@@ -11,10 +11,7 @@ export default function Filter({ showFilter, setShowFilter, handleChangeFilter, 
     "Show All"
   ];
 
-  function handleSubmit(){
-    setSubmit(true)
-    setShowFilter(false)
-  }
+ 
 
   return (
     <div
@@ -44,7 +41,7 @@ export default function Filter({ showFilter, setShowFilter, handleChangeFilter, 
         ))}
       </div>
       <div className="w-full">
-      <button className="px-2 py-1 flex items-self-end mt-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" onClick={handleSubmit}>Apply</button>
+      {/* <button className="px-2 py-1 flex items-self-end mt-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" onClick={handleSubmit}>Apply</button> */}
       </div>
     </div>
   );

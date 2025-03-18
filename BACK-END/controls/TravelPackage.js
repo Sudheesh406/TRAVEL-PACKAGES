@@ -41,7 +41,6 @@ const DisplayPackage = async (req, res) => {
 
 const DisplayMorePackage = async (req, res) => {
   let lmt = req.body
- 
   try {
     const Package = await findAllPackage(lmt)
     if(Package) res.status(201).json({message: "Total Package",Package});
@@ -69,17 +68,29 @@ const DisplayHomePackage = async (req, res) => {
 };
 
 const DisplayLocationPackage = async (req, res) => {
-  try {
-    const Package = await findLocationPackage(req.body.location);
-    if(Package) res.status(201).json({message: "Total Package",Package});
-  } catch (error) {
-    console.error("Error in DisplayLocationPackage:", error);
-    res.status(500).json({
-      message: "Failed to DisplayLocationPackage",
-      error: error.message
-    });
+  let value =  req.body
+  value.limit = 9
+  ;
+try {
+  if(req.body.location != "Any Location"  || req.body.duration != "Any Duration" || req.body.filter != ""){
+    let data = await findLocationPackage(value)
+   
+    if(data.length > 0){
+      res.status(200).json({
+        message: "success",
+        data
+      })
+    }
   }
-};
+} catch (error) {
+  res.status(500).json({
+    message: "Failed to DisplayHomePackage",
+    error: error.message
+  });
+}
 
+}
+
+//full check the conditon
 
 module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage };

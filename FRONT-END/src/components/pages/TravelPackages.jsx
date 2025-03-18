@@ -13,13 +13,13 @@ export default function TravelPackages() {
   const [showFilter, setShowFilter] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [checked, setChecked] = useState();
-  const [limit,setLimit] = useState(16)
+  const [limit,setLimit] = useState(18)
   const [location,setLocation] = useState("Any Location")
-  const [duration,setDuration] = useState("Duration")
+  const [duration,setDuration] = useState("Any Duration")
   const [filter,setFilter] = useState("")
   
   useEffect(() => {
-    if(location === "Any Location"){
+    if(location === "Any Location" && duration === "Any Duration" && filter == ""){
     async function findPackages() {
       try {
         let { data } = await axios.get("/Package/DisplayPackage");
@@ -33,11 +33,12 @@ export default function TravelPackages() {
 
     findPackages();
   }else{
+    let pageDetail = {location, duration, filter}
     async function findLocationPackages() {
       try {
-        let { data } = await axios.post("/Package/DisplayLocationPackage",{location});
+        let { data } = await axios.post("/Package/DisplayLocationPackage",pageDetail);
         if (data) {
-          setPackages(data.Package);
+          setPackages(data.data);
         }
       } catch (error) {
         console.error("error found in TravelPackages", error);
@@ -45,12 +46,8 @@ export default function TravelPackages() {
     }
     findLocationPackages()
   }
-  }, [location]);
+  }, [location, duration, filter]);
 
-
-  //now filter is set duration is set so fix it in useEffect depentancy and then correct the 
-  // full useEffect funtion then search implement, then special destination.and detail page
-  // for that and package .start any of cred in one detail page
 
   async function handleChangeLocation(e){
     setLocation(e.target.value)
@@ -58,12 +55,35 @@ export default function TravelPackages() {
   }
 
   async function handleChangeDuration(e){
-    setDuration(e.target.value)
+    if (e.target.value === "Any Duration") {
+      setDuration("Any Duration");
+      return
+    }
+    let arr = e.target.value.split('')
+    let first = Number(arr[0])
+    if(first == 8){
+      let durationArray = [8]
+      setDuration(durationArray)
+    }else{
+      let last = Number(arr[2])
+      let durationArray = [first,last]
+      setDuration(durationArray)
+    }
   }
 
   const handleChangeFilter = (range, isChecked) => {
     if (isChecked)setChecked(range);
-    console.log("range:",range)
+    if(range == 'Show All'){
+      setFilter("")
+    }else{
+      let data = range.split('-')
+      let first = data[0].trim().replace(/,/g, '') 
+      let second = data[1].trim().replace(/,/g, '')
+      let value1 = Number(first)
+      let value2 = Number(second)
+      let arr = [value1, value2]
+      setFilter(arr)
+    }
   };
 
   async function showFilterModal(){
@@ -75,7 +95,7 @@ export default function TravelPackages() {
     try {
       let { data } = await axios.post("/Package/DisplayMorePackage",lmtAndLocation);
       if (data) {
-        let inc = 8
+        let inc = 9
         setLimit((prev)=>prev+inc)
         if(data.Package){
           data.Package.map((p)=>{
@@ -116,7 +136,7 @@ export default function TravelPackages() {
                 <option>New zealand</option>
               </select>
               <select className="px-4 py-2 border rounded-lg bg-white" onChange={handleChangeDuration}>
-                <option>Duration</option>
+                <option>Any Duration</option>
                 <option>1-3 days</option>
                 <option>4-7 days</option>
                 <option>8+ days</option>
@@ -133,7 +153,7 @@ export default function TravelPackages() {
       {/* Packages Grid */}
       <div className="max-w-7xl mx-auto px-4 py-8 ">
         <h2 className="text-2xl font-bold mb-6">Travel Packages</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {packages &&
             packages.map((pkg, index) => (
               <div
