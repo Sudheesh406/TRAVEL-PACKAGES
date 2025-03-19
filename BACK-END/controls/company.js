@@ -1,5 +1,6 @@
 const {createRegisteredCompany,findCompanyById} =require("../services/companyService")
-const { findPackage } = require("../services/TravelService");const registeredCompany = async (req,res)=>{
+const { findPackage } = require("../services/TravelService");
+const registeredCompany = async (req,res)=>{
     let data = req.body
     let operator = req.User.id
     if(data){

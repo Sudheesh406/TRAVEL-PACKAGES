@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const User = require('../models/userSchema')
+const User = require('../models/userSchema');
+const { applyTimestamps } = require("./TourOperatorSchema");
 
 const tourPackageSchema = new mongoose.Schema({
   tourOperator:{
@@ -74,8 +75,8 @@ const tourPackageSchema = new mongoose.Schema({
    Date:{
     type:Date,
     require:true
-   }
-});
+   },
+},{timestamps:true});
 
 const TourPackage = mongoose.model("TourPackage", tourPackageSchema);
 module.exports = TourPackage;

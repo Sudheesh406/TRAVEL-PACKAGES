@@ -36,7 +36,7 @@ async function Signup(req, res) {
           let accessToken = jwt.sign(
             { id: newUser.id },
             process.env.SECRET_KEY,
-            { expiresIn: "24h" }
+            { expiresIn: "52h" }
           );
   
           return res
@@ -77,7 +77,7 @@ async function Signup(req, res) {
                 let accessToken = jwt.sign(
                   { id: result.id },
                   process.env.SECRET_KEY,
-                  { expiresIn: "24h" }
+                  { expiresIn: "52h" }
                 );
       
                 return res
@@ -148,7 +148,7 @@ async function Signup(req, res) {
           let accessToken = jwt.sign(
             { id: newUser.id },
             process.env.SECRET_KEY,
-            { expiresIn: "24h" }
+            { expiresIn: "52h" }
           );
   
           return res

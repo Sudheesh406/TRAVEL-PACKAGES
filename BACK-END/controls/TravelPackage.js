@@ -19,7 +19,7 @@ const createPackage = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating tour package:", error);
-    res.status(500).json({
+    res.status(500).json({ 
       message: "Failed to create tour package",
       error: error.message
     });
@@ -41,6 +41,7 @@ const DisplayPackage = async (req, res) => {
 
 const DisplayMorePackage = async (req, res) => {
   let lmt = req.body
+  console.log(lmt)
   try {
     const Package = await findAllPackage(lmt)
     if(Package) res.status(201).json({message: "Total Package",Package});
@@ -74,7 +75,6 @@ const DisplayLocationPackage = async (req, res) => {
 try {
   if(req.body.location != "Any Location"  || req.body.duration != "Any Duration" || req.body.filter != ""){
     let data = await findLocationPackage(value)
-   
     if(data.length > 0){
       res.status(200).json({
         message: "success",
@@ -83,7 +83,7 @@ try {
     }
   }
 } catch (error) {
-  res.status(500).json({
+  res.status(401).json({
     message: "Failed to DisplayHomePackage",
     error: error.message
   });

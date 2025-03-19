@@ -37,17 +37,18 @@ export default function TravelPackages() {
     async function findLocationPackages() {
       try {
         let { data } = await axios.post("/Package/DisplayLocationPackage",pageDetail);
+        console.log("data",data)
         if (data) {
           setPackages(data.data);
         }
       } catch (error) {
-        console.error("error found in TravelPackages", error);
+        console.log("no data found")
+        setPackages([]);
       }
     }
     findLocationPackages()
   }
   }, [location, duration, filter]);
-
 
   async function handleChangeLocation(e){
     setLocation(e.target.value)
@@ -87,11 +88,11 @@ export default function TravelPackages() {
   };
 
   async function showFilterModal(){
-    setShowFilter(true)
+    setShowFilter(true) 
   }
 
   async function morePackages() {
-  let lmtAndLocation = {location,limit}
+  let lmtAndLocation = {location,duration,filter,limit}
     try {
       let { data } = await axios.post("/Package/DisplayMorePackage",lmtAndLocation);
       if (data) {
@@ -123,7 +124,7 @@ export default function TravelPackages() {
                 />
                 <input
                   type="text"
-                  placeholder="Search destinations..."
+                  placeholder="Search locations..."
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -131,7 +132,7 @@ export default function TravelPackages() {
             <div className="flex gap-4">
               <select className="px-4 py-2 border rounded-lg bg-white" onChange={handleChangeLocation}>
                 <option>Any Location</option>
-                <option>David</option>
+                <option>David musk</option>
                 <option>w</option>
                 <option>New zealand</option>
               </select>
