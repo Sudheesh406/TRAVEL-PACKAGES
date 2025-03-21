@@ -88,9 +88,17 @@ try {
     error: error.message
   });
 }
-
 }
 
-//full check the conditon
+const getSearchData = async(req,res)=>{
+  try {
+    let data = req.params
+    console.log("data",req.params)
+  } catch (error) {
+    console.error("error found in getSearchData",error);
+    
+  }
+}
 
-module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage };
+
+module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage,getSearchData };

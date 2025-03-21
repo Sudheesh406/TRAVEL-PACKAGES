@@ -44,6 +44,7 @@ async function Signup(req, res) {
               httpOnly: true,
               secure: true,
               sameSite: "lax",
+              maxAge: 194400000
             })
             .status(200)
             .json({
@@ -85,6 +86,7 @@ async function Signup(req, res) {
                     httpOnly: true,
                     secure: true,
                     sameSite: "lax",
+                    maxAge: 194400000
                   })
                   .status(200)
                   .json({ message: "login successfully...", result});
@@ -156,6 +158,7 @@ async function Signup(req, res) {
               httpOnly: true,
               secure: true,
               sameSite: "lax",
+              maxAge: 194400000
             })
             .status(200)
             .json({

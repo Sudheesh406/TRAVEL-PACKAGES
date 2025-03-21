@@ -1,12 +1,13 @@
 import { Search, MapPin, Calendar, Filter } from "lucide-react";
 import axios from "../../axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import FilterModal from '../modal/FilterModal'
+import {debounce} from 'lodash'
 
 export default function TravelPackages() {
   const [packages, setPackages] = useState();
@@ -17,7 +18,8 @@ export default function TravelPackages() {
   const [location,setLocation] = useState("Any Location")
   const [duration,setDuration] = useState("Any Duration")
   const [filter,setFilter] = useState("")
-  
+  const [search, SetSearch] = useState("")
+
   useEffect(() => {
     if(location === "Any Location" && duration === "Any Duration" && filter == ""){
     async function findPackages() {
@@ -110,6 +112,27 @@ export default function TravelPackages() {
     }
   }
   
+  let coverAllLeterToSearch = useCallback(
+    debounce((value) => {
+     async function getData() {
+      try {
+        let data = await axios.get(`/Package/getSearchData/${search}`)
+      } catch (error) {
+        console.error("error found in getData",error);
+      }
+     }
+
+     getData()
+    }, 2000),
+  []
+  )
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    SetSearch(value);
+    coverAllLeterToSearch(value); 
+};
+
   return (
     <div className="min-h-screen bg-gray-50 ">
       {/* Search and Filter Section */}
@@ -126,7 +149,9 @@ export default function TravelPackages() {
                   type="text"
                   placeholder="Search locations..."
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
+                  value={search}
+                  onChange={handleSearch}
+                  />
               </div>
             </div>
             <div className="flex gap-4">

@@ -208,6 +208,4 @@ const findLocationPackage = async (data) => {
   }
 };
 
-//now location work duration work . so need to work filter and all this 
-
 module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage };
