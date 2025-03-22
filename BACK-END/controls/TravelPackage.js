@@ -75,10 +75,15 @@ const DisplayLocationPackage = async (req, res) => {
 try {
   if(req.body.location != "Any Location"  || req.body.duration != "Any Duration" || req.body.filter != ""){
     let data = await findLocationPackage(value)
+    console.log("data",data)
     if(data.length > 0){
       res.status(200).json({
         message: "success",
         data
+      })
+    }else{
+      res.status(400).json({
+        message: "nothing found",
       })
     }
   }
@@ -90,15 +95,21 @@ try {
 }
 }
 
-const getSearchData = async(req,res)=>{
-  try {
-    let data = req.params
-    console.log("data",req.params)
-  } catch (error) {
-    console.error("error found in getSearchData",error);
-    
-  }
-}
+// const getSearchData = async(req,res)=>{
+//     let search = req.params.search
+//       try {
+//        let value = await findBySearch(search)
+//        if(value){
+//         res.status(200).json({message:"searched data finted successfully",value})
+//        }else{
+//         res.status(400).json({message:"not find the searched Data"})
+//        }
+//       } catch (error) {
+//         console.error("error found in getSearchData",error);
+//         res.status(401).json({message:"error found in getSearchData",error})
+
+//       }
+// }
 
 
-module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage,getSearchData };
+module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage };

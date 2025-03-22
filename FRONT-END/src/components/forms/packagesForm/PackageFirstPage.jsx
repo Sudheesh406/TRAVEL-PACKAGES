@@ -45,7 +45,7 @@ function PackageFirstPage() {
     } else {
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: name === "name" ? value.toUpperCase() : value,
       }));
     }
   };

@@ -19,6 +19,7 @@ export default function TravelPackages() {
   const [duration,setDuration] = useState("Any Duration")
   const [filter,setFilter] = useState("")
   const [search, SetSearch] = useState("")
+  const [debounceValue, setDebounceValue] = useState("")
 
   useEffect(() => {
     if(location === "Any Location" && duration === "Any Duration" && filter == ""){
@@ -39,9 +40,10 @@ export default function TravelPackages() {
     async function findLocationPackages() {
       try {
         let { data } = await axios.post("/Package/DisplayLocationPackage",pageDetail);
-        console.log("data",data)
         if (data) {
           setPackages(data.data);
+        }else{
+          setPackages([]);
         }
       } catch (error) {
         console.log("no data found")
@@ -53,6 +55,11 @@ export default function TravelPackages() {
   }, [location, duration, filter]);
 
   async function handleChangeLocation(e){
+    if(e.target.value == "Any Location"){
+      SetSearch("")
+    }else{
+      SetSearch(e.target.value)
+    }
     setLocation(e.target.value)
     setLimit(16)
   }
@@ -94,7 +101,7 @@ export default function TravelPackages() {
   }
 
   async function morePackages() {
-  let lmtAndLocation = {location,duration,filter,limit}
+  let lmtAndLocation = {location,duration,filter,limit,debounceValue}
     try {
       let { data } = await axios.post("/Package/DisplayMorePackage",lmtAndLocation);
       if (data) {
@@ -114,15 +121,12 @@ export default function TravelPackages() {
   
   let coverAllLeterToSearch = useCallback(
     debounce((value) => {
-     async function getData() {
-      try {
-        let data = await axios.get(`/Package/getSearchData/${search}`)
-      } catch (error) {
-        console.error("error found in getData",error);
+      setDebounceValue(value)
+      if(!value){
+        setLocation("Any Location")
+      }else{
+        setLocation(value)
       }
-     }
-
-     getData()
     }, 2000),
   []
   )
@@ -132,7 +136,6 @@ export default function TravelPackages() {
     SetSearch(value);
     coverAllLeterToSearch(value); 
 };
-
   return (
     <div className="min-h-screen bg-gray-50 ">
       {/* Search and Filter Section */}
@@ -155,9 +158,9 @@ export default function TravelPackages() {
               </div>
             </div>
             <div className="flex gap-4">
-              <select className="px-4 py-2 border rounded-lg bg-white" onChange={handleChangeLocation}>
+              <select className="px-4 py-2 border rounded-lg bg-white" onChange={handleChangeLocation} value={location}>
                 <option>Any Location</option>
-                <option>David musk</option>
+                <option>DAVID</option>
                 <option>w</option>
                 <option>New zealand</option>
               </select>

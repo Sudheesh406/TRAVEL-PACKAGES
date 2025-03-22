@@ -26,37 +26,58 @@ const findPackage = async (value) => {
   }
 };
 
+// const findBySearch = async (search)=>{
+//   try {
+//     if(search){
+//       let upperCaseName = search.toUpperCase();
+//     let value = await TourPackage.find({name:upperCaseName}).limit(9)
+//     if(value.length >0){
+//       return value
+//     }else{
+//       return null
+//     }
+//     }else{
+//       return null
+//     }
+//   } catch (error) {
+//     console.error("error found in findBySearch",error);
+    
+//   }
+// }
+
 const findAllPackage = async (data) => {
   if(data){
-  try {
-    const query = { isAvailable: true };
-    if (data.location && data.location !== "Any Location") {
-      query.name = data.location;
-    }
-    if (data.duration && data.duration !== "Any Duration") {
-      if (data.duration[0] === 8) {
-        query.duration = { $gte: 8 };
-      } else {
-        query.duration = {
-          $gte: data.duration[0],
-          $lte: data.duration[1],
-        };
+      try {
+        const query = { isAvailable: true };
+        if (data.location && data.location !== "Any Location") {
+          let upperCaseName = data.location.toUpperCase()
+          query.name = upperCaseName
+        }
+        if (data.duration && data.duration !== "Any Duration") {
+          if (data.duration[0] === 8) {
+            query.duration = { $gte: 8 };
+          } else {
+            query.duration = {
+              $gte: data.duration[0],
+              $lte: data.duration[1],
+            };
+          }
+        }
+        if (data.filter && data.filter.length === 2) {
+          query.price = {
+            $gte: data.filter[0],
+            $lte: data.filter[1],
+          };
+        }
+        console.log("Query:", query);
+        const skip = data.limit ? data.limit - 9 : 0;
+        const limit = 9;
+        const packages = await TourPackage.find(query).skip(skip).limit(limit);
+        return packages.length > 0 ? packages : null;
+      } catch (error) {
+        throw new Error(error.message);
       }
-    }
-    if (data.filter && data.filter.length === 2) {
-      query.price = {
-        $gte: data.filter[0],
-        $lte: data.filter[1],
-      };
-    }
-    console.log("Query:", query);
-    const skip = data.limit ? data.limit - 9 : 0;
-    const limit = 9;
-    const packages = await TourPackage.find(query).skip(skip).limit(limit);
-    return packages.length > 0 ? packages : null;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  
 }else{
   return await TourPackage.find({isAvailable:true}).limit(9);
 }
@@ -64,148 +85,29 @@ const findAllPackage = async (data) => {
 
 
 const findLocationPackage = async (data) => {
+  
   try {
-    if(data.location != "Any Location" && data.duration == "Any Duration" && data.filter == ""){
-      return await TourPackage.find({name:data.location}).limit(9);
-    }else if (data.location == "Any Location" && data.duration != "Any Duration" && data.filter == ""){
-      if(data.duration[0] == 8){
-        let value = await TourPackage.find({duration:{$gte:8}}).limit(9);
-        if(value.length > 0){
-          return value
-        }else{
-          return null
-        }
-      }else{
-        let value = await TourPackage.find({
-          duration: {
-              $gte: data.duration[0], 
-              $lte: data.duration[1]  
-          }
-      }).limit(9)
-
-      if(value.length > 0){
-        return value
-      }else{
-        return null
+    let query = {};
+    if (data.location !== "Any Location") {
+      query.name = data.location.toUpperCase();
+    }
+    if (data.duration !== "Any Duration") {
+      if (data.duration[0] === 8) {
+        query.duration = { $gte: 8 };
+      } else {
+        query.duration = { $gte: data.duration[0], $lte: data.duration[1] };
       }
     }
-    }else if(data.location == "Any Location" && data.duration == "Any Duration" && data.filter != ""){
-     let value = await TourPackage.find({
-        price: {
-          $gte: data.filter[0],
-          $lte: data.filter[1]  
-        }
-      }).limit(9);
-      if(value.length > 0){
-        return value
-      }else{
-        return null
-      }
-    }else if(data.location != "Any Location" && data.duration != "Any Duration" && data.filter == ""){
-      let firstValue = await TourPackage.find({
-        duration: {
-            $gte: data.duration[0], 
-            $lte: data.duration[1]  
-        }
-    }).limit(9)
-    let secondValue = await TourPackage.find({
-      name:data.location
-    }).limit(9)
-        if(firstValue.length >0 && secondValue.length >0){
-          return await TourPackage.find({
-            duration: {
-                $gte: data.duration[0], 
-                $lte: data.duration[1]  
-            }, name:data.location
-          }).limit(9)
-        }else{
-          return null
-        }
-
-    }else if(data.location != "Any Location" && data.duration != "Any Duration" && data.filter != ""){
-      let firstValue = await TourPackage.find({
-        duration: {
-            $gte: data.duration[0], 
-            $lte: data.duration[1]  
-        }
-    }).limit(9)
-    let secondValue =  await TourPackage.find({
-      name:data.location
-    }).limit(9)
-    let thirdValue = await TourPackage.find({
-      price: {
-        $gte: data.filter[0],
-        $lte: data.filter[1]  
-      }
-    }).limit(9);
-    if(firstValue.length >0 && secondValue.length >0 && thirdValue.length >0){
-    return await TourPackage.find({
-        duration: {
-            $gte: data.duration[0], 
-            $lte: data.duration[1]  
-        },
-        name:data.location,
-        price: {
-          $gte: data.filter[0],
-          $lte: data.filter[1]  
-        }
-    }).limit(9)
-    }else{
-      return null
+    if (data.filter !== "") {
+      query.price = { $gte: data.filter[0], $lte: data.filter[1] };
     }
-
-    }else if(data.location == "Any Location" && data.duration != "Any Duration" && data.filter != ""){
-      let firstValue = await TourPackage.find({
-        duration: {
-            $gte: data.duration[0], 
-            $lte: data.duration[1]  
-        }
-    }).limit(9)
-    let secondValue = await TourPackage.find({
-      price: {
-        $gte: data.filter[0],
-        $lte: data.filter[1]  
-      }
-  }).limit(9)
-  if(firstValue.length >0 && secondValue.length >0 ){
-    return await TourPackage.find({
-      duration: {
-          $gte: data.duration[0], 
-          $lte: data.duration[1]  
-      },
-      price: {
-        $gte: data.filter[0],
-        $lte: data.filter[1]  
-      }
-  }).limit(9)
-  }else{
-    return null
-  }
-    }else if(data.location != "Any Location" && data.duration == "Any Duration" && data.filter != ""){
-      let firstValue = await TourPackage.find({
-        name:data.location
-    }).limit(9)
-    let secondValue = await TourPackage.find({
-      price: {
-        $gte: data.filter[0],
-        $lte: data.filter[1]  
-      }
-    }).limit(9)
-    if(firstValue.length >0 && secondValue.length >0){
-      return await TourPackage.find({
-        price: {
-          $gte: data.filter[0],
-          $lte: data.filter[1]  
-        },
-        name:data.location
-      }).limit(9)
-    }else{
-      return null
-    }
-    }
+    const result = await TourPackage.find(query).limit(9);
+    return result.length > 0 ? result : [];
+    
   } catch (error) {
     throw new Error(error.message);
   }
 };
+
 
 module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage };
