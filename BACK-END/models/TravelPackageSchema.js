@@ -54,6 +54,10 @@ const tourPackageSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  availableSeat:{
+    type: Number,
+    required: true
+  },
   vehicleNumber: {
     type: String,
     required: true

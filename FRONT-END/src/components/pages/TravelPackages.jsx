@@ -1,6 +1,7 @@
-import { Search, MapPin, Calendar, Filter } from "lucide-react";
+import { Search, MapPin, Calendar, Filter, Package } from "lucide-react";
 import axios from "../../axios";
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -8,6 +9,8 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import FilterModal from '../modal/FilterModal'
 import {debounce} from 'lodash'
+import { useDispatch, useSelector } from 'react-redux';
+import {setPackage,clearPackage,} from "../../redux/packageSlice";
 
 export default function TravelPackages() {
   const [packages, setPackages] = useState();
@@ -20,6 +23,8 @@ export default function TravelPackages() {
   const [filter,setFilter] = useState("")
   const [search, SetSearch] = useState("")
   const [debounceValue, setDebounceValue] = useState("")
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(location === "Any Location" && duration === "Any Duration" && filter == ""){
@@ -135,9 +140,15 @@ export default function TravelPackages() {
     const value = e.target.value;
     SetSearch(value);
     coverAllLeterToSearch(value); 
-};
+  };
+
+const handleDetails = (id)=>{
+  navigate(`/PackageDetails/${id}`);
+}
+
+dispatch(setPackage(packages)); 
   return (
-    <div className="min-h-screen bg-gray-50 ">
+    <div className="min-h-screen bg-gray-50">
       {/* Search and Filter Section */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -241,7 +252,8 @@ export default function TravelPackages() {
                     <span className="text-2xl font-bold text-blue-600">
                       {pkg.price}
                     </span>
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    onClick={() => handleDetails(pkg._id)}>
                       View Details
                     </button>
                   </div>

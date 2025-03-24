@@ -109,5 +109,16 @@ const findLocationPackage = async (data) => {
   }
 };
 
+const findPackageDetail = async (id)=>{
+  try {
+    let data = await TourPackage.find({_id:id})
+    if(data){
+     return data
+    }
+  } catch (error) {
+    console.error("error found in findPackageDetail",error);
+    
+  }
+}
 
-module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage };
+module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage,findPackageDetail };

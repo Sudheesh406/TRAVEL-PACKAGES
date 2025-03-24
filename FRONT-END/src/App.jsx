@@ -8,6 +8,7 @@ import OpperatorRegister from './components/pages/OpperatorRegister';
 import OperatorDashboard from './components/pages/OperatorDashboard'
 import PackageFirstPage from './components/forms/packagesForm/PackageFirstPage'
 import PackageSecondPage from './components/forms/packagesForm/PackageSecondPage'
+import PackageDetails from './components/pages/PackageDetails'
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollTop";
@@ -28,6 +29,7 @@ function App() {
         <Route path="/OperatorDashboard" element={<OperatorDashboard />} />
         <Route path="/PackageFirstPage" element={<PackageFirstPage />} />
         <Route path="/PackageSecondPage" element={<PackageSecondPage />} />
+        <Route path="/PackageDetails/:id" element={<PackageDetails />} />
       </Routes>
     </div>
   );

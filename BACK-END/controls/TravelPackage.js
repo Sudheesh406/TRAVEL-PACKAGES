@@ -1,4 +1,4 @@
-const { createNewTourPackage,findPackage, findAllPackage,findLocationPackage } = require("../services/TravelService");
+const { createNewTourPackage,findPackage, findAllPackage,findLocationPackage,findPackageDetail } = require("../services/TravelService");
 
 const createPackage = async (req, res) => {
   try {
@@ -13,6 +13,7 @@ const createPackage = async (req, res) => {
       packageData.tourOperator = id
       const locationObj = JSON.parse(packageData.locations);
       packageData.locations = locationObj
+      packageData.availableSeat = packageData.vehicleSeatNumber
     const savedPackage = await createNewTourPackage(packageData);
     res.status(201).json({
       message: "Tour package created successfully",savedPackage 
@@ -41,7 +42,6 @@ const DisplayPackage = async (req, res) => {
 
 const DisplayMorePackage = async (req, res) => {
   let lmt = req.body
-  console.log(lmt)
   try {
     const Package = await findAllPackage(lmt)
     if(Package) res.status(201).json({message: "Total Package",Package});
@@ -75,7 +75,6 @@ const DisplayLocationPackage = async (req, res) => {
 try {
   if(req.body.location != "Any Location"  || req.body.duration != "Any Duration" || req.body.filter != ""){
     let data = await findLocationPackage(value)
-    console.log("data",data)
     if(data.length > 0){
       res.status(200).json({
         message: "success",
@@ -107,9 +106,22 @@ try {
 //       } catch (error) {
 //         console.error("error found in getSearchData",error);
 //         res.status(401).json({message:"error found in getSearchData",error})
-
 //       }
 // }
 
+let getPackage = async (req,res)=>{
+  try {
+    let value = req.params
+    if(value){
+      let result = await findPackageDetail(value.id)
+     res.status(200).json({message:"successfully get package",result})
+ }else{
+   res.status(400).json({message:"package not found"})
+ }
+  } catch (error) {
+    console.error("error found in getPackage",error);
+    res.status(400).json({message:"error found in get package",error})
+  }
+}
 
-module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage };
+module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage,getPackage, };

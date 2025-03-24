@@ -72,6 +72,7 @@ function PackageFirstPage() {
   
 
   const packageForm = useSelector((state) => state.packageForm.packageForm);
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setPackageForm(formData));

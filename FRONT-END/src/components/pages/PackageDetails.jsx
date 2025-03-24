@@ -1,138 +1,124 @@
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-
-// Sample detailed tour package data
-const tourPackagesDetails = {
-  1: {
-    id: 1,
-    name: "Paradise Beach Getaway",
-    place: "Maldives",
-    image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500",
-    price: "$1,999",
-    duration: "7 days",
-    description: "Experience luxury and tranquility in the heart of the Maldives. This all-inclusive package offers pristine beaches, crystal-clear waters, and world-class amenities.",
-    highlights: [
-      "5-star beachfront resort accommodation",
-      "All meals included at premium restaurants",
-      "Snorkeling and diving experiences",
-      "Sunset cruise",
-      "Spa treatment session"
-    ],
-    itinerary: [
-      "Day 1: Arrival and welcome dinner",
-      "Day 2: Island tour and snorkeling",
-      "Day 3: Diving experience",
-      "Day 4: Spa and relaxation day",
-      "Day 5: Water sports activities",
-      "Day 6: Sunset cruise",
-      "Day 7: Departure"
-    ]
-  },
-  2: {
-    id: 2,
-    name: "Mountain Adventure",
-    place: "Swiss Alps",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500",
-    price: "$2,499",
-    duration: "5 days",
-    description: "Embark on an exciting adventure in the majestic Swiss Alps. Perfect for thrill-seekers and nature lovers alike.",
-    highlights: [
-      "Luxury mountain lodge accommodation",
-      "Professional hiking guides",
-      "Cable car passes included",
-      "Equipment rental",
-      "Traditional Swiss dining experiences"
-    ],
-    itinerary: [
-      "Day 1: Arrival and orientation",
-      "Day 2: Guided hiking expedition",
-      "Day 3: Mountain climbing basics",
-      "Day 4: Alpine lakes tour",
-      "Day 5: Departure"
-    ]
-  }
-};
+import axios from '../../axios'
+import BookingModal from '../modal/BookingModal'
 
 function PackageDetails() {
   const { id } = useParams();
+  const packages = useSelector((state) => state.package.package);
   const navigate = useNavigate();
-  const packageDetails = tourPackagesDetails[id];
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [packageDetails, setPackageDetails] = useState()
+  const [show, setShow] = useState(false)
+
+useEffect(()=>{
+  async function getPackageDetails(){
+    if(!packages){
+      try {
+        let {data} = await axios.get(`Package/getPackage/${id}`);
+        if(data){
+          setPackageDetails(data.result[0])
+        }
+        } catch (error) {
+        console.error("error found in geting package",error);
+      }
+    }else{
+      packages.forEach((element) => {
+        if (element._id == id) {
+          setPackageDetails(element)
+        }
+      });
+    }
+  }
+  getPackageDetails()
+},[])
+
+  useEffect(() => {
+    if (packageDetails) {
+      setSelectedImage(packageDetails.images[0]);
+    }
+  }, [packageDetails]);
+
+  const handleSubmit = ()=>{
+    setShow(true)
+  }
 
   if (!packageDetails) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600">Package not found</h1>
-          <button
-            onClick={() => navigate('/')}
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Back to Packages
-          </button>
-        </div>
+      <div className="container mx-auto px-6 py-16 flex flex-col items-center text-center">
+        <h1 className="text-3xl font-bold text-red-600">Package Not Found</h1>
+        <button
+          onClick={() => navigate('/TravelPackages')}
+          className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition"
+        >
+          Back to Packages
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-6 py-12 max-w-6xl h-[600px] relative ">
       <button
-        onClick={() => navigate('/')}
-        className="mb-6 flex items-center text-blue-500 hover:text-blue-600"
+        onClick={() => navigate('/TravelPackages')}
+        className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2"
       >
-        <span>← Back to Packages</span>
+        ← Back to Packages
       </button>
-
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <img
-          src={packageDetails.image}
-          alt={packageDetails.name}
-          className="w-full h-96 object-cover"
-        />
+      
+      <div className="flex gap-10">
+        {/* Left Side: Image Gallery */}
+        <div className="w-1/2">
+          <img
+            src={selectedImage}
+            alt={packageDetails.name}
+            className="w-full h-[500px] object-cover rounded-lg shadow-lg"
+          />
+          <div className="flex gap-2 mt-4">
+            {packageDetails.images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt="Thumbnail"
+                className="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-blue-500"
+                onClick={() => setSelectedImage(img)}
+              />
+            ))}
+          </div>
+        </div>
         
-        <div className="p-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl font-bold">{packageDetails.name}</h1>
-              <p className="text-xl text-gray-600">{packageDetails.place}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-blue-600">{packageDetails.price}</p>
-              <p className="text-gray-600">{packageDetails.duration}</p>
-            </div>
+        {/* Right Side: Package Details */}
+        <div className="w-1/2 bg-gray-200 p-8 rounded-lg shadow-lg border border-gray-200">
+          <h1 className="text-4xl font-bold text-gray-900">{packageDetails.name}</h1>
+          <p className="text-lg text-gray-500 mt-1">{packageDetails.locations.country}, {packageDetails.locations.state}, {packageDetails.locations.city}</p>
+          <p className="text-3xl font-bold text-blue-600 mt-3">${packageDetails.price}</p>
+          
+          <div className="grid grid-cols-2 gap-4 mt-4 text-gray-600 ">
+            <p><strong>Duration:</strong> {packageDetails.duration} days</p>
+            <p><strong>Category:</strong> {packageDetails.category}</p>
+            <p><strong>Date:</strong> {new Date(packageDetails.Date).toDateString()}</p>
+            <p><strong>Number of Visits:</strong> {packageDetails.numberOfVisit}</p>
+            <p><strong>Non-Veg Food:</strong> {packageDetails.nonVegFood ? 'Yes' : 'No'}</p>
+            <p><strong>Veg Food:</strong> {packageDetails.vegFood ? 'Yes' : 'No'}</p>
+            <p><strong>Vehicle Number:</strong> {packageDetails.vehicleNumber}</p>
+            <p><strong>Vehicle Seats:</strong> {packageDetails.vehicleSeatNumber}</p>
+          </div>
+          
+          <div className="mt-6 border-t border-gray-300 pt-6">
+            <h2 className="text-2xl font-semibold text-gray-800">Description</h2>
+            <p className="text-gray-700 leading-relaxed mt-2">{packageDetails.description}</p>
           </div>
 
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold mb-3">Description</h2>
-            <p className="text-gray-700">{packageDetails.description}</p>
-          </div>
-
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold mb-3">Highlights</h2>
-            <ul className="list-disc list-inside space-y-2">
-              {packageDetails.highlights.map((highlight, index) => (
-                <li key={index} className="text-gray-700">{highlight}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold mb-3">Itinerary</h2>
-            <div className="space-y-3">
-              {packageDetails.itinerary.map((day, index) => (
-                <div key={index} className="p-3 bg-gray-50 rounded">
-                  <p className="text-gray-700">{day}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 text-center">
-            <button className="bg-blue-500 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors">
+          <div className="mt-14 text-center">
+            <button className="bg-green-600 w-[90%] text-white px-5 py-2 rounded-lg text-lg font-semibold hover:bg-green-700 transition"
+            onClick={handleSubmit}>
               Book This Package
             </button>
           </div>
         </div>
       </div>
+      {show && <BookingModal packageDetails={packageDetails} setShow={setShow}/>}
     </div>
   );
 }
