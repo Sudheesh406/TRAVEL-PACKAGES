@@ -18,7 +18,7 @@ const Hero = () => {
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Discover the World s Beauty</h1>
         <p className="text-xl text-white mb-8 max-w-2xl">Explore breathtaking destinations and create unforgettable memories with our premium travel packages.</p>
         
-        <div className="bg-white p-4 rounded-lg shadow-lg max-w-4xl">
+        {/* <div className="bg-white p-4 rounded-lg shadow-lg max-w-4xl">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
@@ -38,7 +38,7 @@ const Hero = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

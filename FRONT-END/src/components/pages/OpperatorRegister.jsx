@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from '../../axios'
+import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompany, clearCompany } from '../../redux/companySlice';
 function OpperatorRegister() {
@@ -13,17 +14,12 @@ function OpperatorRegister() {
     gstNumber: '',
     address: ''
   })
+  const user = useSelector((state) => state.user.user);
 
   const handleSubmit = async(e) => {
     e.preventDefault()
     console.log('Form submitted:', formData)
-    try {
-      let {data} = await axios.post('/Company/registeredCompany',formData)
-      if(data)navigate('/OperatorDashboard')
-        console.log("result:",data)
-    } catch (error) {
-      console.error("error found in company data posting",error);
-    }
+    newRegisteration()
   }
 
   const handleChange = (e) => {
@@ -33,6 +29,92 @@ function OpperatorRegister() {
       [name]: value
     }))
   }
+
+  async function navigateToOpperatorPage(){
+    try {
+      let {data} = await axios.post('/Company/registeredCompany',formData)
+      if(data){
+        navigate('/OperatorDashboard')
+        console.log("result:",data)
+      }
+    } catch (error) {
+      console.error("error found in company data posting",error);
+    }
+  }
+
+
+  const checkoutPayment = async (order) => {
+    
+    const options = {
+      key: "rzp_test_ZKcJLyt29WoYex",
+      amount: order.amount,
+      currency: order.currency,
+      name: "VINERGO",
+      description: "Thank you for shopping with us!",
+      order_id: order.id,
+      handler: async function (response) {
+        Swal.fire({
+          title: "Registered Successfully!",
+          text: "Your registeration process is Completed.",
+          icon: "success",
+          showCancelButton: false, 
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        }).then((response)=>{
+          dispatch(setCompany(formData))
+          navigateToOpperatorPage()
+         })
+         
+        const paymentData = {
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature,
+        };
+  
+        try {
+          const result = await axios.post("/Payment/verify-payment", paymentData);
+          if (result.data.success) {
+            console.log("Payment is successful");
+            toast.success("Order Created");
+          } else {
+            console.log("Payment verification failed"); 
+            toast.error("Error while creating order");
+          }
+        } catch (error) {
+          console.error("Payment verification error:", error);
+        }
+      },
+      prefill: {
+        name: user.username,
+        email: user.email,
+        contact: "8078115004",
+      },
+      theme: {
+        color: "#AF6900",
+      },
+    };
+  
+    const razorpay = new Razorpay(options);
+    razorpay.open();
+  };
+  
+
+  const newRegisteration = async () => {
+    try {
+      let response = await axios.post("/Payment/razorpay", {
+        amount: 499,
+        currency: "INR",
+      });
+      if (response) {
+        await checkoutPayment(response.data.order);
+        // change order status ton completed
+        
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
     <div className="h-[727px] bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">

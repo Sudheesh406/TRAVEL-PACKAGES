@@ -153,7 +153,7 @@ function PackageFirstPage() {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Description"
+            placeholder="Destination & visit schedule"
             required
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
           ></textarea>

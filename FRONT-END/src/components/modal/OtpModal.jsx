@@ -1,9 +1,12 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios';  
+import { useDispatch } from 'react-redux';
+import { setUser, clearUser } from '../../redux/userSlice';
 
 function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
-    const navigate = useNavigate();
+  let dispatch = useDispatch()
+  const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
 
@@ -32,6 +35,8 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
   const handleSubmit = async () => {
     const enteredOtp = otp.join(""); 
     let user = localStorage.getItem('user');  
+    dispatch(setUser(user));
+
     let data = JSON.parse(user); 
     if (data) {  
         data.otp = enteredOtp; 

@@ -146,17 +146,28 @@ const handleDetails = (id)=>{
   navigate(`/PackageDetails/${id}`);
 }
 
-dispatch(setPackage(packages)); 
+useEffect(() => {
+  dispatch(setPackage(packages)); 
+}, [packages, dispatch]);
+
   return (
     <div className="min-h-screen bg-gray-50">
+      
       {/* Search and Filter Section */}
       <div className="bg-white shadow-sm">
+        
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-[240px]">
-              <div className="relative">
+              <div className="relative flex">
+              <button
+        onClick={() => navigate('/')}
+        className=" text-blue-600 hover:text-blue-800 flex items-center gap-2"
+      >
+       <div className="flex pr-4"> <span>←</span> <span>Back</span></div> 
+      </button>
                 <Search
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  className="absolute left-[75px] top-1/2 transform -translate-y-1/2 text-gray-400"
                   size={20}
                 />
                 <input

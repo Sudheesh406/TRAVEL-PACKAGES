@@ -69,7 +69,6 @@ const findAllPackage = async (data) => {
             $lte: data.filter[1],
           };
         }
-        console.log("Query:", query);
         const skip = data.limit ? data.limit - 9 : 0;
         const limit = 9;
         const packages = await TourPackage.find(query).skip(skip).limit(limit);
@@ -79,7 +78,7 @@ const findAllPackage = async (data) => {
       }
   
 }else{
-  return await TourPackage.find({isAvailable:true}).limit(9);
+  return await TourPackage.find({isAvailable:true}).sort({createdAt:-1}).limit(9);
 }
 };
 

@@ -24,15 +24,19 @@ useEffect(()=>{
         console.error("error found in geting package",error);
       }
     }else{
+      console.log("lld",packages)
       packages.forEach((element) => {
+        console.log("element",element,"id",id)
         if (element._id == id) {
+          console.log("fdfdfdf");
+          
           setPackageDetails(element)
         }
       });
     }
   }
   getPackageDetails()
-},[])
+},[packages])
 
   useEffect(() => {
     if (packageDetails) {
@@ -64,7 +68,7 @@ useEffect(()=>{
         onClick={() => navigate('/TravelPackages')}
         className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2"
       >
-        ← Back to Packages
+        ← Back
       </button>
       
       <div className="flex gap-10">

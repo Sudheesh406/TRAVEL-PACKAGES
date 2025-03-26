@@ -6,7 +6,7 @@ const {findUser,createNewAccount,findOperator,createNewOperator,otpStore,GetOtp,
 //--------user Signup------------
 
 async function Signup(req, res) {
-    const { email, password, name,otp,otpRequest} = req.body;
+    const { email, password, username,otp,otpRequest} = req.body;
     console.log(req.body)
       if(otpRequest){
         let isExist = await findOperator(email);
@@ -16,8 +16,7 @@ async function Signup(req, res) {
           return res.status(200).json({ message: "otp sented successfully..." });
         }
       }
-    if (email && password && name && otp) {
-      let username = name;
+    if (email && password && username && otp) {
       console.log("total");
       let otpData = await GetOtp(email)
         if(otpData[0].otp != otp){

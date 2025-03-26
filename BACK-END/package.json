@@ -23,6 +23,7 @@
     "multer-s3": "^3.0.1",
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
+    "razorpay": "^2.9.6",
     "token": "^0.1.0",
     "web": "^0.0.2"
   }

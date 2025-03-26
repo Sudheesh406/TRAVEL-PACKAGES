@@ -2,13 +2,14 @@ import { MapPin, Clock, Tag } from 'lucide-react';
 import {Link} from 'react-router-dom'
 import axios from '../../axios'
 import {useState, useEffect} from 'react'
+import {useNavigate} from 'react-router-dom'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 const Packages = () => {
-
+  const navigate = useNavigate() 
   const [allPackage,setAllPackage] = useState()
 
   useEffect(()=>{
@@ -25,6 +26,11 @@ const Packages = () => {
     }
     getPackages ()
   },[])
+
+  const handleDetails = (id)=>{
+    console.log("id",id)
+    navigate(`/PackageDetails/${id}`);
+  }
 
   return (
     <section id="packages" className="py-16">
@@ -86,7 +92,8 @@ const Packages = () => {
                   </div>
                 </div>
                 
-                <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300">
+                <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                onClick={() => handleDetails(pkg._id)}>
                   Book Now
                 </button>
               </div>

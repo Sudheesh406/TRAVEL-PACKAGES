@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const loginRouter = require('./routers/loginRoute')
 const PackageRouter = require('./routers/TravelPackageRoute')
 const companyRouter = require('./routers/companyRoute')
+const bookingRouter = require('./routers/bookingRoute')
 const databaseCn = require('./database/db');
 const cors = require('cors')
 
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/',loginRouter)
 app.use('/Package',PackageRouter)
 app.use('/Company',companyRouter)
+app.use('/Payment',bookingRouter)
 
 databaseCn();
 
