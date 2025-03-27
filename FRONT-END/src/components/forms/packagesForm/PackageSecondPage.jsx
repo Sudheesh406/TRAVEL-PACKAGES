@@ -8,6 +8,9 @@ function PackageSecondPage() {
   const [file, setFile] = useState()
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const company = useSelector((state) => state.company.company);
+  console.log(company);
+  
   const [data, setData] = useState({
     vehicleSeatNumber: "",
     vehicleNumber: "",
@@ -17,7 +20,8 @@ function PackageSecondPage() {
     vegFood: false,
     nonVegFood: false,
     isAvailable: false,
-    Date:""
+    Date:"",
+    company: company._id
   });
 
   const handleChange = (e) => {
@@ -46,12 +50,12 @@ function PackageSecondPage() {
         formData.append('images', image); 
       });      
     } else if (typeof mergedObj[key] === 'object') {
-      formData.append(key, JSON.stringify(mergedObj[key])); // Convert objects to JSON strings
+      formData.append(key, JSON.stringify(mergedObj[key])); 
     } else {
       formData.append(key, mergedObj[key]);
     }
   });
-    try {
+    try { 
       let result = await axios.post('/Package/newPackage', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

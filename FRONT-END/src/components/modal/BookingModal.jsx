@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 function BookingModal({ setShow, packageDetails }) { 
   const user = useSelector((state) => state.user.user);
-  
+  console.log(user)
   const [itemCount, setItemCount] = useState(0);
   const PRICE_PER_ITEM = packageDetails.price;
   const TAX_RATE = 0.00; 
@@ -50,6 +50,15 @@ function BookingModal({ setShow, packageDetails }) {
           setShow(false)
           // navigate('/orders')
           console.log("navigate to booking page");
+          let data = {packageName : packageDetails.name,
+            packageId : packageDetails._id,
+            price : packageDetails.price,
+            Date: packageDetails.Date,
+            user : user._id,
+            company: packageDetails.company
+           }
+          //  console.log("data",data)
+          packageBooked(data)
          })
          
         const paymentData = {
@@ -85,6 +94,14 @@ function BookingModal({ setShow, packageDetails }) {
     razorpay.open();
   };
   
+  
+  const packageBooked = async(data)=>{
+    try {
+      let result = await axios.post('/payment/booking',{data})
+    } catch (error) {
+      console.error("error found in packageBooked",error);
+    }
+  }
 
   const newBooking = async () => {
     try {

@@ -2,7 +2,6 @@ const { createNewTourPackage,findPackage, findAllPackage,findLocationPackage,fin
 
 const createPackage = async (req, res) => {
   try {
-    let id = req.User.id
     let packageData = req.body;
     let fullImages  = req.files
     let images = []
@@ -10,7 +9,6 @@ const createPackage = async (req, res) => {
       images.push(img.location)
     })
       packageData.images = images
-      packageData.tourOperator = id
       const locationObj = JSON.parse(packageData.locations);
       packageData.locations = locationObj
       packageData.availableSeat = packageData.vehicleSeatNumber

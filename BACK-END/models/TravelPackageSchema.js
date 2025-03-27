@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 const User = require('../models/userSchema');
 const { applyTimestamps } = require("./TourOperatorSchema");
+const companyDetails = require('../models/CompanySchema')
 
 const tourPackageSchema = new mongoose.Schema({
-  tourOperator:{
+  company:{
     type:mongoose.Schema.ObjectId,
-    ref:User,
+    ref:companyDetails,
     required:true
 },
   name: {
@@ -61,12 +62,6 @@ const tourPackageSchema = new mongoose.Schema({
   vehicleNumber: {
     type: String,
     required: true
-  },
-  vehicleRCBook: {
-    type: String
-  },
-  drivingLicenceNumber: {
-    type: String
   },
   contactNumber: {
     type: Number,

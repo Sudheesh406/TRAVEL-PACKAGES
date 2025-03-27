@@ -20,8 +20,11 @@ function Login() {
       if(result.data.result.role === "user"){
         navigate('/');
         console.log('Login response:', result.data.result);
+      }else if(result.data.result.role === "opperator"){
+        navigate('/OperatorDashboard');
       }else{
         console.log("result.data.result.role:",result.data.result.role)
+
       }
     } catch (error) {
       console.log('Login error:', error);
