@@ -21,7 +21,7 @@ export default function OperatorDashboard() {
 
   useEffect(() => {
     async function fetchCompanyDetails() {
-      if (!company) { // Fetch only if company is not in Redux state
+      if (!company) { 
         try {
           let { data } = await axios.get("/Company/getCompany");
           if (data) {

@@ -30,6 +30,10 @@ const schema = mongoose.Schema({
         type:Date,
         require:true
     },
+    seat:{
+        type:String,
+        require:true
+    },
 })
 
 const Booked = mongoose.model('Booked',schema)

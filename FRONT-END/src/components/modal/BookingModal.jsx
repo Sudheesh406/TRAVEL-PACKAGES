@@ -55,7 +55,8 @@ function BookingModal({ setShow, packageDetails }) {
             price : packageDetails.price,
             Date: packageDetails.Date,
             user : user._id,
-            company: packageDetails.company
+            company: packageDetails.company,
+            seat: itemCount
            }
           //  console.log("data",data)
           packageBooked(data)

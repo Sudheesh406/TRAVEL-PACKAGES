@@ -1,5 +1,10 @@
 import { Mail, Phone, MapPin, Calendar } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
+import {useState,useEffect} from 'react'
+import { useSelector,useDispatch } from 'react-redux';
+import { setUser, clearUser } from '../../redux/userSlice';
+import axios from '../../axios'
+import ProfileEditModal from '../../components/modal/ProfileEditModal'
 const bookings = [
   {
     id: 1,
@@ -25,29 +30,71 @@ const bookings = [
 ];
 
 export default function UserProfile() {
+
+  const navigate = useNavigate();
+  const [userDetails,setUserDetails] = useState('')
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user.user);
+  const [isOpen,setIsOpen] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      async function getUser() {
+        try {
+          let result = await axios.get("/getUser");
+          if (result.data) {
+            dispatch(setUser(result.data.result));
+            setUserDetails(result.data.result); 
+          }
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      }
+      getUser();
+    } else {
+      setUserDetails(user); 
+    }
+  }, [user, dispatch]); 
+
+  const editProfile = ()=>{
+    setIsOpen(true)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Profile Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-            />
-            <div>
-              <h1 className="text-3xl font-bold mb-2">John Doe</h1>
-              <p className="text-gray-600 mb-4">Travel enthusiast | 15 trips completed</p>
-              <div className="flex flex-wrap gap-4">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                  Edit Profile
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                  Share Profile
-                </button>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-8">
+              <img
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+              />
+              <div>
+                <div>
+                <h1 className="text-3xl font-bold mb-2">{userDetails && userDetails.username}</h1>
+
+                </div>
+                <p className="text-gray-600 mb-4">{userDetails?.About ? userDetails.About : "About"}</p>
+                <div className="flex flex-wrap gap-4">
+                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onClick={editProfile}>
+                    Edit Profile
+                  </button>
+                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                    Share Profile
+                  </button>
+                </div>
               </div>
             </div>
+            {/* Back Button - Positioned to the right */}
+            {/* <button
+              onClick={() => navigate('/')}
+              className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
+            >
+              ← Back
+            </button> */}
           </div>
         </div>
       </div>
@@ -61,28 +108,28 @@ export default function UserProfile() {
               <Mail className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Email</p>
-                <p className="font-medium">john.doe@example.com</p>
+                <p className="font-medium">{userDetails && userDetails.email}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Phone</p>
-                <p className="font-medium">+1 234 567 890</p>
+                <p className="font-medium"> </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium">New York, USA</p>
+                <p className="font-medium"> </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Calendar className="text-gray-400" size={20} />
               <div>
-                <p className="text-sm text-gray-500">Member Since</p>
-                <p className="font-medium">January 2023</p>
+                <p className="text-sm text-gray-500">Date of Birth</p>
+                <p className="font-medium"> </p>
               </div>
             </div>
           </div>
@@ -113,6 +160,7 @@ export default function UserProfile() {
           ))}
         </div>
       </div>
-    </div>
+      {isOpen && <ProfileEditModal isOpen={isOpen} setIsOpen={setIsOpen} setUserDetails={setUserDetails} userDetails={userDetails}/>}
+      </div>
   );
 }

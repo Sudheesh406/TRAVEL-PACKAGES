@@ -11,8 +11,6 @@ import { setUser, clearUser } from '../redux/userSlice';
 
 function HomePages() {
  let dispatch = useDispatch()
-//  dispatch(clearUser());
-
  const user = useSelector((state) => state.user.user);
   async function getUser(){
       try {

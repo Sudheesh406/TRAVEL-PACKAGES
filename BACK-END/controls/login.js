@@ -225,5 +225,16 @@ async function Signup(req, res) {
     }
   }
 
+  let logOut = async (req, res) => {
+    try {
+        res.clearCookie("token");
+        return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
 
-  module.exports = {Signup,login,operatorSignup,getUser}
+  
+
+
+  module.exports = {Signup,login,operatorSignup,getUser,logOut}
