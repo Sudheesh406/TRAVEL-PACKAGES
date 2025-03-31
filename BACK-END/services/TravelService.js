@@ -1,4 +1,5 @@
 const TourPackage = require("../models/TravelPackageSchema");
+const companyDetails = require("../models/CompanySchema")
 
 const createNewTourPackage = async (packageData) => {
   try {
@@ -108,16 +109,26 @@ const findLocationPackage = async (data) => {
   }
 };
 
-const findPackageDetail = async (id)=>{
+const findPackageDetail = async (id) => {
   try {
-    let data = await TourPackage.find({_id:id})
-    if(data){
-     return data
+    let data = await TourPackage.find({ _id: id }); 
+    if (!data.length) return []; 
+    let compId = data[0].company;
+    let cmp = await companyDetails.findOne({ _id: compId });
+    if (cmp) {
+      let modifiedData = data.map((item) => {
+        let obj = item.toObject(); 
+        obj.companyName = cmp.companyName; 
+        return obj;
+      });
+      return modifiedData; 
     }
+    return data; 
   } catch (error) {
-    console.error("error found in findPackageDetail",error);
-    
+    console.error("Error found in findPackageDetail", error);
   }
-}
+};
+
+
 
 module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage,findPackageDetail };

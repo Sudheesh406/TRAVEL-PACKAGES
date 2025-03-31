@@ -1,9 +1,11 @@
-const {newBooking} = require('../services/bookingService')
+const {newBooking ,bookingDetails} = require('../services/bookingService')
 
 async function booking (req,res){
     try {
         let details = req.body
         if(details){
+            console.log("details",details);
+            
          let value = await newBooking(details)
          if(value){
             res.status(200).json({message:"booking successfull"})
@@ -19,4 +21,21 @@ async function booking (req,res){
     }
 }
 
-module.exports = {booking}
+
+const getbookingDetails = async (req,res)=>{
+    let id = req.params
+    if(id){
+        try {
+            let result = await bookingDetails(id)
+            if(result)res.status(200).json({message:"successfully find booking details",result})
+        } catch (error) {
+            console.error("error found in getbookingDetails",error);
+            res.status(400).json({message:"error font in  booking details",error})
+        }
+
+    }else{
+        res.status(404).json({message:"id is missing",error})
+    }
+}
+
+module.exports = {booking, getbookingDetails}

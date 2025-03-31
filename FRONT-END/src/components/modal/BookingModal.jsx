@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 function BookingModal({ setShow, packageDetails }) { 
   const user = useSelector((state) => state.user.user);
-  console.log(user)
+  console.log(packageDetails)
   const [itemCount, setItemCount] = useState(0);
   const PRICE_PER_ITEM = packageDetails.price;
   const TAX_RATE = 0.00; 
@@ -56,7 +56,9 @@ function BookingModal({ setShow, packageDetails }) {
             Date: packageDetails.Date,
             user : user._id,
             company: packageDetails.company,
-            seat: itemCount
+            seat: itemCount,
+            image: packageDetails.images[0],
+            companyName : packageDetails.companyName
            }
           //  console.log("data",data)
           packageBooked(data)

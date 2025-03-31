@@ -18,7 +18,7 @@ const Schema = mongoose.Schema({
         type: String
     },
     phone: { 
-        type: Number
+        type: String
     },
     image:{
         type: String
@@ -27,7 +27,7 @@ const Schema = mongoose.Schema({
         type: Date
     },
     about :{
-        type: Date
+        type: String
     },
     role: {
         type: String,

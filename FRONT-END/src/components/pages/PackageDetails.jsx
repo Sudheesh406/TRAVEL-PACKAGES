@@ -43,7 +43,7 @@ function PackageDetails() {
   const handleSubmit = () => {
     setShow(true);
   };
-
+ console.log(packageDetails)
   if (!packageDetails) {
     return (
       <div className="container mx-auto px-6 py-16 flex flex-col items-center text-center">

@@ -5,33 +5,11 @@ import { useSelector,useDispatch } from 'react-redux';
 import { setUser, clearUser } from '../../redux/userSlice';
 import axios from '../../axios'
 import ProfileEditModal from '../../components/modal/ProfileEditModal'
-const bookings = [
-  {
-    id: 1,
-    destination: "Swiss Alps Adventure",
-    date: "Mar 15, 2024",
-    status: "Upcoming",
-    image: "https://images.unsplash.com/photo-1531973819741-e27a5ae2cc7b"
-  },
-  {
-    id: 2,
-    destination: "Bali Beach Retreat",
-    date: "Feb 10, 2024",
-    status: "Completed",
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4"
-  },
-  {
-    id: 3,
-    destination: "Paris City Break",
-    date: "Jan 5, 2024",
-    status: "Completed",
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34"
-  }
-];
 
 export default function UserProfile() {
 
   const navigate = useNavigate();
+  const [bookings ,setBookings] = useState()
   const [userDetails,setUserDetails] = useState('')
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user.user);
@@ -43,21 +21,51 @@ export default function UserProfile() {
         try {
           let result = await axios.get("/getUser");
           if (result.data) {
-            dispatch(setUser(result.data.result));
-            setUserDetails(result.data.result); 
-          }
+            dispatch(setUser({
+              ...result.data.result,
+              DateOfBirth: result.data.result.DateOfBirth
+                ? new Date(result.data.result.DateOfBirth).toISOString().split("T")[0]
+                : "",
+            }));
+              setUserDetails((prev) => ({
+              ...prev,
+              ...result.data.result,
+              DateOfBirth: result.data.result.DateOfBirth
+                ? new Date(result.data.result.DateOfBirth).toISOString().split("T")[0]
+                : "",
+            }));
+            BookingDetails(result.data.result)
+         }
         } catch (error) {
           console.error("Error fetching user:", error);
         }
       }
       getUser();
-    } else {
-      setUserDetails(user); 
-    }
+    } else {   
+       BookingDetails(user)
+      setUserDetails({
+        ...user,
+        DateOfBirth: user.DateOfBirth ? new Date(user.DateOfBirth).toISOString().split("T")[0] : "",
+      });
+          }
   }, [user, dispatch]); 
 
   const editProfile = ()=>{
     setIsOpen(true)
+  }
+
+  async function BookingDetails(user) {
+    let id
+    if(user){
+      id = user._id
+    }
+    try {
+      let {data} = await axios.get(`/Payment/getbookingDetails/${id}`)
+     if(data)setBookings(data.result)
+    } catch (error) {
+      console.error('error found in booking',error);
+      
+    }
   }
 
   return (
@@ -68,7 +76,7 @@ export default function UserProfile() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-8">
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+                src={userDetails && userDetails.image}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
               />
@@ -77,7 +85,7 @@ export default function UserProfile() {
                 <h1 className="text-3xl font-bold mb-2">{userDetails && userDetails.username}</h1>
 
                 </div>
-                <p className="text-gray-600 mb-4">{userDetails?.About ? userDetails.About : "About"}</p>
+                <p className="text-gray-600 mb-4">{userDetails?.about ? userDetails.about : "About"}</p>
                 <div className="flex flex-wrap gap-4">
                   <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onClick={editProfile}>
                     Edit Profile
@@ -115,21 +123,23 @@ export default function UserProfile() {
               <Phone className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Phone</p>
-                <p className="font-medium"> </p>
+                <p className="font-medium">{userDetails && userDetails.phone} </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium"> </p>
+                <p className="font-medium">{userDetails && userDetails.location} </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Calendar className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Date of Birth</p>
-                <p className="font-medium"> </p>
+                <p className="font-medium"> 
+                {userDetails && new Date(userDetails.DateOfBirth).getDate()}/{new Date(userDetails.DateOfBirth).getMonth() + 1}/{new Date(userDetails.DateOfBirth).getFullYear()}
+              </p>
               </div>
             </div>
           </div>
@@ -138,16 +148,28 @@ export default function UserProfile() {
         {/* Booking History */}
         <h2 className="text-2xl font-bold mt-12 mb-6">Booking History</h2>
         <div className="space-y-4">
-          {bookings.map((booking) => (
-            <div key={booking.id} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
+          {bookings && bookings.map((booking,index) => (
+            <div key={index} className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
               <img
                 src={booking.image}
-                alt={booking.destination}
+                alt={booking.packageName}
                 className="w-24 h-24 rounded-lg object-cover"
               />
               <div className="flex-1">
-                <h3 className="font-semibold text-lg">{booking.destination}</h3>
-                <p className="text-gray-600">{booking.date}</p>
+                <h3 className="font-semibold text-lg">{booking.packageName}</h3>
+                <p className="text-gray-600"> 
+                  {new Date(booking.Date).getDate()}/{new Date(booking.Date).getMonth() + 1}/{new Date(booking.Date).getFullYear()}
+                </p>
+              </div>
+              
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg"> Booked Seats: {booking.seat}</h3>
+                <p className="text-gray-600"> 
+                  Price: {booking.price}
+                </p>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg"> Company: {booking.companyName}</h3>
               </div>
               <div className={`px-3 py-1 rounded-full ${
                 booking.status === 'Upcoming' 

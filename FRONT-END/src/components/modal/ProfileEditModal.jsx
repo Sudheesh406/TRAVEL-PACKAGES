@@ -5,15 +5,17 @@ import axios from '../../axios'
 
 function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
   const [formData, setFormData] = useState({
-    username: userDetails.username || "",
-    dateOfBirth: userDetails.DateOfBirth || "",
-    profileImage: userDetails.image || "",
+    username: userDetails.username,
+    id: userDetails._id,
+    DateOfBirth: userDetails.DateOfBirth || "",
+    image: userDetails.image || "",
     location: userDetails.location || "",
-    phoneNumber: userDetails.phone || "",
-    about: userDetails.about || ""
+    phone: userDetails.phone || "",
+    about: userDetails.about || "",
   });
+  
 
-  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewUrl, setPreviewUrl] = useState(userDetails.image ? userDetails.image : "");
   const [showWarning, setShowWarning] = useState(false);
 
   const handleInputChange = (e) => {
@@ -30,46 +32,67 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        profileImage: file,
+        image: [file], 
       }));
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
+  
+  
 
   const hasFormChanged = () => {
-    let valid = false;
-    if(formData.username === userDetails.username){
-      valid = true;
-    } else if (formData.username === userDetails.username){
-      valid = true;
-    } else if (formData.dateOfBirth === userDetails.DateOfBirth){
-      valid = true;
-    } else if  (formData.profileImage === userDetails.image){
-      valid = true;
-    }else if (formData.location === userDetails.location){
-      valid = true;
-    }else if (formData.phoneNumber === userDetails.phone){
-      valid = true;
-    }else if (formData.about === userDetails.about){
-      valid = true;
+    let valid = true;
+    if (formData.username !== userDetails.username){
+      valid = false;      
+    } else if (formData.DateOfBirth !== '' && formData.DateOfBirth !== userDetails.DateOfBirth){
+      valid = false;
+    } else if  (formData.image !== '' && formData.image !== userDetails.image){
+      valid = false;
+    }else if (formData.location !== '' && formData.location !== userDetails.location){
+      valid = false;
+    }else if (formData.phone !== '' && formData.phone !== userDetails.phone){
+      valid = false;
+    }else if (formData.about !== '' && formData.about !== userDetails.about){
+      valid = false;
     }
     return valid;
   };
-
+  
   const handleSubmit = async(e) => {
     e.preventDefault();
     let value = hasFormChanged();
-    console.log()
     if (!value) {
-      console.log("done",userDetails);
-      // try {
-      //   let result = await axios.post('/editUser')
-      // } catch (error) {
-        
-      // }
-      
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("username", formData.username);
+        formDataToSend.append("DateOfBirth", formData.DateOfBirth);
+        formDataToSend.append("location", formData.location);
+        formDataToSend.append("phone", formData.phone);
+        formDataToSend.append("about", formData.about);
+        formDataToSend.append("id", formData.id);
+        if (formData.image) {
+          formDataToSend.append("images", formData.image[0])
+          }
+  
+        let { data } = await axios.post("/userProfile/editUser", formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        handleClose();
+        if (data){
+          setUserDetails((prev) => ({
+            ...prev,
+            ...data.result,
+            DateOfBirth: data.result.DateOfBirth
+              ? new Date(data.result.DateOfBirth).toISOString().split("T")[0]
+              : "",
+          }));
+        }
+      } catch (error) {
+        console.error("Error in posting user new details", error);
+      }
     } else {
-      console.log("formData",formData)
       setShowWarning(true);
     }
   };
@@ -87,7 +110,7 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
         animate={{ x: 0 }}
         exit={{ x: "-100%" }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="bg-white h-full w-100 shadow-lg p-6 fixed left-0 top-0"
+        className="bg-white h-full w-100 shadow-lg p-6 fixed left-0 top-0 overflow-auto"
       >
         <button
           onClick={handleClose}
@@ -121,7 +144,7 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
             <div className="mt-1 flex items-center space-x-4">
               <input
                 type="file"
-                name="profileImage"
+                name="image"
                 onChange={handleImageChange}
                 accept="image/*"
                 className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
@@ -156,8 +179,8 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
             </label>
             <input
               type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
+              name="DateOfBirth"
+              value={formData.DateOfBirth}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
@@ -182,8 +205,8 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
             </label>
             <input
               type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
+              name="phone"
+              value={formData.phone}
               onChange={handleInputChange}
               pattern="[0-9]{10}"
               placeholder="1234567890"

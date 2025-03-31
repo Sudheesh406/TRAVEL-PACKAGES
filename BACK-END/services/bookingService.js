@@ -3,17 +3,17 @@ const TourPackage = require('../models/TravelPackageSchema')
 
 const newBooking = async (data)=>{
     try {
-        console.log("data:::",data.data)
         let obj = data.data
         let result = await Booked.create({
             packageName: obj.packageName,
-            
             packageId: obj.packageId,
             price: obj.price,
             Date: obj.Date,
             user: obj.user,
             companyDetails: obj.company,
-            seat: obj.seat
+            seat: obj.seat,
+            image: obj.image,
+            companyName: obj.companyName
           })
           let package = await TourPackage.findByIdAndUpdate(
             obj.packageId, 
@@ -30,4 +30,18 @@ const newBooking = async (data)=>{
         
     }
 }
-module.exports = {newBooking}
+
+const bookingDetails = async (id)=>{
+    if(id){
+        try {
+            let result = await Booked.find({user:id.id})
+            if(result)return result
+        } catch (error) {
+            console.error("error found in bookingDetails",error);
+            
+        }
+    }else{
+        return null
+    }
+}
+module.exports = {newBooking, bookingDetails}

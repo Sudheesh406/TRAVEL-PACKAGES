@@ -22,6 +22,10 @@ const schema = mongoose.Schema({
         ref: companyDetails,
         required: true,
     },
+    companyName:{
+        type:String,
+        require:true
+    },
     price: {
         type: Number,
         required: true,
@@ -34,6 +38,10 @@ const schema = mongoose.Schema({
         type:String,
         require:true
     },
+    image:{
+        type:String,
+        require:true
+    }
 })
 
 const Booked = mongoose.model('Booked',schema)
