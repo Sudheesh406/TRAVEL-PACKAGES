@@ -15,11 +15,13 @@ const findPackage = async (value) => {
     if (value == 3) {
       return await TourPackage.find({isAvailable:true}).sort({createdAt:-1}).limit(3);
     }else{
+      let companyData = await companyDetails.find({operator:value})
+      let id = companyData[0]
       const [totalCount, tourPackages] = await Promise.all([
-        TourPackage.countDocuments({ tourOperator: value }),
-        TourPackage.find({ tourOperator: value, isAvailable:true }).sort({createdAt:-1}).limit(3)   
+        TourPackage.countDocuments({ company: id }),
+        TourPackage.find({company: id, isAvailable:true }).sort({createdAt:-1}).limit(3)   
       ]);
-      return { totalCount, tourPackages };
+      return { totalCount, tourPackages};
     }
   }
   } catch (error) {

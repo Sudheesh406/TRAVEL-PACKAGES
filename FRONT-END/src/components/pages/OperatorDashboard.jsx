@@ -10,14 +10,16 @@ import { setCompany } from "../../redux/companySlice";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../../axios";
+import OperatorProfileEditModal from "../modal/operatorProfileEditModal";
 
 export default function OperatorDashboard() {
   const [details, setDetails] = useState(null);
   const [Packages, setPackages] = useState([]);
   const [PackagesCount, setPackagesCount] = useState(0);
+  const [isOpen,setIsOpen] = useState(false)
 
   const dispatch = useDispatch();
-  const company = useSelector((state) => state.company.company); // Get company data from Redux
+  const company = useSelector((state) => state.company.company);
 
   useEffect(() => {
     async function fetchCompanyDetails() {
@@ -25,7 +27,7 @@ export default function OperatorDashboard() {
         try {
           let { data } = await axios.get("/Company/getCompany");
           if (data) {
-            dispatch(setCompany(data.result)); // Save to Redux
+            dispatch(setCompany(data.result)); 
             setDetails(data.result);
             setPackages(data.tourPackages);
             setPackagesCount(data.totalCount);
@@ -34,12 +36,16 @@ export default function OperatorDashboard() {
           console.error("Error fetching company details", error);
         }
       } else {
-        setDetails(company); // Use Redux state when available
+        setDetails(company); 
       }
     }
 
     fetchCompanyDetails();
   }, [company, dispatch]);
+
+const editProfile =()=>{
+  setIsOpen(true)
+}
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,8 +69,9 @@ export default function OperatorDashboard() {
                     Add New Package
                   </button>
                 </Link>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                  View Analytics
+                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                onClick={editProfile}>
+                  Edit Profile
                 </button>
               </div>
             </div>
@@ -82,7 +89,7 @@ export default function OperatorDashboard() {
                 <Users className="text-blue-600" size={24} />
               </div>
               <div>
-                <p className="text-gray-600">Total Customers</p>
+                <p className="text-gray-600">Total Bookings</p>
                 <p className="text-2xl font-bold">1,234</p>
                 <p className="text-green-600 text-sm">+12% from last month</p>
               </div>
@@ -155,6 +162,9 @@ export default function OperatorDashboard() {
           )}
         </div>
       </div>
+      {isOpen && <OperatorProfileEditModal
+       setIsOpen={setIsOpen}
+        details={details} setDetails={setDetails}/>}
     </div>
   );
 }

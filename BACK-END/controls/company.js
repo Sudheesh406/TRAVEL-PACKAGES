@@ -31,4 +31,18 @@ const getCompany = async (req,res)=>{
   }
 }
 
-module.exports = { registeredCompany,getCompany}
+const editCompanyProfile = async (req,res)=>{
+  let img = req.files
+  let profile = req.body
+  if(img.length > 0){
+      let image = img [0].location
+      profile.image = image
+  }
+try {
+  console.log("profile",profile)
+} catch (error) {
+  
+}
+}
+
+module.exports = { registeredCompany,getCompany, editCompanyProfile}

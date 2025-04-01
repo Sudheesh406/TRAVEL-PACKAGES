@@ -15,7 +15,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isExist) {
+    if (isExist && isExist.username) {
       setFirstLetter(isExist.username.charAt(0).toUpperCase());
     }
   }, [isExist]);
@@ -30,7 +30,12 @@ const Navbar = () => {
       }
     } catch (error) {
       console.error('Error during logout:', error);
+      alert('There was an error logging out. Please try again later.');
     }
+  };
+
+  const handleProfileClick = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -57,12 +62,18 @@ const Navbar = () => {
 
             {/* Profile Dropdown */}
             <div className="relative">
-              <div
+              <button
+                aria-haspopup="true"
+                aria-expanded={dropdownOpen ? "true" : "false"}
                 className="w-10 h-10 bg-blue-500 rounded-full cursor-pointer flex items-center justify-center"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                onClick={handleProfileClick}
               >
-                <span className="text-white font-semibold">{firstLetter}</span>
-              </div>
+                {isExist && isExist.image ? (
+                  <img src={isExist.image} alt={firstLetter} className="w-full h-full object-cover rounded-full" />
+                ) : (
+                  <span className="text-white font-bold">{firstLetter}</span>
+                )}
+              </button>
 
               {dropdownOpen && (
                 <div className="absolute left-0 top-8 mt-2 w-40 bg-white shadow-lg rounded-md py-2">

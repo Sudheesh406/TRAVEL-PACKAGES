@@ -6,7 +6,6 @@ import BookingModal from '../modal/BookingModal';
 
 function PackageDetails() {
   const { id } = useParams();
-  const packages = useSelector((state) => state.package.package);
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [packageDetails, setPackageDetails] = useState();
@@ -14,7 +13,6 @@ function PackageDetails() {
 
   useEffect(() => {
     async function getPackageDetails() {
-      if (!packages) {
         try {
           let { data } = await axios.get(`Package/getPackage/${id}`);
           if (data) {
@@ -23,16 +21,9 @@ function PackageDetails() {
         } catch (error) {
           console.error('Error fetching package details', error);
         }
-      } else {
-        packages.forEach((element) => {
-          if (element._id === id) {
-            setPackageDetails(element);
-          }
-        });
-      }
     }
     getPackageDetails();
-  }, [packages]);
+  }, []);
 
   useEffect(() => {
     if (packageDetails) {
@@ -43,7 +34,7 @@ function PackageDetails() {
   const handleSubmit = () => {
     setShow(true);
   };
- console.log(packageDetails)
+
   if (!packageDetails) {
     return (
       <div className="container mx-auto px-6 py-16 flex flex-col items-center text-center">

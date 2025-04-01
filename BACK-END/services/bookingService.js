@@ -13,7 +13,10 @@ const newBooking = async (data)=>{
             companyDetails: obj.company,
             seat: obj.seat,
             image: obj.image,
-            companyName: obj.companyName
+            companyName: obj.companyName,
+            userName : obj.userName,
+            userEmail : obj.userEmail,
+            description : obj.description
           })
           let package = await TourPackage.findByIdAndUpdate(
             obj.packageId, 
@@ -34,8 +37,13 @@ const newBooking = async (data)=>{
 const bookingDetails = async (id)=>{
     if(id){
         try {
-            let result = await Booked.find({user:id.id})
-            if(result)return result
+            let result = await Booked.find({ user: id.id }).sort({ Date: -1 }).limit(1);
+            if(result){
+                return result
+            }else{
+                result = await Booked.find({companyDetails: id.id }).sort({ Date: -1 }).limit(1);
+                return result
+            }
         } catch (error) {
             console.error("error found in bookingDetails",error);
             
@@ -44,4 +52,13 @@ const bookingDetails = async (id)=>{
         return null
     }
 }
-module.exports = {newBooking, bookingDetails}
+
+const BookingHistory = async(id)=>{
+    if(id){
+        return Booked.find({ user: id })
+
+    }else{
+        return null
+    }
+}
+module.exports = {newBooking, bookingDetails, BookingHistory}

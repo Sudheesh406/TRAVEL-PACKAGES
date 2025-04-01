@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {useSelector } from 'react-redux';
 import axios from '../../axios'
 import Swal from "sweetalert2";
@@ -6,6 +7,7 @@ import Swal from "sweetalert2";
 //take user details from redux and give it to the rayzor pay set a page for see all bookings
 
 function BookingModal({ setShow, packageDetails }) { 
+  const navigate = useNavigate()
   const user = useSelector((state) => state.user.user);
   console.log(packageDetails)
   const [itemCount, setItemCount] = useState(0);
@@ -48,21 +50,22 @@ function BookingModal({ setShow, packageDetails }) {
           confirmButtonText: "OK",
         }).then((response)=>{
           setShow(false)
-          // navigate('/orders')
-          console.log("navigate to booking page");
           let data = {packageName : packageDetails.name,
             packageId : packageDetails._id,
-            price : packageDetails.price,
+            price : total,
             Date: packageDetails.Date,
             user : user._id,
             company: packageDetails.company,
             seat: itemCount,
             image: packageDetails.images[0],
-            companyName : packageDetails.companyName
+            companyName : packageDetails.companyName,
+            userName : user.username,
+            userEmail : user.email,
+            description : packageDetails.description
            }
-          //  console.log("data",data)
           packageBooked(data)
          })
+
          
         const paymentData = {
           razorpay_order_id: response.razorpay_order_id,
@@ -96,11 +99,12 @@ function BookingModal({ setShow, packageDetails }) {
     const razorpay = new Razorpay(options);
     razorpay.open();
   };
-  
-  
+
   const packageBooked = async(data)=>{
     try {
       let result = await axios.post('/payment/booking',{data})
+      if(result){
+        navigate(`/BookingHistory/${user._id}`)      }
     } catch (error) {
       console.error("error found in packageBooked",error);
     }

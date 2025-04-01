@@ -74,7 +74,7 @@ const Packages = () => {
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{pkg.name}</h3>
-                <p className="text-gray-600 mb-4">{pkg.description}</p>
+                {/* <p className="text-gray-600 mb-4">{pkg.description}</p> */}
                 
                 <div className="space-y-2 mb-6">
                   <div className="flex items-center text-gray-700">

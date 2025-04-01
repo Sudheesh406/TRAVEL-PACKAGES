@@ -10,6 +10,7 @@ import PackageFirstPage from './components/forms/packagesForm/PackageFirstPage'
 import PackageSecondPage from './components/forms/packagesForm/PackageSecondPage'
 import PackageDetails from './components/pages/PackageDetails'
 import UserProfile from './components/pages/UserProfile'
+import BookingHistory from './components/pages/BookingHistory'
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollTop";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/PackageSecondPage" element={<PackageSecondPage />} />
         <Route path="/PackageDetails/:id" element={<PackageDetails />} />
         <Route path="/UserProfile" element={<UserProfile />} />
+        <Route path="/BookingHistory/:id" element={<BookingHistory />} />
       </Routes>
     </div>
   );

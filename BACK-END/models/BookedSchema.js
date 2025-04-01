@@ -41,8 +41,21 @@ const schema = mongoose.Schema({
     image:{
         type:String,
         require:true
+    },
+    userName:{
+        type:String,
+        require:true
+    },
+    userEmail:{
+        type:String,
+        require:true
+    },
+    description:{
+        type:String,
+        require:true
     }
-})
+
+},{timestamps:true})
 
 const Booked = mongoose.model('Booked',schema)
 module.exports = Booked

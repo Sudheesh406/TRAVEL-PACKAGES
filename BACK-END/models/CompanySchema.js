@@ -27,6 +27,9 @@ const schema = mongoose.Schema({
     address:{
         type:String,
         required:true
+    },
+    image:{
+        type:String 
     }
 })
 

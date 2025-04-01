@@ -1,4 +1,4 @@
-const {newBooking ,bookingDetails} = require('../services/bookingService')
+const {newBooking ,bookingDetails, BookingHistory} = require('../services/bookingService')
 
 async function booking (req,res){
     try {
@@ -38,4 +38,15 @@ const getbookingDetails = async (req,res)=>{
     }
 }
 
-module.exports = {booking, getbookingDetails}
+const getBookingHistory = async (req,res)=>{
+    let {id} = req.params
+    try {
+        let result = await BookingHistory(id)
+        if(result)res.status(200).json({message:"successfully finded Booking history",result})
+    } catch (error) {
+        console.error("error foundgetBookingHistory",error);
+        res.status(400).json({message:"error in find Booking history",error})
+    }
+}
+
+module.exports = {booking, getbookingDetails, getBookingHistory}

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const User = require('../models/userSchema');
-const { applyTimestamps } = require("./TourOperatorSchema");
 const companyDetails = require('../models/CompanySchema')
 
 const tourPackageSchema = new mongoose.Schema({
