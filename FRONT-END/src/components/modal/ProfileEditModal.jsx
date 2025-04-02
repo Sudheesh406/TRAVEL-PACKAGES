@@ -37,8 +37,6 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
-  
-  
 
   const hasFormChanged = () => {
     let valid = true;

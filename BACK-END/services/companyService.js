@@ -1,4 +1,5 @@
 const companyDetails = require("../models/CompanySchema");
+const Booked = require('../models/BookedSchema')
 
 const createRegisteredCompany = async (data,operator) => {
 
@@ -21,8 +22,9 @@ const createRegisteredCompany = async (data,operator) => {
     if (id) {
         try {
           let data = await companyDetails.findOne({operator: id });
+          let booking = await Booked.find({companyDetails: data._id })
           if (data) {
-            return data;
+            return {data,booking}
           } else {
             return null;
           }
@@ -35,22 +37,22 @@ const createRegisteredCompany = async (data,operator) => {
       }
   }
 
-//   const updateCompanyProfile = async (newData) => {
-//     try {
-//         if (!newData?.id) {
-//             throw new Error("User ID is required");
-//         }
-//         const updatedUser = await User.findByIdAndUpdate(
-//             newData.id, 
-//             { $set: newData }, 
-//             { new: true, runValidators: true }
-//         );
-//         return updatedUser;
-//     } catch (error) {
-//         console.error("Error in profile updation:", error);
-//         return null;
-//     }
-// };
+  const updateCompanyProfile = async (newData) => {
+    try {
+        if (!newData?.id) {
+            throw new Error("User ID is required");
+        }
+        const updated = await companyDetails.findByIdAndUpdate(
+            newData.id, 
+            { $set: newData }, 
+            { new: true, runValidators: true }
+        );
+        return updated;
+    } catch (error) {
+        console.error("Error in profile updation:", error);
+        return null;
+    }
+};
 
 
-  module.exports = {createRegisteredCompany,findCompanyById,}
+  module.exports = {createRegisteredCompany,findCompanyById,updateCompanyProfile}

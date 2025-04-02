@@ -31,7 +31,28 @@ const destinations = [
   },
 ];
 
+import {useEffect, useState} from 'react'
+import axios from '../../axios'
+
 const Destinations = () => {
+ const [details,setDetails] = useState()
+
+
+useEffect(()=>{
+  async function getPopularDestination() {
+    try {
+     let {data} = await axios.get('Payment/getPopularDestination')
+      setDetails(data.result)
+      console.log(data.result);
+      
+   } catch (error) {
+     console.error("error found in getPopularDestination",error);
+     
+   }
+  }
+  getPopularDestination()
+},[])
+
   return (
     <section id="destinations" className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,17 +62,17 @@ const Destinations = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {destinations.map((destination) => (
-            <div key={destination.id} className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+          {details && details.map((destination, index) => (
+            <div key={index} className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
               <div className="h-48 overflow-hidden">
                 <img src={destination.image} alt={destination.name} className="w-full h-full object-cover" />
               </div>
               <div className="p-6">
                 <div className="flex items-center mb-2">
                   <MapPin className="h-5 w-5 text-blue-600 mr-1" />
-                  <h3 className="text-xl font-semibold text-gray-900">{destination.name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">{destination.packageName}</h3>
                 </div>
-                <p className="text-gray-600 mb-4">{destination.description}</p>
+                <p className="text-gray-600 mb-4">{destination.packageDetails.description}</p>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
                     <span className="text-yellow-500">★</span>
@@ -65,11 +86,11 @@ const Destinations = () => {
         </div>
         
         <div className="text-center mt-10">
-        <Link to="/DestinationDetail">
+        {/* <Link to="/DestinationDetail">
           <button className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300">
             View All Destinations
           </button>
-            </Link>
+            </Link> */}
         </div>
       </div>
     </section>

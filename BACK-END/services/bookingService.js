@@ -61,4 +61,30 @@ const BookingHistory = async(id)=>{
         return null
     }
 }
-module.exports = {newBooking, bookingDetails, BookingHistory}
+
+const popularDestination = async () => {
+    try {
+        let data = await Booked.aggregate([
+            { $group: { _id: "$packageId", count: { $sum: 1 }, 
+            packageName: { $first: "$packageName" }, image: { $first: "$image" } } },
+            { $sort: { count: -1 } }, 
+            { $limit: 4 },
+            { 
+                $lookup: { 
+                    from: "tourpackages", 
+                    localField: "_id", 
+                    foreignField: "_id", 
+                    as: "packageDetails" 
+                } 
+            }, 
+            { $unwind: "$packageDetails" } 
+        ]);
+        return data;
+    } catch (error) {
+        console.error('Error in popularDestination', error);
+        return null;
+    }
+};
+
+
+module.exports = {newBooking, bookingDetails, BookingHistory, popularDestination}

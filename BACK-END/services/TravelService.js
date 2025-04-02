@@ -1,5 +1,6 @@
 const TourPackage = require("../models/TravelPackageSchema");
 const companyDetails = require("../models/CompanySchema")
+const Booked = require("../models/BookedSchema")
 
 const createNewTourPackage = async (packageData) => {
   try {
@@ -8,6 +9,7 @@ const createNewTourPackage = async (packageData) => {
     throw new Error(error.message);
   }
 }; 
+
 
 const findPackage = async (value) => {
   try {
@@ -29,24 +31,16 @@ const findPackage = async (value) => {
   }
 };
 
-// const findBySearch = async (search)=>{
-//   try {
-//     if(search){
-//       let upperCaseName = search.toUpperCase();
-//     let value = await TourPackage.find({name:upperCaseName}).limit(9)
-//     if(value.length >0){
-//       return value
-//     }else{
-//       return null
-//     }
-//     }else{
-//       return null
-//     }
-//   } catch (error) {
-//     console.error("error found in findBySearch",error);
-    
-//   }
-// }
+ const getCompanyPackage = async (data)=>{
+  try {
+    let id = data.id 
+    let result = await TourPackage.find({company:id})
+    if(result)return result
+  } catch (error) {
+    console.error("error found in getCompanyPackage",error);
+    return null
+  }
+ }
 
 const findAllPackage = async (data) => {
   if(data){
@@ -131,6 +125,39 @@ const findPackageDetail = async (id) => {
   }
 };
 
+const acticeNonActive = async (id) => {
+  try {
+    let package = await TourPackage.find({ _id: id }); 
+
+    if (!package.length) {
+      console.log("Package not found");
+      return null;
+    }
+
+    const updatedPackage = await TourPackage.findOneAndUpdate(
+      { _id: id },
+      { isAvailable: !package[0].isAvailable }, 
+      { new: true } 
+    );
+
+    console.log("Updated Package:", updatedPackage);
+    return updatedPackage;
+  } catch (error) {
+    console.error("Error found in acticeNonActive", error);
+    return null;
+  }
+};
+
+const BookedDetails = async(id)=>{
+  try {
+    let booking = await Booked.find({packageId: id})
+    return booking
+  } catch (error) {
+    console.error("error found in BookedDetails",error);
+    return null
+  }
+}
 
 
-module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage,findPackageDetail };
+module.exports = { createNewTourPackage,findPackage,findAllPackage,findLocationPackage,
+  findPackageDetail,getCompanyPackage,acticeNonActive,BookedDetails };

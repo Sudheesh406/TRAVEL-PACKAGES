@@ -225,7 +225,7 @@ async function Signup(req, res) {
     }
   }
 
-  let logOut = async (req, res) => {
+  let logOut = async (req, res) => {    
     try {
         res.clearCookie("token");
         return res.status(200).json({ success: true, message: "Logged out successfully" });

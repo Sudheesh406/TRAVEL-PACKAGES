@@ -10,8 +10,8 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
     id: details._id,
     image: details.image || "",
     address: details.address || "",
-    phone: details.phone || "",
-    tagline: details.tagline || "",
+    phoneNumber: details.phoneNumber || "",
+    Tagline: details.Tagline || "",
   });
 
   const [showWarning, setShowWarning] = useState(false);
@@ -49,24 +49,25 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
       valid = false;
     }else if (formData.address !== '' && formData.address !== details.address){
       valid = false;
-    }else if (formData.phone !== '' && formData.phone !== details.phone){
+    }else if (formData.phoneNumber !== '' && formData.phoneNumber !== details.phoneNumber){
       valid = false;
-    }else if (formData.tagline !== '' && formData.tagline !== details.tagline){
+    }else if (formData.Tagline !== '' && formData.Tagline !== details.Tagline){
       valid = false;
     }
     return valid;
   };
 
  const handleSubmit = async(e)=>{
-    e.preventDefault();
-    let value = hasFormChanged();
+   
+   e.preventDefault();
+   let value = hasFormChanged();
     if (!value) {
       try {
         const formDataToSend = new FormData();
         formDataToSend.append("companyName", formData.companyName);
         formDataToSend.append("address", formData.address);
-        formDataToSend.append("phone", formData.phone);
-        formDataToSend.append("tagline", formData.tagline);
+        formDataToSend.append("phoneNumber", formData.phoneNumber);
+        formDataToSend.append("Tagline", formData.Tagline);
         formDataToSend.append("id", formData.id);
         if (formData.image) {
           formDataToSend.append("images", formData.image[0])
@@ -76,8 +77,11 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
               "Content-Type": "multipart/form-data",
             },
           });
+          setDetails(data.result)
+          handleClose()
     }catch{
-
+      console.error("error found in posting Data",error);
+      
     }
     }
 
@@ -109,7 +113,7 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
             </label>
             <input
               type="text"
-              name="CompanyName"
+              name="companyName"
               value={formData.companyName}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
@@ -146,8 +150,8 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
 
             <input
               type="text"
-              name="tagLine"
-              value={formData.tagline}
+              name="Tagline"
+              value={formData.Tagline}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
@@ -172,8 +176,8 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
             </label>
             <input
               type="tel"
-              name="phone"
-              value={formData.phone}
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleInputChange}
               pattern="[0-9]{10}"
               placeholder="1234567890"

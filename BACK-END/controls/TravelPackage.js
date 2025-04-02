@@ -1,4 +1,5 @@
-const { createNewTourPackage,findPackage, findAllPackage,findLocationPackage,findPackageDetail } = require("../services/TravelService");
+const { createNewTourPackage,findPackage, findAllPackage,
+  findLocationPackage,findPackageDetail,getCompanyPackage,acticeNonActive,BookedDetails } = require("../services/TravelService");
 
 const createPackage = async (req, res) => {
   try {
@@ -92,20 +93,16 @@ try {
 }
 }
 
-// const getSearchData = async(req,res)=>{
-//     let search = req.params.search
-//       try {
-//        let value = await findBySearch(search)
-//        if(value){
-//         res.status(200).json({message:"searched data finted successfully",value})
-//        }else{
-//         res.status(400).json({message:"not find the searched Data"})
-//        }
-//       } catch (error) {
-//         console.error("error found in getSearchData",error);
-//         res.status(401).json({message:"error found in getSearchData",error})
-//       }
-// }
+const findCompanyPackages = async (req,res)=>{
+  try {
+    let id  = req.params
+    let result = await getCompanyPackage(id)
+    if(result)res.status(200).json({message:"successfully find packages",result})
+  } catch (error) {
+    console.error("error found in findAllPackages",error);
+    res.status(400).json({message:"error in finding packages",error})
+  }
+}
 
 let getPackage = async (req,res)=>{
   try {
@@ -122,4 +119,28 @@ let getPackage = async (req,res)=>{
   }
 }
 
-module.exports = { createPackage,DisplayPackage, DisplayHomePackage,DisplayMorePackage,DisplayLocationPackage,getPackage, };
+const packageHandle = async (req,res)=>{
+  try {
+    let {id} = req.body
+    console.log("id",id)
+    let result = await acticeNonActive(id)
+    if(result)res.status(200).json({message:"Sucessfully change",result})
+  } catch (error) {
+    console.error("error found in packageHandle",error);
+    res.status(200).json({message:"error found in packageHandle",error})
+  }
+}
+
+const PackageBookedDetails = async (req,res)=>{
+  try {
+    let {id} = req.params 
+    let data = await BookedDetails(id)
+    if(data.length > 0)res.status(200).json({message:"successfully finded package Booked details",data})
+  } catch (error) {
+    console.error("error found in PackageBookedDetails",error);
+    res.status(400).json({message:"error in finding booking Details",error})
+  }
+}
+
+module.exports = { createPackage,DisplayPackage, DisplayHomePackage,packageHandle,
+  DisplayMorePackage,DisplayLocationPackage,getPackage,findCompanyPackages,PackageBookedDetails };

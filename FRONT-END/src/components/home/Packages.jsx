@@ -17,7 +17,6 @@ const Packages = () => {
       try {
         let {data} = await axios.get('/Package/DisplayHomePackage')
         if(data){
-          // console.log("data:",data.Package)
           setAllPackage(data.Package)
         }
       } catch (error) {

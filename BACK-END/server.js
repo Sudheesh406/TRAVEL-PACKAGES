@@ -7,6 +7,7 @@ const PackageRouter = require('./routers/TravelPackageRoute')
 const companyRouter = require('./routers/companyRoute')
 const bookingRouter = require('./routers/bookingRoute')
 const userProfileRoute = require('./routers/userProfileRoute')
+const reviewRoute = require('./routers/reviewRoute')
 const databaseCn = require('./database/db');
 const cors = require('cors')
 
@@ -23,6 +24,7 @@ app.use('/Package',PackageRouter)
 app.use('/Company',companyRouter)
 app.use('/Payment',bookingRouter)
 app.use('/userProfile',userProfileRoute)
+app.use('/Review',reviewRoute)
 
 databaseCn();
 

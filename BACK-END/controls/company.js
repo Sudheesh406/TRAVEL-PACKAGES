@@ -1,5 +1,7 @@
-const {createRegisteredCompany,findCompanyById} =require("../services/companyService")
+const {createRegisteredCompany,findCompanyById, updateCompanyProfile} =require("../services/companyService")
 const { findPackage } = require("../services/TravelService");
+
+
 const registeredCompany = async (req,res)=>{
     let data = req.body
     let operator = req.User.id
@@ -33,15 +35,17 @@ const getCompany = async (req,res)=>{
 
 const editCompanyProfile = async (req,res)=>{
   let img = req.files
+  console.log("img",img)
   let profile = req.body
   if(img.length > 0){
       let image = img [0].location
       profile.image = image
   }
 try {
-  console.log("profile",profile)
+  let result = await updateCompanyProfile(profile)
+  if(result)return res.status(200).json({message:"successfully Updated",result})
 } catch (error) {
-  
+  return res.status(200).json({message:"error found in update company",error})
 }
 }
 
