@@ -3,7 +3,6 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 require('dotenv').config()
 
-// Configure the S3 client
 const s3Client = new S3Client({
   region:"ap-south-1",
   credentials: {

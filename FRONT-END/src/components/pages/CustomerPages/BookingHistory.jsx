@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import axios from "../../axios";
+import axios from "../../../axios";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import RatingComponent from "../modal/RatingComponent";
+import RatingComponent from "../../modal/RatingComponent";
 
 function BookingHistory() {
 
@@ -60,7 +60,7 @@ function BookingHistory() {
           Bookings.map((booking, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
+              className=" rounded-lg shadow-md overflow-hidden"
               ref={pdfRef}
             >
               <div className="flex flex-col md:flex-row">

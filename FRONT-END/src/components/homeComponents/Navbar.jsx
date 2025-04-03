@@ -2,7 +2,7 @@ import { Menu, X, MapPin } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUser } from '../../redux/userSlice';
+import { clearUser } from '../../redux/user/userSlice';
 import axios from '../../axios';
 
 const Navbar = () => {

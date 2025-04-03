@@ -1,5 +1,6 @@
 const Booked = require('../models/BookedSchema') 
 const TourPackage = require('../models/TravelPackageSchema')
+const Review = require('../models/reviewSchema')
 
 const newBooking = async (data)=>{
     try {
@@ -79,6 +80,7 @@ const popularDestination = async () => {
             }, 
             { $unwind: "$packageDetails" } 
         ]);
+        
         return data;
     } catch (error) {
         console.error('Error in popularDestination', error);

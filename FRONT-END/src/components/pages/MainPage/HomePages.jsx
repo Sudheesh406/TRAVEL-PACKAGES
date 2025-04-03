@@ -1,13 +1,13 @@
-import Navbar from './home/Navbar';
-import Hero from './home/Hero';
-import Destinations from './home/Destinations';
-import Packages from './home/Packages';
-import Testimonials from './home/Testimonials';
-import Gallery from './home/Gallery';
-import Footer from './home/Footer';
+import Navbar from '../../homeComponents/Navbar';
+import Hero from '../../homeComponents/Hero';
+import Destinations from '../../homeComponents/Destinations';
+import Packages from '../../homeComponents/Packages';
+import Testimonials from '../../homeComponents/Testimonials';
+import Gallery from '../../homeComponents/Gallery';
+import Footer from '../../homeComponents/Footer';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from '../axios';
-import { setUser, clearUser } from '../redux/userSlice';
+import axios from '../../../axios';
+import { setUser, clearUser } from '../../../redux/user/userSlice';
 
 function HomePages() {
  let dispatch = useDispatch()

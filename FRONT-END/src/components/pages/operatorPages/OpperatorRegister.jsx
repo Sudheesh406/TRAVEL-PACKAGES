@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import axios from '../../axios'
+import axios from '../../../axios'
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
-import { setCompany, clearCompany } from '../../redux/companySlice';
+import { setCompany, clearCompany } from '../../../redux/company/companySlice';
 function OpperatorRegister() {
   const dispatch = useDispatch()
   const navigate = useNavigate()

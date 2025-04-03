@@ -1,5 +1,5 @@
 import { Search, MapPin, Calendar, Filter, Package } from "lucide-react";
-import axios from "../../axios";
+import axios from "../../../axios";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -7,10 +7,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import FilterModal from '../modal/FilterModal'
+import FilterModal from '../../modal/FilterModal'
 import {debounce} from 'lodash'
 import { useDispatch, useSelector } from 'react-redux';
-import {setPackage,clearPackage,} from "../../redux/packageSlice";
+import {setPackage,clearPackage,} from "../../../redux/package/packageSlice";
 
 export default function TravelPackages() {
   const [packages, setPackages] = useState();
@@ -153,7 +153,7 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-gray-50">
       
-      {/* Search and Filter Section */}
+
       <div className="bg-white shadow-sm">
         
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -202,7 +202,7 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Packages Grid */}
+
       <div className="max-w-7xl mx-auto px-4 py-8 ">
         <h2 className="text-2xl font-bold mb-6">Travel Packages</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">

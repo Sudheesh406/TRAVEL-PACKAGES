@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setPackageSecondForm,clearPackageSecondForm } from "../../../redux/packageSecondFormSlice";
+import { setPackageSecondForm,clearPackageSecondForm } from "../../../redux/forms/package/packageSecondFormSlice";
 import axios from '../../../axios'
 
 function PackageSecondPage() {

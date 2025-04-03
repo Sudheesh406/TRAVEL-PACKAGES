@@ -11,8 +11,6 @@ export default function Filter({ showFilter, setShowFilter, handleChangeFilter, 
     "Show All"
   ];
 
- 
-
   return (
     <div
       className={`fixed z-50 top-0 right-0 h-full w-[200px] bg-white text-white p-4 transition-transform ${

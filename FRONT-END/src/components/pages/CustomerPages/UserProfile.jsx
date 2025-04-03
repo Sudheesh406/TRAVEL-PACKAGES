@@ -2,9 +2,9 @@ import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser, clearUser } from "../../redux/userSlice";
-import axios from "../../axios";
-import ProfileEditModal from "../../components/modal/ProfileEditModal";
+import { setUser, clearUser } from "../../../redux/user/userSlice";
+import axios from "../../../axios";
+import ProfileEditModal from "../../modal/ProfileEditModal";
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Profile Header */}
+
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
@@ -125,7 +125,7 @@ export default function UserProfile() {
         </div>
       </div>
 
-      {/* Personal Information */}
+
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6">Personal Information</h2>
         <div className="bg-white rounded-xl shadow-sm p-6">
@@ -171,7 +171,7 @@ export default function UserProfile() {
           </div>
         </div>
 
-        {/* Booking History */}
+
         <div className="flex gap-4 items-center mt-10 mb-6">
           <h2 className="text-2xl font-bold ">Booking History</h2>
           <button className="h-11 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"

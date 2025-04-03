@@ -1,5 +1,6 @@
 const companyDetails = require("../models/CompanySchema");
 const Booked = require('../models/BookedSchema')
+const Review = require('../models/reviewSchema')
 
 const createRegisteredCompany = async (data,operator) => {
 
@@ -23,8 +24,28 @@ const createRegisteredCompany = async (data,operator) => {
         try {
           let data = await companyDetails.findOne({operator: id });
           let booking = await Booked.find({companyDetails: data._id })
+          let reviews = await Review.find({ company: data._id });
+          if (!reviews.length) return {};
+
+          let packageRatings = {};
+  
+          reviews.forEach(review => {
+              const { packageId, star } = review;
+              
+              if (!packageRatings[packageId]) {
+                  packageRatings[packageId] = { total: 0, count: 0 };
+              }
+              
+              packageRatings[packageId].total += star;
+              packageRatings[packageId].count += 1;
+          });
+  
+          let averageRatings = {};
+          for (let packageId in packageRatings) {
+              averageRatings = packageRatings[packageId].total / packageRatings[packageId].count;
+          }  
           if (data) {
-            return {data,booking}
+            return {data,booking,averageRatings}
           } else {
             return null;
           }
@@ -36,6 +57,7 @@ const createRegisteredCompany = async (data,operator) => {
         return null;
       }
   }
+
 
   const updateCompanyProfile = async (newData) => {
     try {

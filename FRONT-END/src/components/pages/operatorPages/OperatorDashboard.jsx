@@ -1,11 +1,11 @@
 import { Users, Package, Star, Calendar } from "lucide-react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setCompany } from "../../redux/companySlice";
+import { setCompany } from "../../../redux/company/companySlice";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "../../axios";
-import OperatorProfileEditModal from "../modal/operatorProfileEditModal";
+import axios from "../../../axios";
+import OperatorProfileEditModal from "../../modal/OperatorProfileEditModal";
 
 export default function OperatorDashboard() {
   const [details, setDetails] = useState(null);
@@ -13,6 +13,7 @@ export default function OperatorDashboard() {
   const [PackagesCount, setPackagesCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [booking, setBooking] = useState("");
+  const [review, setReview] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,6 +27,8 @@ export default function OperatorDashboard() {
           setPackages(data.tourPackages);
           setPackagesCount(data.totalCount);
           setBooking(data.result.booking);
+          setReview(data.result.averageRatings)
+          
         }
       } catch (error) {
         console.error("Error fetching company details", error);
@@ -59,7 +62,6 @@ export default function OperatorDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Operator Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
@@ -90,7 +92,7 @@ export default function OperatorDashboard() {
               </div>
             </div>
             <div className="flex w-full justify-end">
-              {/* Logout Button */}
+
               <button
                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 "
              onClick={handleLogout} >
@@ -101,7 +103,7 @@ export default function OperatorDashboard() {
         </div>
       </div>
 
-      {/* Statistics */}
+
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6">Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -135,15 +137,15 @@ export default function OperatorDashboard() {
                 <Star className="text-yellow-600" size={24} />
               </div>
               <div>
-                <p className="text-gray-600">Last Rating</p>
-                <p className="text-2xl font-bold">4.8</p>
+                <p className="text-gray-600">Customer Rating</p>
+                <p className="text-2xl font-bold">{review}</p>
                 {/* <p className="text-green-600 text-sm">+0.2 from last month</p> */}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Recent Packages */}
+
         <div className="flex gap-4 items-center mt-10 mb-6">
           <h2 className="text-2xl font-bold">Recently Added Packages</h2>
           <button

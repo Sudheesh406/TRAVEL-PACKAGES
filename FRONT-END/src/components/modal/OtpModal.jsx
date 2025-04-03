@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios';  
 import { useDispatch } from 'react-redux';
-import { setUser, clearUser } from '../../redux/userSlice';
+import { setUser, clearUser } from '../../redux/user/userSlice';
 
 function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
   let dispatch = useDispatch()

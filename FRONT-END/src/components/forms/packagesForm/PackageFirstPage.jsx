@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {setPackageForm,clearPackageForm,} from "../../../redux/packageFormSlice";
+import {setPackageForm,clearPackageForm,} from "../../../redux/forms/package/packageFormSlice";
 
 const getPreviewUrl = (file) => {
   if (file) {

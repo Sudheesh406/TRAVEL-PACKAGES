@@ -1,35 +1,5 @@
 import { MapPin } from 'lucide-react';
 import { Link } from "react-router-dom";
-const destinations = [
-  {
-    id: 1,
-    name: 'Bali, Indonesia',
-    description: 'Tropical paradise with beautiful beaches and rich culture.',
-    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1738&q=80',
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    name: 'Santorini, Greece',
-    description: 'Stunning white buildings and breathtaking ocean views.',
-    image: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80',
-    rating: 4.9,
-  },
-  {
-    id: 3,
-    name: 'Kyoto, Japan',
-    description: 'Ancient temples and beautiful cherry blossoms.',
-    image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-    rating: 4.7,
-  },
-  {
-    id: 4,
-    name: 'Machu Picchu, Peru',
-    description: 'Ancient Incan citadel set high in the Andes Mountains.',
-    image: 'https://images.unsplash.com/photo-1526392060635-9d6019884377?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-    rating: 4.9,
-  },
-];
 
 import {useEffect, useState} from 'react'
 import axios from '../../axios'
@@ -42,9 +12,8 @@ useEffect(()=>{
   async function getPopularDestination() {
     try {
      let {data} = await axios.get('Payment/getPopularDestination')
-      setDetails(data.result)
-      console.log(data.result);
-      
+      setDetails(data.result)      
+      console.log("data.result",data.result)
    } catch (error) {
      console.error("error found in getPopularDestination",error);
      
@@ -54,7 +23,7 @@ useEffect(()=>{
 },[])
 
   return (
-    <section id="destinations" className="py-16 bg-gray-50">
+    <section id="destinations" className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Popular Destinations</h2>
@@ -76,7 +45,7 @@ useEffect(()=>{
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
                     <span className="text-yellow-500">★</span>
-                    <span className="ml-1 text-gray-700">{destination.rating}</span>
+                    <span className="ml-1 text-gray-700">{destination.review}</span>
                   </div>
                   <button className="text-blue-600 hover:text-blue-800 font-medium">View Details</button>
                 </div>

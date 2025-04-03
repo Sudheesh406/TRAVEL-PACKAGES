@@ -14,6 +14,5 @@ Router.get("/getPackage/:id", getPackage);
 Router.get("/findAllPackages/:id", findCompanyPackages);
 Router.post("/packageHandle", packageHandle);
 Router.get("/PackageBookedDetails/:id", PackageBookedDetails);
-// Router.get("/getSearchData/:search", getSearchData);
  
 module.exports = Router

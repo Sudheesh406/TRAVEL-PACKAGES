@@ -4,8 +4,6 @@ import {useSelector } from 'react-redux';
 import axios from '../../axios'
 import Swal from "sweetalert2";
 
-//take user details from redux and give it to the rayzor pay set a page for see all bookings
-
 function BookingModal({ setShow, packageDetails }) { 
   const navigate = useNavigate()
   const user = useSelector((state) => state.user.user);
