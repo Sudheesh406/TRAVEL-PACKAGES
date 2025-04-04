@@ -1,5 +1,4 @@
 import { Users, Package, Star, Calendar } from "lucide-react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { setCompany } from "../../../redux/company/companySlice";
 import { useEffect, useState } from "react";
@@ -13,7 +12,7 @@ export default function OperatorDashboard() {
   const [PackagesCount, setPackagesCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [booking, setBooking] = useState("");
-  const [review, setReview] = useState("");
+  const [review, setReview] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,8 +26,12 @@ export default function OperatorDashboard() {
           setPackages(data.tourPackages);
           setPackagesCount(data.totalCount);
           setBooking(data.result.booking);
-          setReview(data.result.averageRatings)
-          
+          const rating = data.result.averageRatings;
+          if (typeof rating === "object") {
+            setReview(rating?.avg || 0);
+          } else {
+            setReview(rating || 0);
+          }
         }
       } catch (error) {
         console.error("Error fetching company details", error);
@@ -38,27 +41,35 @@ export default function OperatorDashboard() {
     fetchCompanyDetails();
   }, []);
 
-  let totalBookings = booking.length;
+  let totalBookings = 0;
+  if (booking && booking.length > 0) totalBookings = booking.length;
+
   const editProfile = () => {
     setIsOpen(true);
   };
 
   const handlePackages = () => {
-    let id = Packages[0].company;
-    navigate(`/OperatorPackages/${id}`);
+    let id = Packages[0]?.company;
+    if (id) {
+      navigate(`/OperatorPackages/${id}`);
+    }
   };
 
   const viewBookings = (id) => {
     navigate(`/OperatorBookingHistory/${id}`);
   };
 
-  const handleLogout= async()=>{
-    console.log("gdgdf");
-    
-    let result = await axios.get('/logOut');
-    if(result)navigate('/login')
-
-  }
+  const handleLogout = async () => {
+    try {
+      let result = await axios.get("/logOut");
+      if (result){
+        localStorage.removeItem("token");
+        navigate("/login");
+      } 
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,17 +103,16 @@ export default function OperatorDashboard() {
               </div>
             </div>
             <div className="flex w-full justify-end">
-
               <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 "
-             onClick={handleLogout} >
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </div>
           </div>
         </div>
       </div>
-
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6">Overview</h2>
@@ -115,7 +125,6 @@ export default function OperatorDashboard() {
               <div>
                 <p className="text-gray-600">Total Bookings</p>
                 <p className="text-2xl font-bold">{totalBookings}</p>
-                {/* <p className="text-green-600 text-sm">+12% from last month</p> */}
               </div>
             </div>
           </div>
@@ -127,7 +136,6 @@ export default function OperatorDashboard() {
               <div>
                 <p className="text-gray-600">Active Packages</p>
                 <p className="text-2xl font-bold">{PackagesCount}</p>
-                {/* <p className="text-green-600 text-sm">+3 new this month</p> */}
               </div>
             </div>
           </div>
@@ -138,13 +146,13 @@ export default function OperatorDashboard() {
               </div>
               <div>
                 <p className="text-gray-600">Customer Rating</p>
-                <p className="text-2xl font-bold">{review}</p>
-                {/* <p className="text-green-600 text-sm">+0.2 from last month</p> */}
+                <p className="text-2xl font-bold">
+                  {typeof review === "number" ? review.toFixed(1) : 0}
+                </p>
               </div>
             </div>
           </div>
         </div>
-
 
         <div className="flex gap-4 items-center mt-10 mb-6">
           <h2 className="text-2xl font-bold">Recently Added Packages</h2>
@@ -193,6 +201,7 @@ export default function OperatorDashboard() {
           )}
         </div>
       </div>
+
       {isOpen && (
         <OperatorProfileEditModal
           setIsOpen={setIsOpen}

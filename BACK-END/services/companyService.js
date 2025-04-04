@@ -25,11 +25,11 @@ const createRegisteredCompany = async (data,operator) => {
           let data = await companyDetails.findOne({operator: id });
           let booking = await Booked.find({companyDetails: data._id })
           let reviews = await Review.find({ company: data._id });
-          if (!reviews.length) return {};
 
           let packageRatings = {};
   
-          reviews.forEach(review => {
+       if(reviews){
+        reviews.forEach(review => {
               const { packageId, star } = review;
               
               if (!packageRatings[packageId]) {
@@ -39,6 +39,7 @@ const createRegisteredCompany = async (data,operator) => {
               packageRatings[packageId].total += star;
               packageRatings[packageId].count += 1;
           });
+        }
   
           let averageRatings = {};
           for (let packageId in packageRatings) {

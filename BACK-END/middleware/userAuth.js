@@ -2,26 +2,26 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 async function auth(req,res,next) {
-    let token = req.cookies?.token  
-      
-    if(!token){
-        res.json(null)
-        
-    }else{
-        try {
-            const acessUser =  jwt.verify(token,process.env.SECRET_KEY); 
-            if(!acessUser){
-              res.status(500).send("something error");
-            } else{
-                req.User = acessUser;                
-                next();
-            }
-        } catch (error) {
-            console.error("Error in authentication middleware:", error);
-            res.clearCookie("token");
-            res.status(500).send("Error token not found");
-        }
-    } 
+     const token = req.headers["authorization"]?.split(" ")[1];
+     console.log("Token:", token);
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized - No token provided" });
+  }
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    
+    if (err) {
+      if (err.name === "TokenExpiredError") {
+        return res
+          .status(401)
+          .json({ message: "Session expired, please log in again." });
+      }
+      return res.status(403).json({ message: "Forbidden - Invalid Token" });
+    }
+    req.User = user;
+    next();
+  });
 }
 
 module.exports = auth

@@ -5,6 +5,6 @@ const {registeredCompany,getCompany,editCompanyProfile}= require('../controls/co
 const {upload} = require('../middleware/uploadImageToS3')
 Router.post('/registeredCompany',auth,registeredCompany)
 Router.get('/getCompany',auth,getCompany)
-Router.post('/editCompanyProfile',upload.array('images',1),editCompanyProfile)
+Router.post('/editCompanyProfile',upload.array('images',1),auth,editCompanyProfile)
 
 module.exports = Router;

@@ -3,9 +3,11 @@ import { useState } from 'react';
 import imageSrc from "../../assets/loginimage.jpg";
 import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, clearUser } from '../../redux/user/userSlice';
 
 function Login() {
+  let dispatch = useDispatch()
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,14 +19,15 @@ function Login() {
     e.preventDefault();
     try {
       let result = await axios.post('/Login',formData)
-      if(result.data.result.role === "user"){
+      dispatch(setUser(result.data.result))
+      localStorage.setItem('token', result.data.accessToken);
+      if(result.data.result.role === "user" && result.data.accessToken){
         navigate('/');
         console.log('Login response:', result.data.result);
       }else if(result.data.result.role === "opperator"){
         navigate('/OperatorDashboard');
-      }else{
-        console.log("result.data.result.role:",result.data.result.role)
-
+      }else if(result.data.result.role === "admin"){
+        navigate('/AdminDashboard');
       }
     } catch (error) {
       console.log('Login error:', error);

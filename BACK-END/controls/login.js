@@ -25,19 +25,24 @@ async function Signup(req, res) {
       let result = await findUser(email);
       if (!result) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        let newUser = await createNewAccount({
+        let accessUser = await createNewAccount({
           email,
           username,
           password: hashedPassword,
         });
   
-        if (newUser) {
+        if (accessUser) {
           let accessToken = jwt.sign(
-            { id: newUser.id },
+            { id: accessUser.id },
             process.env.SECRET_KEY,
             { expiresIn: "52h" }
           );
   
+          let newUser = {} 
+          newUser._id = accessUser._id
+          newUser.email = accessUser.email
+          newUser.username = accessUser.username
+          newUser.role = accessUser.role
           return res
             .cookie("token", accessToken, {
               httpOnly: true,
@@ -48,7 +53,7 @@ async function Signup(req, res) {
             .status(200)
             .json({
               message: "Account created successfully...",
-              result: newUser,
+              result: {newUser,accessToken},
             });
         } else {
           console.error("Error creating account");
@@ -67,19 +72,28 @@ async function Signup(req, res) {
   async function login (req,res){
     const { email, password } = req.body;
     if (email && password){
-            let result = await findUser(email);
-            if(!result){
-              result = await findOperator(email);
+            let data = await findUser(email);
+            if(!data){
+              data = await findOperator(email);
             }
-            if (result) {
-              let valid = await bcrypt.compare(password, result.password);
+            if (data) {
+              let valid = await bcrypt.compare(password, data.password);
               if (valid) {
                 let accessToken = jwt.sign(
-                  { id: result.id },
+                  { id: data.id },
                   process.env.SECRET_KEY,
                   { expiresIn: "52h" }
                 );
-      
+                let result = {}
+                result._id = data._id
+                result.email = data.email
+                result.username = data.username
+                result.role = data.role
+                result.about = data.about
+                result.phone = data.phone
+                result.location = data.location
+                result.image = data.image
+                result.DateOfBirth = data.DateOfBirth
                 return res
                   .cookie("token", accessToken, {
                     httpOnly: true,
@@ -88,7 +102,7 @@ async function Signup(req, res) {
                     maxAge: 194400000
                   })
                   .status(200)
-                  .json({ message: "login successfully...", result});
+                  .json({ message: "login successfully...", result,accessToken});
               } else {
                 return res.status(400).json({ message: "in correct password..." });
               }
@@ -139,19 +153,23 @@ async function Signup(req, res) {
       let result = await findOperator(email);
       if (!result) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        let newUser = await createNewOperator({
+        let accessUser = await createNewOperator({
           email,
           username,
           password: hashedPassword,
         });
   
-        if (newUser) {
+        if (accessUser) {
           let accessToken = jwt.sign(
-            { id: newUser.id },
+            { id: accessUser.id },
             process.env.SECRET_KEY,
             { expiresIn: "52h" }
           );
-  
+          let newUser = {}
+          newUser._id = accessUser._id 
+          newUser.email = accessUser.email
+          newUser.username = accessUser.username
+          newUser.role = accessUser.role
           return res
             .cookie("token", accessToken, {
               httpOnly: true,
@@ -162,7 +180,7 @@ async function Signup(req, res) {
             .status(200)
             .json({
               message: "Account created successfully...",
-              result: newUser,
+              result: {newUser,accessToken}
             });
         } else {
           console.error("Error creating account");
@@ -177,8 +195,6 @@ async function Signup(req, res) {
   }
 
 
-
-  
   // //--------operator Login------------
 
   // async function operatorLogin (req,res){

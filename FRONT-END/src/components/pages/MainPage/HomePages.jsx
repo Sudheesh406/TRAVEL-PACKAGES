@@ -12,9 +12,14 @@ import { setUser, clearUser } from '../../../redux/user/userSlice';
 function HomePages() {
  let dispatch = useDispatch()
  const user = useSelector((state) => state.user.user);
+ const token = localStorage.getItem("token");
+
   async function getUser(){
       try {
-        let result = await axios.get('/getUser');
+        let result = await axios.get('/getUser',{
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
         if(result.data){
             if(!user){
               dispatch(setUser(result.data.result));

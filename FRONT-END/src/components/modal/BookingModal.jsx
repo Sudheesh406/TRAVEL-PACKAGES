@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 function BookingModal({ setShow, packageDetails }) { 
   const navigate = useNavigate()
   const user = useSelector((state) => state.user.user);
-  console.log(packageDetails)
   const [itemCount, setItemCount] = useState(0);
   const PRICE_PER_ITEM = packageDetails.price;
   const TAX_RATE = 0.00; 
@@ -29,7 +28,6 @@ function BookingModal({ setShow, packageDetails }) {
   const total = subtotal + tax;
   
   const checkoutPayment = async (order) => {
-    console.log("order:",order);
     
     const options = {
       key: "rzp_test_ZKcJLyt29WoYex",

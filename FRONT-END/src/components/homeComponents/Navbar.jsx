@@ -27,6 +27,7 @@ const Navbar = () => {
         dispatch(clearUser());
         setDropdownOpen(false);
         setFirstLetter("Guest");
+        localStorage.removeItem("token");
       }
     } catch (error) {
       console.error('Error during logout:', error);

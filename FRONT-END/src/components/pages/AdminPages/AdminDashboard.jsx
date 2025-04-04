@@ -1,4 +1,5 @@
-function DashboardCard({ title, count, onClick, icon }) {
+function AdminDashboard({ title, count, onClick, icon }) {
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-xl border border-gray-100">
       <div className="flex items-center justify-between mb-6">
@@ -29,4 +30,4 @@ function DashboardCard({ title, count, onClick, icon }) {
   );
 }
 
-export default DashboardCard;
+export default AdminDashboard;

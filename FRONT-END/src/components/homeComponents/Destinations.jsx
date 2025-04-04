@@ -3,17 +3,16 @@ import { Link } from "react-router-dom";
 
 import {useEffect, useState} from 'react'
 import axios from '../../axios'
-
+import { useNavigate } from 'react-router-dom';
 const Destinations = () => {
- const [details,setDetails] = useState()
-
+const [details,setDetails] = useState()
+const navigate = useNavigate()
 
 useEffect(()=>{
   async function getPopularDestination() {
     try {
      let {data} = await axios.get('Payment/getPopularDestination')
       setDetails(data.result)      
-      console.log("data.result",data.result)
    } catch (error) {
      console.error("error found in getPopularDestination",error);
      
@@ -21,6 +20,10 @@ useEffect(()=>{
   }
   getPopularDestination()
 },[])
+
+const handleOnclick = (id) => {
+  navigate(`/PackageDetails/${id}`);
+}
 
   return (
     <section id="destinations" className="py-24 bg-gray-50">
@@ -41,13 +44,16 @@ useEffect(()=>{
                   <MapPin className="h-5 w-5 text-blue-600 mr-1" />
                   <h3 className="text-xl font-semibold text-gray-900">{destination.packageName}</h3>
                 </div>
+              
                 <p className="text-gray-600 mb-4">{destination.packageDetails.description}</p>
                 <div className="flex justify-between items-center">
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <span className="text-yellow-500">★</span>
                     <span className="ml-1 text-gray-700">{destination.review}</span>
+                  </div> */}
+                  <div className='flex w-full justify-end'>
+                  <button className="text-blue-600 hover:text-blue-800 font-medium" onClick={()=>handleOnclick(destination.packageDetails._id)}>View Details</button>
                   </div>
-                  <button className="text-blue-600 hover:text-blue-800 font-medium">View Details</button>
                 </div>
               </div>
             </div>

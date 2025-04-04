@@ -5,7 +5,9 @@ import axios from '../../axios';
 import OtpModal from '../modal/OtpModal';
 
 function Signup() {
-  const [otpModal, setOtpModal] = useState(false);
+  const [
+    
+    otpModal, setOtpModal] = useState(false);
   const [handleOtp, setHandleOtp] = useState();
   const [identifyUser, setIdentifyUser] = useState(false);
 

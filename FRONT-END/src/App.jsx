@@ -14,12 +14,15 @@ import OperatorPackages from './components/pages/operatorPages/OperatorPackages'
 import OperatorPackageDetail from './components/pages/operatorPages/OperatorPackageDetail';
 import OperatorBookingHistory from './components/pages/operatorPages/OperatorBookingHistory';
 import ReviewCard from './components/pages/commonPages/ReviewCard';
+import UserProtectedRoute from './components/auth/ProtectedRoute/UserProtectedRoute';
+import OperatorProtectedRoute from './components/auth/ProtectedRoute/OperatorProtectedRoute';
+import AdminProtectedRoute from './components/auth/ProtectedRoute/AdminProtectedRoute';
+import DashboardCard from './components/pages/AdminPages/AdminDashboard'
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollTop";
 import './App.css';
 import { Toaster } from "react-hot-toast";
-
 
 function App() {
   return (
@@ -27,22 +30,70 @@ function App() {
        <ScrollToTop />
        <Toaster/>
       <Routes>
+        
         <Route path="/" element={<HomePages />} />
         {/* <Route path="/DestinationDetail" element={<DestinationDetail />} /> */}
         <Route path="/TravelPackages" element={<TravelPackages />} />
         <Route path="/login" element={< Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/OpperatorRegister" element={<OpperatorRegister />} />
-        <Route path="/OperatorDashboard" element={<OperatorDashboard />} />
-        <Route path="/PackageFirstPage" element={<PackageFirstPage />} />
-        <Route path="/PackageSecondPage" element={<PackageSecondPage />} />
         <Route path="/PackageDetails/:id" element={<PackageDetails />} />
-        <Route path="/UserProfile" element={<UserProfile />} />
-        <Route path="/BookingHistory/:id" element={<BookingHistory />} />
-        <Route path="/OperatorPackages/:id" element={<OperatorPackages />} />
-        <Route path="/OperatorPackageDetail/:id" element={<OperatorPackageDetail />} />
-        <Route path="/OperatorBookingHistory/:id" element={<OperatorBookingHistory />} />
         <Route path="/ReviewCard" element={<ReviewCard />} />
+
+
+        <Route path="/UserProfile" element={
+          <UserProtectedRoute>
+            <UserProfile />
+        </UserProtectedRoute>} />
+
+        <Route path="/BookingHistory/:id" element={
+        <UserProtectedRoute>
+          <BookingHistory />
+        </UserProtectedRoute>} />
+
+
+        <Route path="/OpperatorRegister" element={
+        <OperatorProtectedRoute>
+          <OpperatorRegister />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/OperatorDashboard" element={
+        <OperatorProtectedRoute>
+          <OperatorDashboard />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/PackageFirstPage" element={
+        <OperatorProtectedRoute>
+          <PackageFirstPage />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/PackageSecondPage" element={
+        <OperatorProtectedRoute>
+          <PackageSecondPage />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/OperatorPackages/:id" element={
+        <OperatorProtectedRoute>
+          <OperatorPackages />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/OperatorPackageDetail/:id" element={
+        <OperatorProtectedRoute>
+          <OperatorPackageDetail />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/OperatorBookingHistory/:id" element={
+        <OperatorProtectedRoute>
+          <OperatorBookingHistory />
+        </OperatorProtectedRoute>} />
+
+        <Route path="/AdminDashboard" element={
+        <AdminProtectedRoute>
+          <DashboardCard />
+        </AdminProtectedRoute>} />
+
+        <Route path="/UserProtectedRoute" element={<UserProtectedRoute />} />
+        <Route path="/OperatorProtectedRoute" element={<OperatorProtectedRoute />} />
+        <Route path="/AdminProtectedRoute" element={<AdminProtectedRoute />} />
       </Routes>
     </div>
   );
