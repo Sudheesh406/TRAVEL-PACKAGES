@@ -15,6 +15,7 @@ function OpperatorRegister() {
     address: ''
   })
   const user = useSelector((state) => state.user.user);
+  
 
   const handleSubmit = async(e) => {
     e.preventDefault()
@@ -31,8 +32,12 @@ function OpperatorRegister() {
   }
 
   async function navigateToOpperatorPage(){
+    const token = localStorage.getItem("token");
     try {
-      let {data} = await axios.post('/Company/registeredCompany',formData)
+      let {data} = await axios.post('/Company/registeredCompany',formData,{
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
       if(data){
         navigate('/OperatorDashboard')
         console.log("result:",data)
@@ -61,6 +66,7 @@ function OpperatorRegister() {
           confirmButtonColor: "#3085d6",
           confirmButtonText: "OK",
         }).then((response)=>{
+
           dispatch(setCompany(formData))
           navigateToOpperatorPage()
          })
@@ -100,10 +106,15 @@ function OpperatorRegister() {
   
 
   const newRegisteration = async () => {
+    const token = localStorage.getItem("token");
+    console.log(token)
     try {
       let response = await axios.post("/Payment/razorpay", {
         amount: 499,
         currency: "INR",
+      },{
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       });
       if (response) {
         await checkoutPayment(response.data.order);

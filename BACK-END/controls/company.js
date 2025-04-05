@@ -1,7 +1,6 @@
 const {createRegisteredCompany,findCompanyById, updateCompanyProfile} =require("../services/companyService")
 const { findPackage } = require("../services/TravelService");
 
-
 const registeredCompany = async (req,res)=>{
     let data = req.body
     let operator = req.User.id
@@ -17,6 +16,7 @@ const registeredCompany = async (req,res)=>{
 }
 
 const getCompany = async (req,res)=>{
+  let data = req.User
   try {
     let result = await findCompanyById(req.User.id)
     const data = await findPackage(req.User.id)

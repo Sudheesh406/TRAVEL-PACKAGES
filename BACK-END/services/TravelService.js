@@ -12,10 +12,12 @@ const createNewTourPackage = async (packageData) => {
 
 
 const findPackage = async (value) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0)
   try {
   if(value){
     if (value == 3) {
-      return await TourPackage.find({isAvailable:true}).sort({createdAt:-1}).limit(3);
+      return await TourPackage.find({isAvailable:true,Date: { $gte: today }}).sort({createdAt:-1}).limit(3);
     }else{
       let companyData = await companyDetails.find({operator:value})
       let id = companyData[0]
@@ -43,9 +45,11 @@ const findPackage = async (value) => {
  }
 
 const findAllPackage = async (data) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0)
   if(data){
       try {
-        const query = { isAvailable: true };
+        const query = { isAvailable: true , Date: { $gte: today }};
         if (data.location && data.location !== "Any Location") {
           let upperCaseName = data.location.toUpperCase()
           query.name = upperCaseName
@@ -75,15 +79,16 @@ const findAllPackage = async (data) => {
       }
   
 }else{
-  return await TourPackage.find({isAvailable:true}).sort({createdAt:-1}).limit(9);
+  return await TourPackage.find({isAvailable:true, Date: { $gte: today }}).sort({createdAt:-1}).limit(9);
 }
 };
 
 
 const findLocationPackage = async (data) => {
-  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0)
   try {
-    let query = {};
+    let query = { isAvailable: true , Date: { $gte: today }};
     if (data.location !== "Any Location") {
       query.name = data.location.toUpperCase();
     }

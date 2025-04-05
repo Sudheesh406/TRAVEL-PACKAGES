@@ -17,7 +17,6 @@ async function Signup(req, res) {
         }
       }
     if (email && password && username && otp) {
-      console.log("total");
       let otpData = await GetOtp(email)
         if(otpData[0].otp != otp){
           return res.status(200).json({ message: "otp is not correct" });
@@ -77,6 +76,9 @@ async function Signup(req, res) {
               data = await findOperator(email);
             }
             if (data) {
+              if(data.acess !== true){
+                return res.status(400).json({ message: "Acess Cancelled.." });
+              }
               let valid = await bcrypt.compare(password, data.password);
               if (valid) {
                 let accessToken = jwt.sign(

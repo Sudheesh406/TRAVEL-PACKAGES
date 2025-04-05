@@ -1,6 +1,6 @@
-import { Menu, X, MapPin } from 'lucide-react';
+import { Menu, X, MapPin, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUser } from '../../redux/user/userSlice';
 import axios from '../../axios';
@@ -8,17 +8,10 @@ import axios from '../../axios';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [firstLetter, setFirstLetter] = useState("Guest");
 
   const isExist = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isExist && isExist.username) {
-      setFirstLetter(isExist.username.charAt(0).toUpperCase());
-    }
-  }, [isExist]);
 
   const handleLogout = async () => {
     try {
@@ -26,7 +19,6 @@ const Navbar = () => {
       if (result) {
         dispatch(clearUser());
         setDropdownOpen(false);
-        setFirstLetter("Guest");
         localStorage.removeItem("token");
       }
     } catch (error) {
@@ -70,9 +62,13 @@ const Navbar = () => {
                 onClick={handleProfileClick}
               >
                 {isExist && isExist.image ? (
-                  <img src={isExist.image} alt={firstLetter} className="w-full h-full object-cover rounded-full" />
+                  <img
+                    src={isExist.image}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
                 ) : (
-                  <span className="text-white font-bold">{firstLetter}</span>
+                  <User className="text-white w-5 h-5" />
                 )}
               </button>
 

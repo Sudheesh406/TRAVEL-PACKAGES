@@ -11,17 +11,24 @@ function AdminProtectedRoute({ children }) {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem("token");
       try {
-        const result = await axios.get('/getUser');
-        console.log(result.data.result);
+        const result = await axios.get('/getUser',{
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
         if (result.data?.result) {
-          if(result.data.result.role === 'admin'){
-            navigate('/AdminDashboard');
+          if(result.data.result.role === 'opperator'){
+            navigate('/OperatorDashboard');
+          }else if(result.data.result.role === 'user'){
+            navigate('/');
           }
+        }else{
+          navigate('/');
         }
       } catch (error) {
         console.error('error in getUser', error);
-        // navigate('/login');
+        navigate('/');
       }
     };
 
@@ -30,9 +37,7 @@ function AdminProtectedRoute({ children }) {
     }
   }, [user, dispatch, navigate]);
 
-  // if (!user) {
-  //   return <div>Loading...</div>; 
-  // }
+ 
 
   return children;
 }

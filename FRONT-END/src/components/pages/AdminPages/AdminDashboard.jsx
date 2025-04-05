@@ -1,31 +1,129 @@
-function AdminDashboard({ title, count, onClick, icon }) {
+import { Users, Shield, DollarSign } from "lucide-react";
+import { FiMenu } from "react-icons/fi";
+
+import { useNavigate } from "react-router-dom";
+import axios from "../../../axios";
+import { useState, useEffect } from "react";
+
+function AdminDashboard() {
+  const navigate = useNavigate();
+  const [details, setDetails] = useState([]);
+
+  useEffect(() => {
+    async function getAdminPageDetails() {
+      const token = localStorage.getItem("token");
+      try {
+        let { data } = await axios.get("/Admin/getAdminPageDetails", {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+        if (data) {
+          setDetails([
+            {
+              title: "Users",
+              value: data.result.userCount,
+              icon: Users,
+              route: "/AdminUserListing",
+            },
+            {
+              title: "Operators",
+              value: data.result.operators,
+              icon: Shield,
+              route: "/AdminOperatorListing",
+            },
+            {
+              title: "Total Revenue",
+              value: data.result.totalAmount,
+              icon: DollarSign,
+              route: "/AdminPaymentDetails",
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error("error found in getAdminPageDetails", error);
+      }
+    }
+
+    getAdminPageDetails();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      let result = await axios.get("/logOut");
+      if (result) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-xl border border-gray-100">
-      <div className="flex items-center justify-between mb-6">
-        <div className="p-3 rounded-full bg-indigo-50">
-          {icon}
+    <div className="flex min-h-screen bg-gray-50 text-gray-800">
+      <aside className="w-64 bg-white shadow-md px-6 py-8 hidden md:block">
+        <div className="text-2xl font-bold mb-8 flex items-center gap-2">
+          <FiMenu />
+          Admin Panel
         </div>
-        <span className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-          Last 30 days
-        </span>
+        <nav className="space-y-4 text-gray-700 font-medium">
+          <button
+            onClick={() => navigate("/AdminUserListing")}
+            className="hover:text-blue-600 flex items-center gap-2"
+          >
+            <Users className="w-5 h-5 text-blue-500" />
+            Manage users
+          </button>
+          <button
+            onClick={() => navigate("/AdminOperatorListing")}
+            className="hover:text-blue-600 flex items-center gap-2"
+          >
+            <Shield className="w-5 h-5 text-blue-500" />
+            Manage operators
+          </button>
+          <button
+            onClick={() => navigate("/AdminPaymentDetails")}
+            className="hover:text-blue-600 flex items-center gap-2"
+          >
+            <DollarSign className="w-5 h-5 text-blue-500" />
+            Payment details
+          </button>
+        </nav>
+      </aside>
+
+      <div className="flex-1 flex flex-col">
+        <header className="bg-white shadow px-6 py-4 flex justify-between items-center">
+          <h1 className="text-xl font-semibold flex items-center gap-2">
+            <FiMenu />
+            Dashboard
+          </h1>
+          <div className="flex items-center space-x-4"></div>
+          <button
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </header>
+
+        <main className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {details.map((details, idx) => (
+            <div
+              key={idx}
+              className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm"
+            >
+              <div className="flex justify-between">
+                <div>
+                  <p className="text-sm text-gray-500 pb-4">{details.title}</p>
+                  <h2 className="text-3xl font-bold">{details.value}</h2>
+                </div>
+                <details.icon className="text-3xl text-blue-500" />
+              </div>
+              <div className="mt-4 flex justify-end"></div>
+            </div>
+          ))}
+        </main>
       </div>
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
-        <div className="flex items-end space-x-2">
-          <p className="text-4xl font-bold text-indigo-600">{count}</p>
-          <span className="text-green-500 text-sm font-medium mb-1">+12.5%</span>
-        </div>
-      </div>
-      <button
-        onClick={onClick}
-        className="mt-6 w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center justify-center space-x-2 font-semibold"
-      >
-        <span>View Details</span>
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
     </div>
   );
 }

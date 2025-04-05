@@ -2,6 +2,7 @@
 import {useParams , useNavigate} from 'react-router-dom'
 import axios from '../../../axios'
 import { useEffect,useState } from 'react';
+import { set } from 'lodash';
 
 function OperatorPackages() {
   const navigate = useNavigate()
@@ -11,6 +12,7 @@ function OperatorPackages() {
 
     useEffect(()=>{
         async function findAllPackages(){
+          
             try {
                 let {data} = await axios.get(`Package/findAllPackages/${id}`)
                 setPackages(data.result)
@@ -26,7 +28,6 @@ function OperatorPackages() {
       navigate(`/OperatorPackageDetail/${id}`);
     }
  
-console.log("packages",packages)
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow">

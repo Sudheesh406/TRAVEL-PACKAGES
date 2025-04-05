@@ -1,14 +1,17 @@
 const companyDetails = require("../models/CompanySchema");
 const Booked = require('../models/BookedSchema')
 const Review = require('../models/reviewSchema')
-
+const RegistrationPayment = require('../models/RegistrationPaymentSchema')
+ 
 const createRegisteredCompany = async (data,operator) => {
 
     if (data) {
       data.operator = operator
       try {
         let result = await companyDetails.create(data);
-        if (result) {
+        let payment = await RegistrationPayment.create({operatorId:operator, gstNumber:data.gstNumber, companyName:data.companyName, amount:499})
+
+        if (result && payment) {
           return result;
         } else {
           return null;

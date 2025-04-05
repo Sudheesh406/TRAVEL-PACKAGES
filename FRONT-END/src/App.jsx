@@ -18,6 +18,11 @@ import UserProtectedRoute from './components/auth/ProtectedRoute/UserProtectedRo
 import OperatorProtectedRoute from './components/auth/ProtectedRoute/OperatorProtectedRoute';
 import AdminProtectedRoute from './components/auth/ProtectedRoute/AdminProtectedRoute';
 import DashboardCard from './components/pages/AdminPages/AdminDashboard'
+import UtilProtectedRoute from './components/auth/ProtectedRoute/utilProtectorRoute';
+import AdminUserListing from './components/pages/AdminPages/AdminUserListing';
+import AdminOperatorListing from './components/pages/AdminPages/AdminOperatorListing';
+import AdminPaymentDetails from './components/pages/AdminPages/AdminPaymentDetails';
+import LoginProtectRoute from './components/auth/ProtectedRoute/LoginProtectedRoute';
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollTop";
@@ -30,14 +35,37 @@ function App() {
        <ScrollToTop />
        <Toaster/>
       <Routes>
+
+      <Route path="/login" element={
+          <LoginProtectRoute>
+            <Login />
+        </LoginProtectRoute>} />
+
+      <Route path="/signup" element={
+          <LoginProtectRoute>
+            <Signup />
+        </LoginProtectRoute>} />
         
-        <Route path="/" element={<HomePages />} />
-        {/* <Route path="/DestinationDetail" element={<DestinationDetail />} /> */}
-        <Route path="/TravelPackages" element={<TravelPackages />} />
-        <Route path="/login" element={< Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/PackageDetails/:id" element={<PackageDetails />} />
-        <Route path="/ReviewCard" element={<ReviewCard />} />
+
+        <Route path="/" element={
+          <UtilProtectedRoute>
+            <HomePages />
+        </UtilProtectedRoute>} />
+
+        <Route path="/TravelPackages" element={
+          <UtilProtectedRoute>
+            <TravelPackages />
+        </UtilProtectedRoute>} />
+
+        <Route path="/PackageDetails/:id" element={
+          <UtilProtectedRoute>
+            <PackageDetails />
+        </UtilProtectedRoute>} />
+        
+        <Route path="/ReviewCard" element={
+          <UtilProtectedRoute>
+            <ReviewCard />
+        </UtilProtectedRoute>} />
 
 
         <Route path="/UserProfile" element={
@@ -86,12 +114,31 @@ function App() {
           <OperatorBookingHistory />
         </OperatorProtectedRoute>} />
 
+
         <Route path="/AdminDashboard" element={
         <AdminProtectedRoute>
           <DashboardCard />
         </AdminProtectedRoute>} />
 
+        <Route path="/AdminUserListing" element={
+        <AdminProtectedRoute>
+          <AdminUserListing />
+        </AdminProtectedRoute>} />
+
+        <Route path="/AdminOperatorListing" element={
+        <AdminProtectedRoute>
+          <AdminOperatorListing />
+        </AdminProtectedRoute>} />
+
+        <Route path="/AdminPaymentDetails" element={
+        <AdminProtectedRoute>
+          <AdminPaymentDetails />
+        </AdminProtectedRoute>} />
+
+        
+        <Route path="/LoginProtectRoute" element={<LoginProtectRoute />} />
         <Route path="/UserProtectedRoute" element={<UserProtectedRoute />} />
+        <Route path="/UtilProtectedRoute" element={<UtilProtectedRoute />} />
         <Route path="/OperatorProtectedRoute" element={<OperatorProtectedRoute />} />
         <Route path="/AdminProtectedRoute" element={<AdminProtectedRoute />} />
       </Routes>

@@ -45,7 +45,6 @@ function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div className="max-w-6xl h-[630px] w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl flex overflow-hidden">
-      {/* Left Side - Video */}
       <div className="w-1/2 hidden lg:flex items-center justify-center bg-gradient-to-r from-teal-500 to-blue-500">
       <img src={imageSrc} alt="Background" className="object-cover w-full" />
       </div>

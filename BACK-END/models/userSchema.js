@@ -33,6 +33,9 @@ const Schema = mongoose.Schema({
         type: String,
         enum: ['user','admin'],
         default: 'user'
+    },acess:{
+        type:Boolean,
+        default:true
     }
 })
 

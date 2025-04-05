@@ -19,8 +19,14 @@ export default function OperatorDashboard() {
   useEffect(() => {
     async function fetchCompanyDetails() {
       try {
-        let { data } = await axios.get("/Company/getCompany");
+        const token = localStorage.getItem("token");
+
+        let { data } = await axios.get("/Company/getCompany",{
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
         if (data) {
+          
           dispatch(setCompany(data.result.data));
           setDetails(data.result.data);
           setPackages(data.tourPackages);

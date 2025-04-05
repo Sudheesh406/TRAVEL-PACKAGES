@@ -4,14 +4,13 @@ import { setUser } from '../../../redux/user/userSlice';
 import axios from '../../../axios';
 import { useNavigate } from 'react-router-dom';
 
-function OperatorProtectedRoute({ children }) {
+function UtilProtectedRoute({ children }) {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log('fetching user...');
       const token = localStorage.getItem("token");
       try {
         const result = await axios.get('/getUser',{
@@ -19,25 +18,14 @@ function OperatorProtectedRoute({ children }) {
           withCredentials: true,
         });
         if (result.data?.result) {
-          console.log('User fetched:', result.data.result);
-          if(result.data.result.role !== 'opperator'){
+          if(result.data.result.role === 'opperator'){
             navigate('/OperatorDashboard');
-          }
-          if(result.data.result.role !== 'admin'){
-            console.log("djdj");
+          }else if(result.data.result.role === 'admin'){
             navigate('/AdminDashboard');
           }
-           if(result.data.result.role !== 'user'){
-            navigate('/');
-          }else{
-            dispatch(setUser(result.data.result));
-          }
-        } else {
-          navigate('/login');
         }
       } catch (error) {
         console.error('error in getUser', error);
-        navigate('/login');
       }
     };
 
@@ -46,9 +34,8 @@ function OperatorProtectedRoute({ children }) {
     }
   }, [user, dispatch, navigate]);
 
- 
 
   return children;
 }
 
-export default OperatorProtectedRoute;
+export default UtilProtectedRoute;

@@ -18,6 +18,9 @@ password: {
 role: { 
     type: String,
     default:"opperator"
+},acess:{
+    type:Boolean,
+    default:true
 }
 });
 
