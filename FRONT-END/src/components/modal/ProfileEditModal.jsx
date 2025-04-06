@@ -108,7 +108,7 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
         animate={{ x: 0 }}
         exit={{ x: "-100%" }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="bg-white h-full w-100 shadow-lg p-6 fixed left-0 top-0 overflow-auto"
+        className="bg-white h-full w-full sm:w-[90%] md:w-[50%] lg:w-[30%] shadow-lg p-4 sm:p-6 fixed left-0 top-0 overflow-y-auto"
       >
         <button
           onClick={handleClose}

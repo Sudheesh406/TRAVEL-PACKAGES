@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { Upload, MapPin, User, Calendar, Phone, X, Info } from "lucide-react";
 import axios from '../../axios'
 
-function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
- 
+function OperatorProfileEditModal({ setIsOpen, details, setDetails }) {
+
   const [formData, setFormData] = useState({
     companyName: details.companyName,
     id: details._id,
@@ -17,25 +17,25 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
   const [showWarning, setShowWarning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(details.image ? details.image : "");
 
- const handleClose = ()=>{
+  const handleClose = () => {
     setIsOpen(false)
- }
+  }
 
- const handleInputChange = (e)=>{
+  const handleInputChange = (e) => {
     setShowWarning(false);
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
- }
+  }
 
- const handleImageChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        image: [file], 
+        image: [file],
       }));
       setPreviewUrl(URL.createObjectURL(file));
     }
@@ -43,24 +43,24 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
 
   const hasFormChanged = () => {
     let valid = true;
-    if (formData.companyName !== details.companyName){
-      valid = false;      
-    } else if  (formData.image !== '' && formData.image !== details.image){
+    if (formData.companyName !== details.companyName) {
       valid = false;
-    }else if (formData.address !== '' && formData.address !== details.address){
+    } else if (formData.image !== '' && formData.image !== details.image) {
       valid = false;
-    }else if (formData.phoneNumber !== '' && formData.phoneNumber !== details.phoneNumber){
+    } else if (formData.address !== '' && formData.address !== details.address) {
       valid = false;
-    }else if (formData.Tagline !== '' && formData.Tagline !== details.Tagline){
+    } else if (formData.phoneNumber !== '' && formData.phoneNumber !== details.phoneNumber) {
+      valid = false;
+    } else if (formData.Tagline !== '' && formData.Tagline !== details.Tagline) {
       valid = false;
     }
     return valid;
   };
 
- const handleSubmit = async(e)=>{
-   
-   e.preventDefault();
-   let value = hasFormChanged();
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+    let value = hasFormChanged();
     if (!value) {
       try {
         const formDataToSend = new FormData();
@@ -72,20 +72,21 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
         if (formData.image) {
           formDataToSend.append("images", formData.image[0])
         }
+        const token = localStorage.getItem("token");
         let { data } = await axios.post("/Company/editCompanyProfile", formDataToSend, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-          setDetails(data.result)
-          handleClose()
-    }catch{
-      console.error("error found in posting Data",error);
-      
-    }
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
+          },
+        });
+        setDetails(data.result)
+        handleClose()
+      } catch (error){
+        console.error("error found in posting Data", error);
+      }
     }
 
- }
+  }
 
   return (
     <div className="fixed inset-0 flex bg-opacity-30 z-50">
@@ -94,10 +95,10 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
         animate={{ x: 0 }}
         exit={{ x: "-100%" }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="bg-white h-full w-100 shadow-lg p-6 fixed left-0 top-0 overflow-auto"
+        className="bg-white h-full w-full sm:w-[90%] md:w-[50%] lg:w-[30%] shadow-lg p-4 sm:p-6 fixed left-0 top-0 overflow-y-auto"
       >
         <button
-          onClick={()=>handleClose()}
+          onClick={() => handleClose()}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
         >
           <X size={20} />
@@ -125,7 +126,7 @@ function OperatorProfileEditModal({setIsOpen,details,setDetails}) {
             <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
               <Upload size={18} /> Profile Image
             </label>
-            <div className="mt-1 flex items-center space-x-4">
+            <div className="mt-1 flex flex-col sm:flex-row items-center sm:space-x-4 space-y-2 sm:space-y-0">
               <input
                 type="file"
                 name="image"

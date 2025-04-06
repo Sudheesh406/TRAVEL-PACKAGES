@@ -11,7 +11,6 @@ function OperatorProtectedRoute({ children }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log('fetching user...');
       const token = localStorage.getItem("token");
       try {
         const result = await axios.get('/getUser',{
@@ -19,12 +18,12 @@ function OperatorProtectedRoute({ children }) {
           withCredentials: true,
         });
         if (result.data?.result) {
-          console.log('User fetched:', result.data.result);
+
           if(result.data.result.role !== 'opperator'){
             navigate('/OperatorDashboard');
           }
           if(result.data.result.role !== 'admin'){
-            console.log("djdj");
+
             navigate('/AdminDashboard');
           }
            if(result.data.result.role !== 'user'){

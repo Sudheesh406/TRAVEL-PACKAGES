@@ -12,7 +12,7 @@ const createRegisteredCompany = async (data,operator) => {
         let payment = await RegistrationPayment.create({operatorId:operator, gstNumber:data.gstNumber, companyName:data.companyName, amount:499})
 
         if (result && payment) {
-          return result;
+          return result;    
         } else {
           return null;
         }

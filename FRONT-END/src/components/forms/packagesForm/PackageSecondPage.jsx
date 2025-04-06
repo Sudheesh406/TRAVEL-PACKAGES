@@ -9,7 +9,6 @@ function PackageSecondPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const company = useSelector((state) => state.company.company);
-  console.log(company);
   
   const [data, setData] = useState({
     vehicleSeatNumber: "",
@@ -56,13 +55,15 @@ function PackageSecondPage() {
     }
   });
     try { 
+      const token = localStorage.getItem("token");
+
       let result = await axios.post('/Package/newPackage', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`
       },
     });
       if(result){
-        console.log("resu;t:",result)
         navigate('/OperatorDashboard')
       }
     } catch (error) {
@@ -90,8 +91,6 @@ function PackageSecondPage() {
     }
   }, [packageForm]);
   
-
-console.log("file:",file)
 
  useEffect(() => {
     if (packageSecondForm) {

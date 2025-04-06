@@ -8,6 +8,8 @@ import { setUser, clearUser } from '../../redux/user/userSlice';
 
 function Login() {
   let dispatch = useDispatch()
+  const [errorDisplay, setErrorDisplay] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -17,6 +19,17 @@ function Login() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    const { email, password } = formData;
+    if (!email || !password) {
+      setErrorDisplay(true)
+      setErrorMessage('Email and password are required');
+      return;
+    }
+    if (password.length <=0) {
+      setErrorDisplay(true)
+      setErrorMessage('Password is required');
+      return;
+    }
     try {
       let result = await axios.post('/Login',formData)
       dispatch(setUser(result.data.result))
@@ -30,11 +43,23 @@ function Login() {
         navigate('/AdminDashboard');
       }
     } catch (error) {
-      console.log('Login error:', error);
+      if(error.response.status === 401){
+        setErrorDisplay(true)
+        setErrorMessage('Invalid email or password');
+      }
+      if(error.response.status === 403){
+        setErrorDisplay(true)
+        setErrorMessage('Your account is not verified');
+      }
+      if(error.response.status === 404){
+        setErrorDisplay(true)
+        setErrorMessage('Email has not been registered');
+      }
     }
   };
 
   const handleChange = (e) => {
+    setErrorDisplay(false)
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -62,7 +87,7 @@ function Login() {
             </div>
           </div>
         </div>
-        <form className="mt-8 space-y-24" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-12" onSubmit={handleSubmit}>
           <div className="space-y-8">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
@@ -89,6 +114,7 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
               />
+          {errorDisplay && <p className='p-0 m-0 flex justify-center text-red-600'>{errorMessage}</p> } 
             </div>
           </div>
           <div>

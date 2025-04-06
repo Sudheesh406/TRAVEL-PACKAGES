@@ -5,11 +5,11 @@ import axios from '../../axios';
 import OtpModal from '../modal/OtpModal';
 
 function Signup() {
-  const [
-    
-    otpModal, setOtpModal] = useState(false);
+  const [otpModal, setOtpModal] = useState(false);
   const [handleOtp, setHandleOtp] = useState();
   const [identifyUser, setIdentifyUser] = useState(false);
+  const [errorDisplay, setErrorDisplay] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     username: '',
@@ -21,7 +21,13 @@ function Signup() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     setIdentifyUser(false)
-    if(formData){
+    const { username, email, password, confirmPassword } = formData;
+    if (username && email && password && confirmPassword) {
+      if (password !== confirmPassword && password.length >= 0) {
+        setErrorDisplay(true)
+        setErrorMessage('Passwords do not match')
+        return;
+      }
     let data = {otpRequest : true, email: formData.email}
      await axios.post('/Signup',data)
       .then(res => {
@@ -34,15 +40,40 @@ function Signup() {
       })
       .catch(err => {
         console.log('Signup error:', err);
+        if(err.response.status === 409){
+          setErrorDisplay(true)
+          setErrorMessage('This email already has an account')
+        }
+        if(err.response.status === 500){
+          alert('Internal server error')
+        }
+        if(err.response.status === 400){
+          setErrorDisplay(true)
+          setErrorMessage('This mail already has an account as operator')
+        }
+        if(err.response.status === 402){
+          setErrorDisplay(true)
+          setErrorMessage('Missing fields')
+        }
       });
+    }else{
+      setErrorDisplay(true)
+      setErrorMessage('Please fill all the fields')
     }
-    console.log('Signup data:', formData);
   };
 
   const handleOpperatorSubmit = async(e) => {
     e.preventDefault();
     setIdentifyUser(true)
-    if(formData){
+    const { username, email, password, confirmPassword } = formData;
+    if (username && email && password && confirmPassword) {
+
+      console.log('formData:', formData);
+      if (password !== confirmPassword && password.length >= 0) {
+        setErrorDisplay(true)
+        setErrorMessage('Passwords do not match')
+        return;
+      }
       let data = {otpRequest : true, email: formData.email}
      await axios.post('/operatorSignup',data)
       .then(res => {
@@ -54,13 +85,33 @@ function Signup() {
         setOtpModal(true);
       })
       .catch(err => {
+        if(err.response.status === 409){
+          setErrorDisplay(true)
+          setErrorMessage('This email already has an account')
+        }
+        if(err.response.status === 500){
+          alert('Internal server error')
+        }
+        if(err.response.status === 400){
+          setErrorDisplay(true)
+          setErrorMessage('This mail already has an account as user')
+        }
+        if(err.response.status === 402){
+          setErrorDisplay(true)
+          setErrorMessage('Missing fields')
+        }
+
         console.log('Signup error:', err);
       });
+    }else{
+      setErrorDisplay(true)
+      setErrorMessage('Please fill all the fields')
+      console.log('Signup data:', formData);
     }
-    console.log('Signup data:', formData);
   };
 
   const handleChange = (e) => {
+    setErrorDisplay(false)
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -74,11 +125,11 @@ function Signup() {
       {/* left Side - Signup Form */}
       <div className="w-full lg:w-1/2 p-8 ">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Begin Your Journey</h1>
+          <h1 className="text-4xl font-bold text-gray-900 ">Begin Your Journey</h1>
           <p className="text-lg text-gray-600">Join our community of travelers</p>
         </div>
-        <div className="mt-4 space-y-6">
-          <div className="space-y-4">
+        <div className=" space-y-2">
+          <div className="space-y-2">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full name</label>
               <input
@@ -118,8 +169,8 @@ function Signup() {
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <div className=''>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 ">Confirm Password</label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -132,7 +183,10 @@ function Signup() {
               />
             </div>
           </div>
-          <div className="space-y-4">
+
+           {errorDisplay && <p className='p-0 m-0 flex justify-center text-red-600'>{errorMessage}</p> } 
+
+          <div className="space-y-4 mt-2">
             <button
               type="submit"
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transform transition-all duration-150 hover:scale-[1.02]"
@@ -151,7 +205,7 @@ function Signup() {
           <p className="text-sm text-gray-600">
             Already an explorer?{' '}
             <Link to="/login" className="font-medium text-purple-600 hover:text-purple-500 transition-colors">
-              Sign in to your account
+              Sign in here
             </Link>
           </p>
         </div>

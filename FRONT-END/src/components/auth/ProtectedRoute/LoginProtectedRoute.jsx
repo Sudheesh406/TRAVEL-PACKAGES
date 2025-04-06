@@ -20,16 +20,18 @@ function LoginProtectRoute({ children }) {
         if (result.data?.result) {
           if(result.data.result.role === 'opperator'){
             navigate('/OperatorDashboard');
-          }else if(result.data.result.role === 'user'){
+          }
+           if(result.data.result.role === 'user'){
             navigate('/');
-          }else if(result.data.result.role === 'admin'){
+          }
+          if(result.data.result.role === 'admin'){
             navigate('/AdminDashboard');
             }
         }
         
       } catch (error) {
         console.error('error in getUser', error);
-        navigate('/login');
+        
       }
     };
 

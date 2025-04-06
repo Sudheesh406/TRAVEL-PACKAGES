@@ -1,4 +1,4 @@
-import { Users, Package, Star, Calendar } from "lucide-react";
+import { Users, Package, Star, Calendar, Menu } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCompany } from "../../../redux/company/companySlice";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ export default function OperatorDashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const [booking, setBooking] = useState("");
   const [review, setReview] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,13 +21,10 @@ export default function OperatorDashboard() {
     async function fetchCompanyDetails() {
       try {
         const token = localStorage.getItem("token");
-
-        let { data } = await axios.get("/Company/getCompany",{
-          headers: { Authorization: `Bearer ${token}` },
+        let { data } = await axios.get("/Company/getCompany", {
           withCredentials: true,
         });
         if (data) {
-          
           dispatch(setCompany(data.result.data));
           setDetails(data.result.data);
           setPackages(data.tourPackages);
@@ -68,10 +66,10 @@ export default function OperatorDashboard() {
   const handleLogout = async () => {
     try {
       let result = await axios.get("/logOut");
-      if (result){
+      if (result) {
         localStorage.removeItem("token");
         navigate("/login");
-      } 
+      }
     } catch (err) {
       console.error("Logout failed", err);
     }
@@ -80,44 +78,72 @@ export default function OperatorDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
             <img
               src={details?.image || ""}
               alt={details?.companyName || "Company Logo"}
-              className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+              className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg"
             />
             <div>
-              <h1 className="text-3xl font-bold mb-2">
+              <h1 className="text-xl md:text-3xl font-bold">
                 {details?.companyName || "Company Name"}
               </h1>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 text-sm md:text-base">
                 {details?.Tagline || "No tagline available"}
               </p>
-              <div className="flex w-96 gap-4">
-                <Link to="/PackageFirstPage">
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Add New Package
-                  </button>
-                </Link>
-                <button
-                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  onClick={editProfile}
-                >
-                  Edit Profile
-                </button>
-              </div>
-            </div>
-            <div className="flex w-full justify-end">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
             </div>
           </div>
+
+          <button
+            className="md:hidden p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <Menu size={28} />
+          </button>
+
+          <div className="hidden md:flex gap-4">
+            <Link to="/PackageFirstPage">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Add New Package
+              </button>
+            </Link>
+            <button
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              onClick={editProfile}
+            >
+              Edit Profile
+            </button>
+            <button
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </div>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white px-4 pb-4 flex flex-col gap-2">
+            <Link to="/PackageFirstPage">
+              <button className="w-full px-4 py-2  text-black border border-gray-300  rounded-lg ">
+                Add New Package
+              </button>
+            </Link>
+            <button
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              onClick={editProfile}
+            >
+              Edit Profile
+            </button>
+            <button
+              className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -160,7 +186,7 @@ export default function OperatorDashboard() {
           </div>
         </div>
 
-        <div className="flex gap-4 items-center mt-10 mb-6">
+        <div className="flex flex-wrap gap-4 items-center mt-10 mb-6">
           <h2 className="text-2xl font-bold">Recently Added Packages</h2>
           <button
             className="h-11 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -174,18 +200,18 @@ export default function OperatorDashboard() {
             Packages.map((pkg, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4"
+                className="bg-white rounded-xl shadow-sm p-4 flex flex-col sm:flex-row items-center gap-4"
               >
                 <img
                   src={pkg?.images?.[0] || ""}
                   alt={pkg?.name || "Package Image"}
                   className="w-24 h-24 rounded-lg object-cover"
                 />
-                <div className="flex-1">
+                <div className="flex-1 text-center sm:text-left">
                   <h3 className="font-semibold text-lg">
                     {pkg?.name || "No Name"}
                   </h3>
-                  <div className="flex items-center gap-4 text-gray-600">
+                  <div className="flex justify-center sm:justify-start items-center gap-2 text-gray-600">
                     <span className="flex items-center gap-1">
                       <Calendar size={16} />
                       {pkg?.Date
