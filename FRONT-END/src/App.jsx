@@ -24,6 +24,7 @@ import AdminOperatorListing from './components/pages/AdminPages/AdminOperatorLis
 import AdminPaymentDetails from './components/pages/AdminPages/AdminPaymentDetails';
 
 import ProtectRoute from './components/auth/ProtectedRoute/ProtectedRoute';
+import NotFound404 from './components/pages/commonPages/NotFound404';
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollTop";
@@ -36,6 +37,7 @@ function App() {
       <ScrollToTop />
       <Toaster />
       <Routes>
+      <Route path="*" element={<NotFound404 />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 

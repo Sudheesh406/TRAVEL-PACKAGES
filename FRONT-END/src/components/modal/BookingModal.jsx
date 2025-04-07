@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {useSelector } from 'react-redux';
+import {useSelector,useDispatch } from 'react-redux';
+import { setUser } from '../../redux/user/userSlice';
 import axios from '../../axios'
 import Swal from "sweetalert2";
 
 function BookingModal({ setShow, packageDetails }) { 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.user.user);
   const [itemCount, setItemCount] = useState(0);
@@ -23,8 +25,23 @@ function BookingModal({ setShow, packageDetails }) {
     }
   };
 
+  async function getUser(){
+    try {
+      let result = await axios.get('/getUser',{
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+      if(result.data){
+          if(!user){
+            dispatch(setUser(result.data.result));
+          }
+      }
+    } catch (error) {  
 
-  console.log("user",user)
+    }
+  }
+  getUser()
+
   const subtotal = itemCount * PRICE_PER_ITEM;
   const tax = subtotal * TAX_RATE;
   const total = subtotal + tax;
@@ -103,6 +120,7 @@ function BookingModal({ setShow, packageDetails }) {
   };
 
   const packageBooked = async(data)=>{
+    let token = localStorage.getItem("token")
     try {
       let result = await axios.post('/payment/booking',{data}, {
           headers: { Authorization: `Bearer ${token}` },

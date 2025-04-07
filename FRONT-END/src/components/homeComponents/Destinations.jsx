@@ -26,7 +26,7 @@ const handleOnclick = (id) => {
 }
 
   return (
-    <section id="destinations" className="py-24 bg-gray-50">
+    <section id="destinations" className="pt-24 pb-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Popular Destinations</h2>
@@ -40,9 +40,8 @@ const handleOnclick = (id) => {
                 <img src={destination.image} alt={destination.name} className="w-full h-full object-cover" />
               </div>
               <div className="p-6">
-                <div className="flex items-center mb-2">
-                  <MapPin className="h-5 w-5 text-blue-600 mr-1" />
-                  <h3 className="text-xl font-semibold text-gray-900">{destination.packageName}</h3>
+                <div className="flex items-center justify-center mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 ">{destination.packageName}</h3>
                 </div>
               
                 <p className="text-gray-600 mb-4 flex text-center text-sm">{destination.packageDetails.description}</p>

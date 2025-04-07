@@ -7,13 +7,19 @@ import { Star, Quote } from 'lucide-react';
 const Testimonials = () => {
 
   const navigate = useNavigate()
-
+ const token = localStorage.getItem("token");
     const [testimonials,setTestimonials] = useState()
-  useEffect(()=>{
+   useEffect(()=>{
     async function getReviews() {
       try {
-        let {data} = await axios.get('/Review/getReviews')
-        if(data) setTestimonials(data.result)           
+        let {data} = await axios.get('/Review/getReviews',{
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if(data){
+          console.log("data found",data);
+          setTestimonials(data.result)    
+        }        
       } catch (error) {
         console.error("error found getReviews",error );
       }
@@ -26,7 +32,7 @@ const handleclick = ()=>{
 }
 
   return (
-    <section id="testimonials" className="py-16">
+    <section id="testimonials" className="py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Travelers Say</h2>

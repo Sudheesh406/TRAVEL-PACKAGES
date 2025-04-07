@@ -6,14 +6,24 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import axios from "../../../axios";
 import { Star, ChevronRight, ChevronLeft } from "lucide-react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/user/userSlice";
 
-function ReviewCard() {
+function ReviewCard() {  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [reviews, setReviews] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     async function getAllReview() {
       try {
-        let { data } = await axios.get("/Review/getAllReview");
+        let { data } = await axios.get("/Review/getAllReview",{
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (data) setReviews(data.result);
       } catch (error) {
         console.error("Error in getAllReview", error);
@@ -21,6 +31,35 @@ function ReviewCard() {
     }
     getAllReview();
   }, []);
+
+  async function getUser(){
+    try {
+      let result = await axios.get('/getUser',{
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+      if(result.data){
+          if(!user){
+            dispatch(setUser(result.data.result));
+          }
+      }
+    } catch (error) {  
+
+    }
+  }
+  getUser()
+
+  const user = useSelector((state) => state.user.user);
+ 
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'admin') {
+        navigate('/AdminDashboard');
+      } else if (user.role === 'opperator') {
+        navigate('/OperatorDashboard');
+      }
+    }
+  }, [user, navigate]);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">

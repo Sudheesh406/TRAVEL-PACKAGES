@@ -48,7 +48,7 @@ const ProtectedRoute = () => {
       if (user.role === 'admin' && !location.pathname.startsWith('/Admin')) {
         navigate('/AdminDashboard');
         redirected = true;
-      } else if (user.role === 'opperator' && !location.pathname.startsWith('/Operator')) {
+      } else if (user.role === 'opperator' && !location.pathname.startsWith('/Operator')) {        
         navigate('/OperatorDashboard');
         redirected = true;
       } else if (user.role === 'user' && location.pathname.startsWith('Operator') || location.pathname.startsWith('Admin')) {

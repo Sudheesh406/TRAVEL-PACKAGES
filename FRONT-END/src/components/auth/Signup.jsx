@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link,useNavigate } from 'react-router-dom';
+import { useState,useEffect } from 'react';
 import imageSrc from "../../assets/signupimage.jpg";
 import axios from '../../axios';
 import OtpModal from '../modal/OtpModal';
 
 function Signup() {
+  const navigate = useNavigate();
   const [otpModal, setOtpModal] = useState(false);
   const [handleOtp, setHandleOtp] = useState();
   const [identifyUser, setIdentifyUser] = useState(false);
@@ -17,6 +18,39 @@ function Signup() {
     password: '',
     confirmPassword: '',
   });
+
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        let result = await axios.get('/getUser', {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+        if (result?.data.result.role === "user") {
+          navigate('/');
+        }
+
+        if (result?.data.result.role === "admin") {
+          navigate('/AdminDashboard');
+        }
+
+        if (result?.data.result.role === "opperator") {
+          navigate('/OperatorDashboard');
+        }
+
+      } catch (error) {
+
+      }
+    };
+
+    if (token) {
+      getUser();
+    }
+  }, [token, navigate]);
+
 
   const handleSubmit = async(e) => {
     e.preventDefault();

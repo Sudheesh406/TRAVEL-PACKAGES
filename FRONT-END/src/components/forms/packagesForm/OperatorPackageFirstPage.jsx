@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {setPackageForm,clearPackageForm,} from "../../../redux/forms/package/packageFormSlice";
+import {
+  setPackageForm,
+  clearPackageForm,
+} from "../../../redux/forms/package/packageFormSlice";
 
 const getPreviewUrl = (file) => {
   if (file) {
@@ -28,10 +31,14 @@ function PackageFirstPage() {
     images: [],
     category: "",
   });
-  const [isFormValid, setIsFormValid] = useState(false);
-            
+
+  const [touchedFields, setTouchedFields] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    setTouchedFields((prev) => ({ ...prev, [name]: true }));
 
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
@@ -58,23 +65,36 @@ function PackageFirstPage() {
         size: file.size,
         type: file.type,
         lastModified: file.lastModified,
-        data: file, 
+        data: file,
       }));
-  
+
       setFormData((prev) => ({
         ...prev,
         images: [...prev.images, ...fileObjects],
       }));
-  
-      console.log(fileObjects);
+
+      setTouchedFields((prev) => ({ ...prev, images: true }));
     }
   };
-  
 
   const packageForm = useSelector((state) => state.packageForm.packageForm);
-  
+
+  const isValid =
+    formData.name.trim() &&
+    formData.description.trim() &&
+    formData.price.trim() &&
+    formData.duration.trim() &&
+    formData.numberOfVisit.trim() &&
+    formData.locations.country.trim() &&
+    formData.locations.state.trim() &&
+    formData.locations.city.trim() &&
+    formData.images.length > 0 &&
+    formData.category.trim();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSubmitted(true);
+    if (!isValid) return;
     dispatch(setPackageForm(formData));
     navigate("/OperatorPackageSecondPage");
   };
@@ -85,22 +105,6 @@ function PackageFirstPage() {
     }
   }, [packageForm]);
 
-  useEffect(() => {
-    const isValid =
-      formData.name.trim() &&
-      formData.description.trim() &&
-      formData.price.trim() &&
-      formData.duration.trim() &&
-      formData.numberOfVisit.trim() &&
-      formData.locations.country.trim() &&
-      formData.locations.state.trim() &&
-      formData.locations.city.trim() &&
-      formData.images.length>0 &&
-      formData.category.trim();
-
-    setIsFormValid(isValid);
-  }, [formData]);
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-8">
@@ -109,86 +113,146 @@ function PackageFirstPage() {
         </h2>
         <form className="space-y-2">
           <div className="grid grid-cols-2 gap-4">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Package Name"
-              required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-            />
+            <div>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Package Name"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+              />
+              {(submitted || touchedFields.name) && !formData.name.trim() && (
+                <p className="text-red-500 text-sm mt-1">Name is required.</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Price"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+              />
+              {(submitted || touchedFields.price) && !formData.price.trim() && (
+                <p className="text-red-500 text-sm mt-1">Price is required.</p>
+              )}
+            </div>
+          </div>
+
+          <div>
             <input
               type="number"
-              name="price"
-              value={formData.price}
+              name="duration"
+              value={formData.duration}
               onChange={handleChange}
-              placeholder="Price"
+              placeholder="Duration (days)"
               required
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
             />
+            {(submitted || touchedFields.duration) &&
+              !formData.duration.trim() && (
+                <p className="text-red-500 text-sm mt-1">
+                  Duration is required.
+                </p>
+              )}
           </div>
 
-          <input
-            type="number"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            placeholder="Duration (days)"
-            required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-          />
+          <div>
+            <input
+              type="number"
+              name="numberOfVisit"
+              value={formData.numberOfVisit}
+              onChange={handleChange}
+              placeholder="Number of Visits"
+              required
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+            />
+            {(submitted || touchedFields.numberOfVisit) &&
+              !formData.numberOfVisit.trim() && (
+                <p className="text-red-500 text-sm mt-1">
+                  Number of Visits is required.
+                </p>
+              )}
+          </div>
 
-          <input
-            type="number"
-            name="numberOfVisit"
-            value={formData.numberOfVisit}
-            onChange={handleChange}
-            placeholder="Number of Visits"
-            required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-          />
-
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Destination & visit schedule"
-            required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-          ></textarea>
+          <div>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Destination & visit schedule"
+              required
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+            ></textarea>
+            {(submitted || touchedFields.description) &&
+              !formData.description.trim() && (
+                <p className="text-red-500 text-sm mt-1">
+                  Description is required.
+                </p>
+              )}
+          </div>
 
           <div className="grid grid-cols-3 gap-4">
-            <input
-              type="text"
-              name="locations.country"
-              value={formData.locations.country}
-              onChange={handleChange}
-              placeholder="Country"
-              required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-            />
-            <input
-              type="text"
-              name="locations.state"
-              value={formData.locations.state}
-              onChange={handleChange}
-              placeholder="State"
-              required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-            />
-            <input
-              type="text"
-              name="locations.city"
-              value={formData.locations.city}
-              onChange={handleChange}
-              placeholder="City"
-              required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
-            />
+            <div>
+              <input
+                type="text"
+                name="locations.country"
+                value={formData.locations.country}
+                onChange={handleChange}
+                placeholder="Country"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+              />
+              {(submitted || touchedFields["locations.country"]) &&
+                !formData.locations.country.trim() && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Country is required.
+                  </p>
+                )}
+            </div>
+
+            <div>
+              <input
+                type="text"
+                name="locations.state"
+                value={formData.locations.state}
+                onChange={handleChange}
+                placeholder="State"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+              />
+              {(submitted || touchedFields["locations.state"]) &&
+                !formData.locations.state.trim() && (
+                  <p className="text-red-500 text-sm mt-1">
+                    State is required.
+                  </p>
+                )}
+            </div>
+
+            <div>
+              <input
+                type="text"
+                name="locations.city"
+                value={formData.locations.city}
+                onChange={handleChange}
+                placeholder="City"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+              />
+              {(submitted || touchedFields["locations.city"]) &&
+                !formData.locations.city.trim() && (
+                  <p className="text-red-500 text-sm mt-1">
+                    City is required.
+                  </p>
+                )}
+            </div>
           </div>
 
-          {/* Image Upload */}
           <div className="border border-gray-300 p-4 rounded-lg bg-gray-50">
             <label className="block text-gray-600 font-medium mb-2">
               Upload Image
@@ -200,6 +264,12 @@ function PackageFirstPage() {
               className="w-full p-2 border border-gray-300 rounded-lg bg-white"
               onChange={handleImageChange}
             />
+            {(submitted || touchedFields.images) &&
+              formData.images.length === 0 && (
+                <p className="text-red-500 text-sm mt-1">
+                  At least one image is required.
+                </p>
+              )}
             <div className="flex flex-wrap gap-2">
               {formData.images.length > 0 &&
                 formData.images.map((elem, index) => (
@@ -213,29 +283,32 @@ function PackageFirstPage() {
             </div>
           </div>
 
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 bg-white"
-          >
-            <option value="">Select a category</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Family">Family</option>
-            <option value="Students-Advance">Students</option>
-            <option value="Culture">Culture</option>
-          </select>
+          <div>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 bg-white"
+            >
+              <option value="">Select a category</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Family">Family</option>
+              <option value="Students-Advance">Students</option>
+              <option value="Culture">Culture</option>
+            </select>
+            {(submitted || touchedFields.category) &&
+              !formData.category.trim() && (
+                <p className="text-red-500 text-sm mt-1">
+                  Category is required.
+                </p>
+              )}
+          </div>
 
           <button
             type="submit"
             onClick={handleSubmit}
-            disabled={!isFormValid}
-            className={`w-full p-3 mt-4 rounded-lg text-white font-semibold ${
-              isFormValid
-                ? "bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
-                : "bg-gray-400 cursor-not-allowed"
-            }`}
+            className="w-full p-3 mt-4 rounded-lg border bg-blue-600 hover:bg-blue-700 border-gray-200 text-white font-semibold"
           >
             Next
           </button>
