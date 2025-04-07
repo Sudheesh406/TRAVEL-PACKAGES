@@ -9,10 +9,13 @@ function OperatorBookingHistory() {
 
   useEffect(()=>{
     async function PackageBookedDetails() {
+        let token = localStorage.getItem("token");
         try {
-          let { data } = await axios.get(`/Package/PackageBookedDetails/${id}`);
-          if (data){
-
+          let { data } = await axios.get(`/Package/PackageBookedDetails/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          });
+         if (data){
               setBookingDetails(data.data);
           }
         } catch (error) {
@@ -67,7 +70,7 @@ function OperatorBookingHistory() {
                       </td>
                       <td className="px-4 py-2 whitespace-nowrap">
                       <p className="text-blue-600 text-md font-semibold">
-                    {new Date(booking.Date) < new Date() ? "Completed" : ""}
+                    {new Date(booking.Date) < new Date() ? "Completed" : "Booked"}
                   </p>
                       </td>
                     </tr>

@@ -16,10 +16,12 @@ const registeredCompany = async (req,res)=>{
 }
 
 const getCompany = async (req,res)=>{
-  let data = req.User
+  let value = req.User
+
+  if(value){
   try {
-    let result = await findCompanyById(req.User.id)
-    const data = await findPackage(req.User.id)
+    let result = await findCompanyById(value.id)
+    const data = await findPackage(value.id)
     let totalCount = data.totalCount
     let tourPackages = data.tourPackages
     if(result){
@@ -31,6 +33,7 @@ const getCompany = async (req,res)=>{
     console.error("error found in getUser",error);
     return res.status(400).json({ message: "error found in getUser" })    
   }
+}
 }
 
 const editCompanyProfile = async (req,res)=>{

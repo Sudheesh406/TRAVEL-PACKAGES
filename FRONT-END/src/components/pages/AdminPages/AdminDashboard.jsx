@@ -9,6 +9,10 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const [details, setDetails] = useState([]);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  
+
   useEffect(() => {
     async function getAdminPageDetails() {
       const token = localStorage.getItem("token");
@@ -61,6 +65,7 @@ function AdminDashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-800">
+      {/* Sidebar - desktop */}
       <aside className="w-64 bg-white shadow-md px-6 py-8 hidden md:block">
         <div className="text-2xl font-bold mb-8 flex items-center gap-2">
           <FiMenu />
@@ -90,22 +95,62 @@ function AdminDashboard() {
           </button>
         </nav>
       </aside>
-
+  
       <div className="flex-1 flex flex-col">
-        <header className="bg-white shadow px-6 py-4 flex justify-between items-center">
+        {/* Header */}
+        <header className="bg-white shadow px-6 py-4 flex justify-between items-center relative">
           <h1 className="text-xl font-semibold flex items-center gap-2">
-            <FiMenu />
+            <button className="md:hidden" onClick={toggleMenu}>
+              <FiMenu size={24} />
+            </button>
             Dashboard
           </h1>
-          <div className="flex items-center space-x-4"></div>
+  
           <button
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
             onClick={handleLogout}
           >
             Logout
           </button>
+  
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className="absolute top-full left-4 right-4 bg-white border rounded-lg shadow-lg z-50 mt-4 p-4 space-y-3 md:hidden">
+              <button
+                onClick={() => {
+                  navigate("/AdminUserListing");
+                  setIsMenuOpen(false);
+                }}
+                className="hover:text-blue-600 flex items-center gap-2"
+              >
+                <Users className="w-5 h-5 text-blue-500" />
+                Manage users
+              </button>
+              <button
+                onClick={() => {
+                  navigate("/AdminOperatorListing");
+                  setIsMenuOpen(false);
+                }}
+                className="hover:text-blue-600 flex items-center gap-2"
+              >
+                <Shield className="w-5 h-5 text-blue-500" />
+                Manage operators
+              </button>
+              <button
+                onClick={() => {
+                  navigate("/AdminPaymentDetails");
+                  setIsMenuOpen(false);
+                }}
+                className="hover:text-blue-600 flex items-center gap-2"
+              >
+                <DollarSign className="w-5 h-5 text-blue-500" />
+                Payment details
+              </button>
+            </div>
+          )}
         </header>
-
+  
+        {/* Cards */}
         <main className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {details.map((details, idx) => (
             <div
@@ -126,6 +171,7 @@ function AdminDashboard() {
       </div>
     </div>
   );
+  
 }
 
 export default AdminDashboard;

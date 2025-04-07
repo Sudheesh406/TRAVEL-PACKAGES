@@ -23,6 +23,8 @@ function BookingModal({ setShow, packageDetails }) {
     }
   };
 
+
+  console.log("user",user)
   const subtotal = itemCount * PRICE_PER_ITEM;
   const tax = subtotal * TAX_RATE;
   const total = subtotal + tax;
@@ -70,7 +72,11 @@ function BookingModal({ setShow, packageDetails }) {
         };
   
         try {
-          const result = await axios.post("/Payment/verify-payment", paymentData);
+          let token = localStorage.getItem("token")
+          const result = await axios.post("/Payment/verify-payment", paymentData,{
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true,
+            });
           if (result.data.success) {
             console.log("Payment is successful");
             toast.success("Order Created");
@@ -98,7 +104,11 @@ function BookingModal({ setShow, packageDetails }) {
 
   const packageBooked = async(data)=>{
     try {
-      let result = await axios.post('/payment/booking',{data})
+      let result = await axios.post('/payment/booking',{data}, {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+      
       if(result){
         navigate(`/BookingHistory/${user._id}`)      }
     } catch (error) {

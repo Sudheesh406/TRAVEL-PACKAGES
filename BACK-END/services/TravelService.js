@@ -23,7 +23,7 @@ const findPackage = async (value) => {
       let id = companyData[0]
       const [totalCount, tourPackages] = await Promise.all([
         TourPackage.countDocuments({ company: id }),
-        TourPackage.find({company: id, isAvailable:true }).sort({createdAt:-1}).limit(3)   
+        TourPackage.find({company: id, isAvailable:true }).sort({createdAt:-1}).limit(1)   
       ]);
       return { totalCount, tourPackages};
     }

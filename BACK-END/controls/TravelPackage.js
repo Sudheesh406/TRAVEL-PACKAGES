@@ -43,7 +43,11 @@ const DisplayMorePackage = async (req, res) => {
   let lmt = req.body
   try {
     const Package = await findAllPackage(lmt)
-    if(Package) res.status(201).json({message: "Total Package",Package});
+    if(Package){
+      res.status(201).json({message: "Total Package",Package});
+    } else{
+      res.status(401).json({message: "No more package found"});
+    }
   } catch (error) {
     console.error("Error in DisplayPackage :", error);
     res.status(500).json({

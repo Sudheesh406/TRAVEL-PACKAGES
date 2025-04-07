@@ -74,7 +74,6 @@ function Login() {
       <img src={imageSrc} alt="Background" className="object-cover w-full" />
       </div>
       
-      {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 p-8 space-y-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome Back!</h1>

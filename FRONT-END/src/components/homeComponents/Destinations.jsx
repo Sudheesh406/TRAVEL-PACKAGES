@@ -45,13 +45,13 @@ const handleOnclick = (id) => {
                   <h3 className="text-xl font-semibold text-gray-900">{destination.packageName}</h3>
                 </div>
               
-                <p className="text-gray-600 mb-4">{destination.packageDetails.description}</p>
+                <p className="text-gray-600 mb-4 flex text-center text-sm">{destination.packageDetails.description}</p>
                 <div className="flex justify-between items-center">
                   {/* <div className="flex items-center">
                     <span className="text-yellow-500">★</span>
                     <span className="ml-1 text-gray-700">{destination.review}</span>
                   </div> */}
-                  <div className='flex w-full justify-end'>
+                  <div className='flex w-full justify-center'>
                   <button className="text-blue-600 hover:text-blue-800 font-medium" onClick={()=>handleOnclick(destination.packageDetails._id)}>View Details</button>
                   </div>
                 </div>

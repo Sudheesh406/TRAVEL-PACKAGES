@@ -1,12 +1,16 @@
 import { Users, Package, Star, Calendar, Menu } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCompany } from "../../../redux/company/companySlice";
+import {clearPackageForm} from "../../../redux/forms/package/packageFormSlice";
+import { clearPackageSecondForm } from "../../../redux/forms/package/packageSecondFormSlice";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import OperatorProfileEditModal from "../../modal/OperatorProfileEditModal";
 
 export default function OperatorDashboard() {
+  clearPackageForm(null)
+  clearPackageSecondForm(null)
   const [details, setDetails] = useState(null);
   const [Packages, setPackages] = useState([]);
   const [PackagesCount, setPackagesCount] = useState(0);
@@ -20,8 +24,9 @@ export default function OperatorDashboard() {
   useEffect(() => {
     async function fetchCompanyDetails() {
       try {
-        const token = localStorage.getItem("token");
+        let token = localStorage.getItem("token");
         let { data } = await axios.get("/Company/getCompany", {
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
         if (data) {
@@ -103,7 +108,7 @@ export default function OperatorDashboard() {
           </button>
 
           <div className="hidden md:flex gap-4">
-            <Link to="/PackageFirstPage">
+            <Link to="/OperatorPackageFirstPage">
               <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 Add New Package
               </button>

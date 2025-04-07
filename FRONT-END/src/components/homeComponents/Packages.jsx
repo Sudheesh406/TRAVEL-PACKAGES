@@ -20,7 +20,7 @@ const Packages = () => {
           setAllPackage(data.Package)
         }
       } catch (error) {
-        console.error("error found in getPackages",error);
+
       }
     }
     getPackages ()
@@ -53,7 +53,7 @@ const Packages = () => {
                       slidesPerView={1}
                       slidesPerGroup={1}
                       autoplay={{
-                        delay: 2000,
+                        delay: 3000,
                         disableOnInteraction: false,
                       }}
                       className="w-full h-64"

@@ -26,7 +26,7 @@ function HomePages() {
             }
         }
       } catch (error) {  
-        console.error('error in getUser', error);
+
       }
     }
     getUser()

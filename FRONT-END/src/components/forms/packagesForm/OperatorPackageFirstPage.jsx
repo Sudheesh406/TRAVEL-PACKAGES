@@ -76,7 +76,7 @@ function PackageFirstPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setPackageForm(formData));
-    navigate("/PackageSecondPage");
+    navigate("/OperatorPackageSecondPage");
   };
 
   useEffect(() => {
@@ -222,9 +222,8 @@ function PackageFirstPage() {
           >
             <option value="">Select a category</option>
             <option value="Adventure">Adventure</option>
-            <option value="Students-Basic">Students-Basic</option>
             <option value="Family">Family</option>
-            <option value="Students-Advance">Students-Advance</option>
+            <option value="Students-Advance">Students</option>
             <option value="Culture">Culture</option>
           </select>
 

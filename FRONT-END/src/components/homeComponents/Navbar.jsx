@@ -22,7 +22,6 @@ const Navbar = () => {
         localStorage.removeItem("token");
       }
     } catch (error) {
-      console.error('Error during logout:', error);
       alert('There was an error logging out. Please try again later.');
     }
   };

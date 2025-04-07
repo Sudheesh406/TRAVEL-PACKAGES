@@ -7,14 +7,17 @@ import { set } from 'lodash';
 function OperatorPackages() {
   const navigate = useNavigate()
     const {id}  = useParams();
-    console.log("id",id)
     const [packages,setPackages] = useState()
 
     useEffect(()=>{
         async function findAllPackages(){
+            let token = localStorage.getItem("token")
           
             try {
-                let {data} = await axios.get(`Package/findAllPackages/${id}`)
+                let {data} = await axios.get(`Package/findAllPackages/${id}`,{
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
+                  });
                 setPackages(data.result)
             } catch (error) {
                 console.error("errorn found in findAllPackages",error);

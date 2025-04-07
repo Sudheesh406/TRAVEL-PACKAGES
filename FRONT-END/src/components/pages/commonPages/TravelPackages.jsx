@@ -11,6 +11,7 @@ import FilterModal from '../../modal/FilterModal'
 import {debounce} from 'lodash'
 import { useDispatch, useSelector } from 'react-redux';
 import {setPackage,clearPackage,} from "../../../redux/package/packageSlice";
+import { toast } from 'react-hot-toast';
 
 export default function TravelPackages() {
   const [packages, setPackages] = useState();
@@ -25,6 +26,7 @@ export default function TravelPackages() {
   const [debounceValue, setDebounceValue] = useState("")
   const navigate = useNavigate()
   const dispatch = useDispatch();
+  const [error, setError] = useState(false);
   
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function TravelPackages() {
           setPackages([]);
         }
       } catch (error) {
-        console.log("no data found")
+        setError(true);
         setPackages([]);
       }
     }
@@ -61,6 +63,7 @@ export default function TravelPackages() {
   }, [location, duration, filter]);
 
   async function handleChangeLocation(e){
+    setError(false)
     if(e.target.value == "Any Location"){
       SetSearch("")
     }else{
@@ -71,6 +74,7 @@ export default function TravelPackages() {
   }
 
   async function handleChangeDuration(e){
+    setError(false)
     if (e.target.value === "Any Duration") {
       setDuration("Any Duration");
       return
@@ -88,6 +92,7 @@ export default function TravelPackages() {
   }
 
   const handleChangeFilter = (range, isChecked) => {
+    setError(false)
     if (isChecked)setChecked(range);
     if(range == 'Show All'){
       setFilter("")
@@ -121,7 +126,9 @@ export default function TravelPackages() {
         }
       }
     } catch (error) {
-      console.error("error found in TravelPackages", error);
+      if(error.response.status == 401){
+        toast('No more packages')
+      }
     }
   }
   
@@ -150,6 +157,8 @@ const handleDetails = (id)=>{
 useEffect(() => {
   dispatch(setPackage(packages)); 
 }, [packages, dispatch]);
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -206,6 +215,7 @@ useEffect(() => {
       <div className="max-w-7xl mx-auto px-4 py-8 ">
         <h2 className="text-2xl font-bold mb-6">Travel Packages</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+         
           {packages &&
             packages.map((pkg, index) => (
               <div
@@ -274,11 +284,13 @@ useEffect(() => {
             ))}
         </div>
       </div>
+      {error && <p className="flex justify-center text-lg font-bold">No Package Found</p>}
       <div className="w-full flex justify-center p-4">
-      <button className="bg-transparent border border-blue-600 text-blue-600 px-12 py-3 rounded-md hover:bg-blue-50 transition duration-300"
+     {!error && <button className="bg-transparent border border-blue-600 text-blue-600 px-12 py-3 rounded-md hover:bg-blue-50 transition duration-300"
       onClick={()=>morePackages()}>
          View More
       </button>
+     }
       </div>
       {showFilter && (<FilterModal handleChangeFilter={handleChangeFilter} setShowFilter={setShowFilter} showFilter={showFilter} checked={checked} setSubmit={setSubmit}/>)}
     </div>

@@ -11,8 +11,12 @@ function OperatorPackageDetail() {
 
   useEffect(() => {
     async function getPackageDetails() {
+      let token = localStorage.getItem("token");
       try {
-        let { data } = await axios.get(`Package/getPackage/${id}`);
+        let { data } = await axios.get(`Package/getPackage/${id}`,{
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
         if (data) {
           setPackageDetails(data.result[0]);
         }

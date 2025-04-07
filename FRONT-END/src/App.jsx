@@ -1,28 +1,29 @@
 
+
+import PackageDetails from './components/pages/commonPages/PackageDetails'
+import UserProfile from './components/pages/CustomerPages/UserProfile'
+import BookingHistory from './components/pages/CustomerPages/BookingHistory'
+
+import OperatorPackageFirstPage from './components/forms/packagesForm/OperatorPackageFirstPage'
+import OperatorPackageSecondPage from './components/forms/packagesForm/OperatorPackageSecondPage'
+import OperatorPackages from './components/pages/operatorPages/OperatorPackages';
+import OperatorPackageDetail from './components/pages/operatorPages/OperatorPackageDetail';
+import OperatorBookingHistory from './components/pages/operatorPages/OperatorBookingHistory';
+import OpperatorRegister from './components/pages/operatorPages/OpperatorRegister';
+import OperatorDashboard from './components/pages/operatorPages/OperatorDashboard'
+
+import ReviewCard from './components/pages/commonPages/ReviewCard';
 import HomePages from './components/pages/MainPage/HomePages';
 import TravelPackages from './components/pages/commonPages/TravelPackages';
 import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
-import OpperatorRegister from './components/pages/operatorPages/OpperatorRegister';
-import OperatorDashboard from './components/pages/operatorPages/OperatorDashboard'
-import PackageFirstPage from './components/forms/packagesForm/PackageFirstPage'
-import PackageSecondPage from './components/forms/packagesForm/PackageSecondPage'
-import PackageDetails from './components/pages/commonPages/PackageDetails'
-import UserProfile from './components/pages/CustomerPages/UserProfile'
-import BookingHistory from './components/pages/CustomerPages/BookingHistory'
-import OperatorPackages from './components/pages/operatorPages/OperatorPackages';
-import OperatorPackageDetail from './components/pages/operatorPages/OperatorPackageDetail';
-import OperatorBookingHistory from './components/pages/operatorPages/OperatorBookingHistory';
-import ReviewCard from './components/pages/commonPages/ReviewCard';
-import UserProtectedRoute from './components/auth/ProtectedRoute/UserProtectedRoute';
-import OperatorProtectedRoute from './components/auth/ProtectedRoute/OperatorProtectedRoute';
-import AdminProtectedRoute from './components/auth/ProtectedRoute/AdminProtectedRoute';
-import DashboardCard from './components/pages/AdminPages/AdminDashboard'
-import UtilProtectedRoute from './components/auth/ProtectedRoute/utilProtectorRoute';
+
+import AdminDashboard from './components/pages/AdminPages/AdminDashboard'
 import AdminUserListing from './components/pages/AdminPages/AdminUserListing';
 import AdminOperatorListing from './components/pages/AdminPages/AdminOperatorListing';
 import AdminPaymentDetails from './components/pages/AdminPages/AdminPaymentDetails';
-import LoginProtectRoute from './components/auth/ProtectedRoute/LoginProtectedRoute';
+
+import ProtectRoute from './components/auth/ProtectedRoute/ProtectedRoute';
 
 import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollTop";
@@ -32,115 +33,34 @@ import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <div>
-       <ScrollToTop />
-       <Toaster/>
+      <ScrollToTop />
+      <Toaster />
       <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
 
-      <Route path="/login" element={
-          <LoginProtectRoute>
-            <Login />
-        </LoginProtectRoute>} />
+          <Route path="/" element={<HomePages />} />
+          <Route path="/TravelPackages" element={<TravelPackages />} />
+          <Route path="/ReviewCard" element={<ReviewCard />} />
+          <Route path="/PackageDetails/:id" element={<PackageDetails />} />
 
-      <Route path="/signup" element={
-          <LoginProtectRoute>
-            <Signup />
-        </LoginProtectRoute>} />
-        
+         <Route path='/' element={<ProtectRoute />}>
 
-        <Route path="/" element={
-          <UtilProtectedRoute>
-            <HomePages />
-        </UtilProtectedRoute>} />
+          <Route path="/UserProfile" element={<UserProfile />} />
+          <Route path="/BookingHistory/:id" element={<BookingHistory />} />
+          <Route path="/OpperatorRegister" element={<OpperatorRegister />} />
+          <Route path="/OperatorDashboard" element={<OperatorDashboard />} />
+          <Route path="/OperatorPackageFirstPage" element={<OperatorPackageFirstPage />} />
+          <Route path="/OperatorPackageSecondPage" element={<OperatorPackageSecondPage />} />
+          <Route path="/OperatorPackages/:id" element={<OperatorPackages />} />
+          <Route path="/OperatorPackageDetail/:id" element={<OperatorPackageDetail />} />
+          <Route path="/OperatorBookingHistory/:id" element={<OperatorBookingHistory />} />
+          <Route path="/AdminDashboard" element={<AdminDashboard />} />
+          <Route path="/AdminUserListing" element={<AdminUserListing />} />
+          <Route path="/AdminOperatorListing" element={<AdminOperatorListing />} />
+          <Route path="/AdminPaymentDetails" element={<AdminPaymentDetails />} />
+        </Route>
 
-        <Route path="/TravelPackages" element={
-          <UtilProtectedRoute>
-            <TravelPackages />
-        </UtilProtectedRoute>} />
-
-        <Route path="/PackageDetails/:id" element={
-          <UtilProtectedRoute>
-            <PackageDetails />
-        </UtilProtectedRoute>} />
-        
-        <Route path="/ReviewCard" element={
-          <UtilProtectedRoute>
-            <ReviewCard />
-        </UtilProtectedRoute>} />
-
-
-        <Route path="/UserProfile" element={
-          <UserProtectedRoute>
-            <UserProfile />
-        </UserProtectedRoute>} />
-
-        <Route path="/BookingHistory/:id" element={
-        <UserProtectedRoute>
-          <BookingHistory />
-        </UserProtectedRoute>} />
-
-
-        <Route path="/OpperatorRegister" element={
-        <OperatorProtectedRoute>
-          <OpperatorRegister />
-        </OperatorProtectedRoute>} />
-
-        <Route path="/OperatorDashboard" element={
-        <OperatorProtectedRoute>
-          <OperatorDashboard />
-        </OperatorProtectedRoute>} />
-
-        <Route path="/PackageFirstPage" element={
-        <OperatorProtectedRoute>
-          <PackageFirstPage />
-        </OperatorProtectedRoute>} />
-
-        <Route path="/PackageSecondPage" element={
-        <OperatorProtectedRoute>
-          <PackageSecondPage />
-        </OperatorProtectedRoute>} />
-
-        <Route path="/OperatorPackages/:id" element={
-        <OperatorProtectedRoute>
-          <OperatorPackages />
-        </OperatorProtectedRoute>} />
-
-        <Route path="/OperatorPackageDetail/:id" element={
-        <OperatorProtectedRoute>
-          <OperatorPackageDetail />
-        </OperatorProtectedRoute>} />
-
-        <Route path="/OperatorBookingHistory/:id" element={
-        <OperatorProtectedRoute>
-          <OperatorBookingHistory />
-        </OperatorProtectedRoute>} />
-
-
-        <Route path="/AdminDashboard" element={
-        <AdminProtectedRoute>
-          <DashboardCard />
-        </AdminProtectedRoute>} />
-
-        <Route path="/AdminUserListing" element={
-        <AdminProtectedRoute>
-          <AdminUserListing />
-        </AdminProtectedRoute>} />
-
-        <Route path="/AdminOperatorListing" element={
-        <AdminProtectedRoute>
-          <AdminOperatorListing />
-        </AdminProtectedRoute>} />
-
-        <Route path="/AdminPaymentDetails" element={
-        <AdminProtectedRoute>
-          <AdminPaymentDetails />
-        </AdminProtectedRoute>} />
-
-        
-        <Route path="/LoginProtectRoute" element={<LoginProtectRoute />} />
-        <Route path="/UserProtectedRoute" element={<UserProtectedRoute />} />
-        <Route path="/UtilProtectedRoute" element={<UtilProtectedRoute />} />
-        <Route path="/OperatorProtectedRoute" element={<OperatorProtectedRoute />} />
-        <Route path="/AdminProtectedRoute" element={<AdminProtectedRoute />} />
       </Routes>
     </div>
   );
