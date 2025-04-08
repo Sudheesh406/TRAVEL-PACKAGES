@@ -1,4 +1,4 @@
-import { Search, MapPin, Calendar, Filter, Package } from "lucide-react";
+import { Search, MapPin, Calendar, Filter, Menu } from "lucide-react";
 import axios from "../../../axios";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +27,8 @@ export default function TravelPackages() {
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); 
+
 
   useEffect(() => {
     if(location === "Any Location" && duration === "Any Duration" && filter == ""){
@@ -186,36 +188,93 @@ return (
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <select
-              className="px-4 py-2 border rounded-lg bg-white w-full sm:w-auto"
-              onChange={handleChangeLocation}
-              value={location}
-            >
-              <option>Any Location</option>
-              <option>THIRUVANANTHAPURAM</option>
-              <option>KOLLAM</option>
-              <option>ALAPPUZHA</option>
-              <option>THRISSUR</option>
-            </select>
-            <select
-              className="px-4 py-2 border rounded-lg bg-white w-full sm:w-auto"
-              onChange={handleChangeDuration}
-            >
-              <option>Any Duration</option>
-              <option>1-3 days</option>
-              <option>4-7 days</option>
-              <option>8+ days</option>
-            </select>
-            <button
-              className="px-4 py-2 border rounded-lg bg-white flex items-center gap-2 w-full sm:w-auto justify-center"
-              onClick={() => showFilterModal()}
-            >
-              <Filter size={20} />
-              Filters
-            </button>
-          </div>
-        </div>
+          import { Menu } from "lucide-react"; // Add this at the top with your other imports
+import { useState } from "react";    // If not already imported
+
+...
+
+const [menuOpen, setMenuOpen] = useState(false); // Add this in your component
+
+...
+
+{/* 📱 Responsive Filters with Hamburger */}
+<div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+
+  {/* 👇 Hamburger Icon (Visible only on small screens) */}
+  <div className="flex sm:hidden justify-end w-full">
+    <button
+      className="p-2 border rounded-md"
+      onClick={() => setMenuOpen(!menuOpen)}
+    >
+      <Menu className="w-6 h-6" />
+    </button>
+  </div>
+
+  {/* 👇 Menu Content on Small Screens */}
+  {menuOpen && (
+    <div className="flex flex-col gap-4 mt-2 sm:hidden">
+      <select
+        className="px-4 py-2 border rounded-lg bg-white"
+        onChange={handleChangeLocation}
+        value={location}
+      >
+        <option>Any Location</option>
+        <option>THIRUVANANTHAPURAM</option>
+        <option>KOLLAM</option>
+        <option>ALAPPUZHA</option>
+        <option>THRISSUR</option>
+      </select>
+      <select
+        className="px-4 py-2 border rounded-lg bg-white"
+        onChange={handleChangeDuration}
+      >
+        <option>Any Duration</option>
+        <option>1-3 days</option>
+        <option>4-7 days</option>
+        <option>8+ days</option>
+      </select>
+      <button
+        className="px-4 py-2 border rounded-lg bg-white flex items-center gap-2 justify-center"
+        onClick={() => showFilterModal()}
+      >
+        <Filter size={20} />
+        Filters
+      </button>
+    </div>
+  )}
+
+  {/* 👇 Normal Layout on Medium & Up */}
+  <div className="hidden sm:flex gap-4">
+    <select
+      className="px-4 py-2 border rounded-lg bg-white"
+      onChange={handleChangeLocation}
+      value={location}
+    >
+      <option>Any Location</option>
+      <option>THIRUVANANTHAPURAM</option>
+      <option>KOLLAM</option>
+      <option>ALAPPUZHA</option>
+      <option>THRISSUR</option>
+    </select>
+    <select
+      className="px-4 py-2 border rounded-lg bg-white"
+      onChange={handleChangeDuration}
+    >
+      <option>Any Duration</option>
+      <option>1-3 days</option>
+      <option>4-7 days</option>
+      <option>8+ days</option>
+    </select>
+    <button
+      className="px-4 py-2 border rounded-lg bg-white flex items-center gap-2 justify-center"
+      onClick={() => showFilterModal()}
+    >
+      <Filter size={20} />
+      Filters
+    </button>
+  </div>
+</div>
+
       </div>
     </div>
 

@@ -123,7 +123,13 @@ const Navbar = () => {
       <a href="#packages" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Packages</a>
       <a href="#testimonials" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Testimonials</a>
       {isExist ? (
-        <a href="/UserProfile" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Profile</a>
+        <Link
+        to="/UserProfile"
+        className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
+      >
+        Profile
+      </Link>
+       
       ) : (
         <Link
         to="/login"
