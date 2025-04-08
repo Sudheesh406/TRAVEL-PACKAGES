@@ -188,14 +188,6 @@ return (
             </div>
           </div>
 
-          import { Menu } from "lucide-react"; // Add this at the top with your other imports
-import { useState } from "react";    // If not already imported
-
-...
-
-const [menuOpen, setMenuOpen] = useState(false); // Add this in your component
-
-...
 
 {/* 📱 Responsive Filters with Hamburger */}
 <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
