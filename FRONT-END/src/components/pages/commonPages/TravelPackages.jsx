@@ -26,7 +26,7 @@ export default function TravelPackages() {
   const [debounceValue, setDebounceValue] = useState("")
   const navigate = useNavigate()
   const dispatch = useDispatch();
-  const [error, setError] = useState(false);npm 
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if(location === "Any Location" && duration === "Any Duration" && filter == ""){
