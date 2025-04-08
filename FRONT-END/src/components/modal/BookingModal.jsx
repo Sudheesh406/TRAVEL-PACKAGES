@@ -26,15 +26,14 @@ function BookingModal({ setShow, packageDetails }) {
   };
 
   async function getUser(){
+    let token = localStorage.getItem("token")
     try {
       let result = await axios.get('/getUser',{
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
       if(result.data){
-          if(!user){
             dispatch(setUser(result.data.result));
-          }
       }
     } catch (error) {  
 
