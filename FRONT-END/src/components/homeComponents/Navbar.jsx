@@ -114,7 +114,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
   {/* Mobile menu */}
 {isMenuOpen && (
   <div className="md:hidden">
@@ -126,7 +125,12 @@ const Navbar = () => {
       {isExist ? (
         <a href="/UserProfile" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Profile</a>
       ) : (
-        <a href="/login" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Login</a>
+        <Link
+        to="/login"
+        className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium"
+      >
+        Login
+      </Link>
       )}
       <Link to="/TravelPackages">
         <button className="mt-2 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
