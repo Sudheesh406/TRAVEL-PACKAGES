@@ -10,22 +10,32 @@ function PackageDetails() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [packageDetails, setPackageDetails] = useState();
   const [show, setShow] = useState(false);
+  const [loading,setLoading] = useState(true);
+  const [value, setValue] = useState(false);
 
   useEffect(() => {
     async function getPackageDetails() {
       try {
         let { data } = await axios.get(`Package/getPackage/${id}`);
-        if (data) {
+        if (data && data.result.length > 0) {
           setPackageDetails(data.result[0]);
+          setValue(false);
+        } else {
+          setValue(true);
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching package details", error);
+        setValue(true);
+        setLoading(false);
       }
     }
     getPackageDetails();
   }, []);
+  
 
   useEffect(() => {
+    setValue(false);
     if (packageDetails) {
       setSelectedImage(packageDetails.images[0]);
     }
@@ -40,7 +50,18 @@ function PackageDetails() {
     }
   };
 
-  if (!packageDetails) {
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-white">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  
+
+
+  if (!value && !packageDetails) {
     return (
       <div className="container mx-auto px-6 py-16 flex flex-col items-center text-center">
         <h1 className="text-3xl font-bold text-red-600">Package Not Found</h1>
