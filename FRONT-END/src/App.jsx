@@ -7,10 +7,9 @@ import BookingHistory from './components/pages/CustomerPages/BookingHistory'
 import OperatorPackageFirstPage from './components/forms/packagesForm/OperatorPackageFirstPage'
 import OperatorPackageSecondPage from './components/forms/packagesForm/OperatorPackageSecondPage'
 import OperatorPackages from './components/pages/operatorPages/OperatorPackages';
-import OperatorPackageDetail from './components/pages/operatorPages/OperatorPackageDetail';
 import OperatorBookingHistory from './components/pages/operatorPages/OperatorBookingHistory';
-import OpperatorRegister from './components/pages/operatorPages/OpperatorRegister';
-import OperatorDashboard from './components/pages/operatorPages/OperatorDashboard'
+import OperatorRegister from './components/pages/operatorPages/OperatorRegister';
+import OperatorDashboard from './components/pages/operatorPages/OperatorDashboard';
 
 import ReviewCard from './components/pages/commonPages/ReviewCard';
 import HomePages from './components/pages/MainPage/HomePages';
@@ -37,31 +36,31 @@ function App() {
       <ScrollToTop />
       <Toaster />
       <Routes>
-      <Route path="*" element={<NotFound404 />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
           <Route path="/" element={<HomePages />} />
           <Route path="/TravelPackages" element={<TravelPackages />} />
           <Route path="/ReviewCard" element={<ReviewCard />} />
-          <Route path="/PackageDetails/:id" element={<PackageDetails />} />
+          <Route path="/PackageDetails/:operator/:id" element={<PackageDetails />} />
 
          <Route path='/' element={<ProtectRoute />}>
 
           <Route path="/UserProfile" element={<UserProfile />} />
           <Route path="/BookingHistory/:id" element={<BookingHistory />} />
-          <Route path="/OpperatorRegister" element={<OpperatorRegister />} />
+          <Route path="/OperatorRegister" element={<OperatorRegister />} />
           <Route path="/OperatorDashboard" element={<OperatorDashboard />} />
           <Route path="/OperatorPackageFirstPage" element={<OperatorPackageFirstPage />} />
           <Route path="/OperatorPackageSecondPage" element={<OperatorPackageSecondPage />} />
           <Route path="/OperatorPackages/:id" element={<OperatorPackages />} />
-          <Route path="/OperatorPackageDetail/:id" element={<OperatorPackageDetail />} />
           <Route path="/OperatorBookingHistory/:id" element={<OperatorBookingHistory />} />
           <Route path="/AdminDashboard" element={<AdminDashboard />} />
           <Route path="/AdminUserListing" element={<AdminUserListing />} />
           <Route path="/AdminOperatorListing" element={<AdminOperatorListing />} />
           <Route path="/AdminPaymentDetails" element={<AdminPaymentDetails />} />
         </Route>
+        <Route path="*" element={<NotFound404 />} />
+
 
       </Routes>
     </div>

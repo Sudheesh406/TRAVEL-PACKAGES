@@ -14,53 +14,53 @@ const ProtectedRoute = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const { data } = await axios.get('/getUser', {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        });
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const { data } = await axios.get('/getUser', {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //         withCredentials: true,
+  //       });
 
-        if (data?.result) {
-          dispatch(setUser(data.result));
-        } else {
-          navigate('/');
-        }
-      } catch (error) {
-        navigate('/');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       if (data?.result) {
+  //         dispatch(setUser(data.result));
+  //       } else {
+  //         navigate('/');
+  //       }
+  //     } catch (error) {
+  //       navigate('/');
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    if (token) fetchUserData()
-    else {
-      navigate('/login');
-      setIsLoading(false);
-    }
-  }, [dispatch, navigate, token]);
+  //   if (token) fetchUserData()
+  //   else {
+  //     navigate('/login');
+  //     setIsLoading(false);
+  //   }
+  // }, [dispatch, navigate, token]);
 
-  useEffect(() => {
-    if (!isLoading && user) {
-      let redirected = false;
+  // useEffect(() => {
+  //   if (!isLoading && user) {
+  //     let redirected = false;
 
-      if (user.role === 'admin' && !location.pathname.startsWith('/Admin')) {
-        navigate('/AdminDashboard');
-        redirected = true;
-      } else if (user.role === 'opperator' && !location.pathname.startsWith('/Operator')) {        
-        navigate('/OperatorDashboard');
-        redirected = true;
-      } else if (user.role === 'user' && location.pathname.startsWith('Operator') || location.pathname.startsWith('Admin')) {
-        navigate('/');
-        redirected = true;
-      }
+  //     if (user.role === 'admin' && !location.pathname.startsWith('/Admin')) {
+  //       navigate('/AdminDashboard');
+  //       redirected = true;
+  //     } else if (user.role === 'opperator' && !location.pathname.startsWith('/Operator')) {        
+  //       navigate('/OperatorDashboard');
+  //       redirected = true;
+  //     } else if (user.role === 'user' && location.pathname.startsWith('Operator') || location.pathname.startsWith('Admin')) {
+  //       navigate('/');
+  //       redirected = true;
+  //     }
 
-      setIsRedirecting(redirected);
-    }
-  }, [user, isLoading, location.pathname, navigate]);
+  //     setIsRedirecting(redirected);
+  //   }
+  // }, [user, isLoading, location.pathname, navigate]);
 
-  if (isLoading || isRedirecting) return null;
+  // if (isLoading || isRedirecting) return null;
 
   return <Outlet />;
 };

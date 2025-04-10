@@ -11,7 +11,6 @@ function OperatorPackages() {
   useEffect(() => {
     async function findAllPackages() {
       let token = localStorage.getItem("token");
-
       try {
         let { data } = await axios.get(`Package/findAllPackages/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -26,7 +25,8 @@ function OperatorPackages() {
   }, [id]);
 
   const ViewPackageDetails = async (id) => {
-    navigate(`/OperatorPackageDetail/${id}`);
+    let operator = true
+    navigate(`/PackageDetails/${operator}/${id}`);
   };
 
   return (

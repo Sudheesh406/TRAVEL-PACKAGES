@@ -144,8 +144,6 @@ const acticeNonActive = async (id) => {
       { isAvailable: !package[0].isAvailable }, 
       { new: true } 
     );
-
-    console.log("Updated Package:", updatedPackage);
     return updatedPackage;
   } catch (error) {
     console.error("Error found in acticeNonActive", error);

@@ -27,8 +27,8 @@ const Packages = () => {
   },[])
 
   const handleDetails = (id)=>{
-    console.log("id",id)
-    navigate(`/PackageDetails/${id}`);
+    let operator = false
+  navigate(`/PackageDetails/${operator}/${id}`);
   }
 
   return (

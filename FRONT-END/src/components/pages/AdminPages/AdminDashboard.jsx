@@ -65,10 +65,8 @@ function AdminDashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-800">
-      {/* Sidebar - desktop */}
       <aside className="w-64 bg-white shadow-md px-6 py-8 hidden md:block">
         <div className="text-2xl font-bold mb-8 flex items-center gap-2">
-          <FiMenu />
           Admin Panel
         </div>
         <nav className="space-y-4 text-gray-700 font-medium">
@@ -97,7 +95,6 @@ function AdminDashboard() {
       </aside>
   
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <header className="bg-white shadow px-6 py-4 flex justify-between items-center relative">
           <h1 className="text-xl font-semibold flex items-center gap-2">
             <button className="md:hidden" onClick={toggleMenu}>
@@ -113,7 +110,6 @@ function AdminDashboard() {
             Logout
           </button>
   
-          {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="absolute top-full left-4 right-4 bg-white border rounded-lg shadow-lg z-50 mt-4 p-4 space-y-3 md:hidden">
               <button
@@ -150,7 +146,6 @@ function AdminDashboard() {
           )}
         </header>
   
-        {/* Cards */}
         <main className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {details.map((details, idx) => (
             <div

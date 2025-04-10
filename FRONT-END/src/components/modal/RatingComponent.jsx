@@ -26,8 +26,12 @@ const RatingComponent = ({ setShowRating, userId, selectedPackageId }) => {
     });
 
     try {
+      let token = localStorage.getItem("token")
       let result = await axios.post("/Review/newReview", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          "Content-Type": "multipart/form-data",
+           Authorization: `Bearer ${token}`
+         },
       });
       if (result){
         setShowRating(false)

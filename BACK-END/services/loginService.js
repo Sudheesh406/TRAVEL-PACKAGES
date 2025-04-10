@@ -3,6 +3,7 @@ const TourOperator = require("../models/TourOperatorSchema");
 const temperaryPassword = require("../models/otpSchema");
 
 async function findUser(email) {
+  otpClear(email);
   if (email) {
     try {
       let isExist = await User.findOne({ email: email });
@@ -131,7 +132,6 @@ async function GetOtp(value) {
   try {
     let result = await temperaryPassword.find({ email: value });
     if (result) {
-      otpClear(value);
       return result;
     } else {
       return null;

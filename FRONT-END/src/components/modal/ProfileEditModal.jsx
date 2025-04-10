@@ -71,10 +71,11 @@ function ProfileEditModal({ isOpen, setIsOpen, setUserDetails, userDetails }) {
         if (formData.image) {
           formDataToSend.append("images", formData.image[0])
           }
-  
+          let token = localStorage.getItem("token")
         let { data } = await axios.post("/userProfile/editUser", formDataToSend, {
           headers: {
             "Content-Type": "multipart/form-data",
+             Authorization: `Bearer ${token}`
           },
         });
         handleClose();

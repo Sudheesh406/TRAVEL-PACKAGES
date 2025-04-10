@@ -152,13 +152,13 @@ export default function TravelPackages() {
   };
 
 const handleDetails = (id)=>{
-  navigate(`/PackageDetails/${id}`);
+  let operator = false
+  navigate(`/PackageDetails/${operator}/${id}`);
 }
 
 useEffect(() => {
   dispatch(setPackage(packages)); 
 }, [packages, dispatch]);
-
 
 
 return (
@@ -279,7 +279,7 @@ return (
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <span className="text-2xl font-bold text-blue-600">
-                    {pkg.price}
+                   ${pkg.price}
                   </span>
                   <button
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 w-full sm:w-auto"

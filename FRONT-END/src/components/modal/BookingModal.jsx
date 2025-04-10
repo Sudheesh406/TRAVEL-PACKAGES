@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/user/userSlice';
@@ -25,6 +25,7 @@ function BookingModal({ setShow, packageDetails }) {
     }
   };
 
+  useEffect(() => {   
   async function getUser(){
     let token = localStorage.getItem("token")
     try {
@@ -34,12 +35,14 @@ function BookingModal({ setShow, packageDetails }) {
       });
       if(result.data){
             dispatch(setUser(result.data.result));
+            console.log("user found in booking modal",result.data);
       }
     } catch (error) {  
 
     }
   }
   getUser()
+},[])
 
   const subtotal = itemCount * PRICE_PER_ITEM;
   const tax = subtotal * TAX_RATE;
@@ -134,11 +137,18 @@ function BookingModal({ setShow, packageDetails }) {
   }
 
   const newBooking = async () => {
+    let token = localStorage.getItem("token")
+    console.log("token",token)
     try {
-      let response = await axios.post("/Payment/razorpay", {
-        amount: subtotal,
-        currency: "INR",
-      });
+      let response = await axios.post("/Payment/razorpay",{
+          amount: subtotal,
+          currency: "INR",
+        },{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },withCredentials: true, 
+        });
+        
       if (response) {
         await checkoutPayment(response.data.order);
         // change order status ton completed

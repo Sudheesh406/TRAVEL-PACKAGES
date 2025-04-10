@@ -19,7 +19,12 @@ export default function UserProfile() {
     if (!user) {
       async function getUser() {
         try {
-          let result = await axios.get("/getUser");
+          let token = localStorage.getItem("token");
+          let result = await axios.get("/getUser", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
           if (result.data) {
             dispatch(
               setUser({
@@ -68,8 +73,13 @@ export default function UserProfile() {
       id = user._id;
     }
     try {
-      let { data } = await axios.get(`/Payment/getbookingDetails/${id}`);
-      if (data) setBookings(data.result);
+      let token = localStorage.getItem("token");
+      let { data } = await axios.get(`/Payment/getbookingDetails/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    if (data) setBookings(data.result);
     } catch (error) {
       console.error("error found in booking", error);
     }

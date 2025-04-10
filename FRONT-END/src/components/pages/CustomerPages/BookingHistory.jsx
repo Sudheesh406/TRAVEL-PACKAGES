@@ -18,7 +18,12 @@ function BookingHistory() {
   useEffect(() => {
     async function getHistory() {
       try {
-        let { data } = await axios.get(`/Payment/getBookingHistory/${id}`);
+        let token = localStorage.getItem("token");
+        let { data } = await axios.get(`/Payment/getBookingHistory/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         if (data){
           setBookings(data.result);
           if(data.result.length === 0){

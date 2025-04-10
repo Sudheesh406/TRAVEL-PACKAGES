@@ -28,7 +28,6 @@ function HomePages() {
    }
  }, [user, navigate]);
   
-  
   async function getUser(){
       try {
         let result = await axios.get('/getUser',{
@@ -41,7 +40,8 @@ function HomePages() {
             }
         }
       } catch (error) {  
-
+     console.error("error found in getUser",error);
+     
       }
     }
     getUser()

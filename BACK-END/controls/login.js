@@ -15,6 +15,7 @@ const {
 //--------user Signup------------
 
 async function Signup(req, res) {
+  try {
   const { email, password, username, otp, otpRequest } = req.body;
   console.log(req.body);
   if (otpRequest) {
@@ -81,11 +82,16 @@ async function Signup(req, res) {
   } else {
     return res.status(402).json({ message: "Missing required fields" });
   }
+} catch (error) {
+    console.error("error found in signup", error);
+    return res.status(500).json({ message: "Internal server error" });
+}
 }
 
 //--------user Login------------
 
 async function login(req, res) {
+  try {
   const { email, password } = req.body;
   if (email && password) {
     let data = await findUser(email);
@@ -127,6 +133,11 @@ async function login(req, res) {
       return res.status(404).json({ message: "no user found with this email" });
     }
   }
+     
+} catch (error) {
+    console.error("error found in login", error);
+    return res.status(500).json({ message: "Internal server error" });
+}
 }
 
 async function nodemailer(userMail) {
@@ -154,6 +165,7 @@ function generateOTP(length = 6) {
 //--------operator Signup------------
 
 async function operatorSignup(req, res) {
+  try {
   const { email, password, username, otp, otpRequest } = req.body;
   if (otpRequest) {
     let data = await findUser(email);
@@ -217,6 +229,10 @@ async function operatorSignup(req, res) {
   } else {
     return res.status(401).json({ message: "Missing required fields" });
   }
+} catch (error) {
+ res.status(500).json({ message: "Internal server error" });
+  console.error("error found in operator signup", error);   
+}
 }
 
 // //--------operator Login------------

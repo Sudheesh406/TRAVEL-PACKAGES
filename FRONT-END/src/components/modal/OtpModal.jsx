@@ -53,15 +53,16 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
         console.log('Otp error:', error);
           
       }
+
     }else if(identifyUser){
       try {
         let result = await axios.post('/operatorSignup',data)
         if(result){
-          console.log('Otp response:', result.data.result.accessToken);
           localStorage.setItem('token', result.data.result.accessToken);
-            setOtpModal(false);
-            navigate('/OpperatorRegister')
-            localStorage.removeItem('user');
+          console.log('Otp response:', result.data.result.accessToken);
+          setOtpModal(false);
+          navigate('/OperatorPackages')
+          localStorage.removeItem('user');
         }
     } catch (error) {
       console.log('Otp error:', error);

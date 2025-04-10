@@ -86,7 +86,7 @@ export default function OperatorDashboard() {
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img
-              src={details?.image || ""}
+              src={details?.image || "image"}
               alt={details?.companyName || "Company Logo"}
               className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg"
             />

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from '../../../axios'
 import Swal from "sweetalert2";
@@ -16,6 +16,27 @@ function OpperatorRegister() {
   })
   const user = useSelector((state) => state.user.user);
   
+  // useEffect(() => {
+  //     async function fetchCompanyDetails() {
+  //       try {
+  //         let token = localStorage.getItem("token");
+  //         let { data } = await axios.get("/Company/getCompany", {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //           withCredentials: true,
+  //         });
+  //         if (data) {
+  //           if(data.result?.data){
+  //             navigate('/OperatorDashboard')
+  //           }
+          
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching company details", error);
+  //       }
+  //     }
+  
+  //     fetchCompanyDetails();
+  //   }, []);
 
   const handleSubmit = async(e) => {
     e.preventDefault()

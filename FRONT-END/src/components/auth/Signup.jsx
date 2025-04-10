@@ -3,6 +3,7 @@ import { useState,useEffect } from 'react';
 import imageSrc from "../../assets/signupimage.jpg";
 import axios from '../../axios';
 import OtpModal from '../modal/OtpModal';
+import { toast } from 'react-hot-toast';
 
 function Signup() {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ function Signup() {
 
 
   const token = localStorage.getItem("token");
-
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -42,7 +42,8 @@ function Signup() {
         }
 
       } catch (error) {
-
+        console.error('error found in getUser:', error);
+        
       }
     };
 
@@ -81,6 +82,9 @@ function Signup() {
         if(err.response.status === 500){
           alert('Internal server error')
         }
+        if(err.response.status === 401){
+          toast.error('Otp is not correct');
+        }
         if(err.response.status === 400){
           setErrorDisplay(true)
           setErrorMessage('This mail already has an account as operator')
@@ -101,11 +105,10 @@ function Signup() {
     setIdentifyUser(true)
     const { username, email, password, confirmPassword } = formData;
     if (username && email && password && confirmPassword) {
-
       console.log('formData:', formData);
       if (password !== confirmPassword && password.length >= 0) {
         setErrorDisplay(true)
-        setErrorMessage('Passwords do not match')
+        setErrorMessage('Password is not matched')
         return;
       }
       let data = {otpRequest : true, email: formData.email}
@@ -126,6 +129,9 @@ function Signup() {
         if(err.response.status === 500){
           alert('Internal server error')
         }
+        if(err.response.status === 401){
+          toast.error('Otp is not correct');
+        }
         if(err.response.status === 400){
           setErrorDisplay(true)
           setErrorMessage('This mail already has an account as user')
@@ -134,7 +140,6 @@ function Signup() {
           setErrorDisplay(true)
           setErrorMessage('Missing fields')
         }
-
         console.log('Signup error:', err);
       });
     }else{
