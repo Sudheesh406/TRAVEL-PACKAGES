@@ -2,57 +2,22 @@ import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser, clearUser } from "../../../redux/user/userSlice";
 import axios from "../../../axios";
 import ProfileEditModal from "../../modal/ProfileEditModal";
 
 export default function UserProfile() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const [bookings, setBookings] = useState();
   const [userDetails, setUserDetails] = useState("");
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
   const [isOpen, setIsOpen] = useState(false);
-  const [showMenu, setShowMenu] = useState(false); // <-- for mobile menu toggle
+  const [showMenu, setShowMenu] = useState(false); 
+  
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    if (!user) {
-      async function getUser() {
-        try {
-          let token = localStorage.getItem("token");
-          let result = await axios.get("/getUser", {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          if (result.data) {
-            dispatch(
-              setUser({
-                ...result.data.result,
-                DateOfBirth: result.data.result.DateOfBirth
-                  ? new Date(result.data.result.DateOfBirth)
-                      .toISOString()
-                      .split("T")[0]
-                  : "",
-              })
-            );
-            setUserDetails((prev) => ({
-              ...prev,
-              ...result.data.result,
-              DateOfBirth: result.data.result.DateOfBirth
-                ? new Date(result.data.result.DateOfBirth)
-                    .toISOString()
-                    .split("T")[0]
-                : "",
-            }));
-            BookingDetails(result.data.result);
-          }
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      }
-      getUser();
-    } else {
+    if (user) {
       BookingDetails(user);
       setUserDetails({
         ...user,

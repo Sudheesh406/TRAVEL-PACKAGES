@@ -35,7 +35,6 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
   const handleSubmit = async () => {
     const enteredOtp = otp.join(""); 
     let user = localStorage.getItem('user');  
-    dispatch(setUser(user));
     let data = JSON.parse(user); 
     if (data) {  
         data.otp = enteredOtp; 
@@ -45,7 +44,8 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
         let result = await axios.post('/Signup',data)
         if(result){
             localStorage.setItem('token', result.data.result.accessToken);
-              setOtpModal(false);
+            dispatch(setUser(result.data.result.newUser));
+            setOtpModal(false);
               navigate('/');
               localStorage.removeItem('user');
           }
@@ -59,9 +59,10 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
         let result = await axios.post('/operatorSignup',data)
         if(result){
           localStorage.setItem('token', result.data.result.accessToken);
-          console.log('Otp response:', result.data.result.accessToken);
+          dispatch(setUser(result.data.result.newUser));
           setOtpModal(false);
-          navigate('/OperatorPackages')
+          console.log("navigated")
+          navigate('/Operator/OperatorRegister')
           localStorage.removeItem('user');
         }
     } catch (error) {

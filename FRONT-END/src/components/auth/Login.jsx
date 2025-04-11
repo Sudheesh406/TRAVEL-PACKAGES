@@ -5,8 +5,6 @@ import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, clearUser } from '../../redux/user/userSlice';
-import { useEffect } from 'react';
-
 
 function Login() {
   let dispatch = useDispatch()
@@ -18,37 +16,6 @@ function Login() {
     email: '',
     password: '',
   });
-
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        let result = await axios.get('/getUser', {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        });
-        if (result?.data.result.role === "user") {
-          navigate('/');
-        }
-
-        if (result?.data.result.role === "admin") {
-          navigate('/AdminDashboard');
-        }
-
-        if (result?.data.result.role === "opperator") {
-          navigate('/OperatorDashboard');
-        }
-
-      } catch (error) {
-
-      }
-    };
-
-    if (token) {
-      getUser();
-    }
-  }, [token, navigate]);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -70,10 +37,10 @@ function Login() {
       if(result.data.result.role === "user" && result.data.accessToken){
         navigate('/');
         console.log('Login response:', result.data.result);
-      }else if(result.data.result.role === "opperator"){
-        navigate('/OperatorDashboard');
+      }else if(result.data.result.role === "operator"){
+        navigate('/Operator/OperatorDashboard');
       }else if(result.data.result.role === "admin"){
-        navigate('/AdminDashboard');
+        navigate('/Admin/AdminDashboard');
       }
     } catch (error) {
       if(error.response.status === 401){

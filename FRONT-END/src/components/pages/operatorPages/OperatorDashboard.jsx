@@ -7,10 +7,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import OperatorProfileEditModal from "../../modal/OperatorProfileEditModal";
+import { clearUser} from "../../../redux/user/userSlice"
 
 export default function OperatorDashboard() {
   clearPackageForm(null)
   clearPackageSecondForm(null)
+
   const [details, setDetails] = useState(null);
   const [Packages, setPackages] = useState([]);
   const [PackagesCount, setPackagesCount] = useState(0);
@@ -20,6 +22,7 @@ export default function OperatorDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchCompanyDetails() {
@@ -45,10 +48,29 @@ export default function OperatorDashboard() {
       } catch (error) {
         console.error("Error fetching company details", error);
       }
-    }
+    }fetchCompanyDetails();
 
-    fetchCompanyDetails();
+    
+    async function RegisterOrNot(){
+      try {
+        let token = localStorage.getItem("token");
+        let {data} = await axios.get('/Company/checkRegister',{
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,})
+        if(!data.result){
+          navigate("/Operator/OperatorRegister")
+          setLoading(false)
+        }else{
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error('error found in RegisterOrNot',error);
+      }
+    }RegisterOrNot()
+
   }, []);
+
+  
 
   let totalBookings = 0;
   if (booking && booking.length > 0) totalBookings = booking.length;
@@ -60,12 +82,12 @@ export default function OperatorDashboard() {
   const handlePackages = () => {
     let id = Packages[0]?.company;
     if (id) {
-      navigate(`/OperatorPackages/${id}`);
+      navigate(`/Operator/OperatorPackages/${id}`);
     }
   };
 
   const viewBookings = (id) => {
-    navigate(`/OperatorBookingHistory/${id}`);
+    navigate(`/Operator/OperatorBookingHistory/${id}`);
   };
 
   const handleLogout = async () => {
@@ -73,6 +95,7 @@ export default function OperatorDashboard() {
       let result = await axios.get("/logOut");
       if (result) {
         localStorage.removeItem("token");
+        dispatch(clearUser(null))
         navigate("/login");
       }
     } catch (err) {
@@ -80,6 +103,17 @@ export default function OperatorDashboard() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+      <div className="relative w-24 h-24">
+        <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+        <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
+      </div>
+    </div>
+    );
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm">
@@ -108,7 +142,7 @@ export default function OperatorDashboard() {
           </button>
 
           <div className="hidden md:flex gap-4">
-            <Link to="/OperatorPackageFirstPage">
+            <Link to="/Operator/OperatorPackageFirstPage">
               <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 Add New Package
               </button>
@@ -130,7 +164,7 @@ export default function OperatorDashboard() {
 
         {mobileMenuOpen && (
           <div className="md:hidden bg-white px-4 pb-4 flex flex-col gap-2">
-            <Link to="/PackageFirstPage">
+            <Link to="/Operator/OperatorPackageFirstPage">
               <button className="w-full px-4 py-2  text-black border border-gray-300  rounded-lg ">
                 Add New Package
               </button>

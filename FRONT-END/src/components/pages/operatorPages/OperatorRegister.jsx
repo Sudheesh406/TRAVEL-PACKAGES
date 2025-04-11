@@ -14,29 +14,8 @@ function OpperatorRegister() {
     gstNumber: '',
     address: ''
   })
+  const[loading,setLoading] = useState(true)
   const user = useSelector((state) => state.user.user);
-  
-  // useEffect(() => {
-  //     async function fetchCompanyDetails() {
-  //       try {
-  //         let token = localStorage.getItem("token");
-  //         let { data } = await axios.get("/Company/getCompany", {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //           withCredentials: true,
-  //         });
-  //         if (data) {
-  //           if(data.result?.data){
-  //             navigate('/OperatorDashboard')
-  //           }
-          
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching company details", error);
-  //       }
-  //     }
-  
-  //     fetchCompanyDetails();
-  //   }, []);
 
   const handleSubmit = async(e) => {
     e.preventDefault()
@@ -60,7 +39,7 @@ function OpperatorRegister() {
         withCredentials: true,
       });
       if(data){
-        navigate('/OperatorDashboard')
+        navigate('/Operator/OperatorDashboard')
         console.log("result:",data)
       }
     } catch (error) {
@@ -68,6 +47,24 @@ function OpperatorRegister() {
     }
   }
 
+  useEffect(()=>{
+    async function RegisterOrNot(){
+      try {
+        let token = localStorage.getItem("token");
+        let {data} = await axios.get('/Company/checkRegister',{
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,})
+        if(!data.result){
+          setLoading(false)
+        }else{
+          navigate("/Operator/OperatorDashBoard")
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error('error found in RegisterOrNot',error);
+      }
+    }RegisterOrNot()
+  },[])
 
   const checkoutPayment = async (order) => {
     
@@ -147,6 +144,16 @@ function OpperatorRegister() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+      <div className="relative w-24 h-24">
+        <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+        <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
+      </div>
+    </div>
+    );
+  }
 
   return (
     <div className="h-[727px] bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">

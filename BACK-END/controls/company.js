@@ -1,4 +1,4 @@
-const {createRegisteredCompany,findCompanyById, updateCompanyProfile} =require("../services/companyService")
+const {createRegisteredCompany,findCompanyById, updateCompanyProfile, findRegister} =require("../services/companyService")
 const { findPackage } = require("../services/TravelService");
 
 const registeredCompany = async (req,res)=>{
@@ -48,8 +48,24 @@ try {
   let result = await updateCompanyProfile(profile)
   if(result)return res.status(200).json({message:"successfully Updated",result})
 } catch (error) {
-  return res.status(200).json({message:"error found in update company",error})
+  return res.status(400).json({message:"error found in update company",error})
 }
 }
 
-module.exports = { registeredCompany,getCompany, editCompanyProfile}
+const checkRegister = async(req,res)=>{
+  id = req.User.id
+  try {
+    let result = await findRegister(id)
+    if(result){
+    return res.status(200).json({message:"It is a Registered company",result})
+    }else{
+      return res.status(200).json({message:"It is not Registered",result})
+    }
+  } catch (error) {
+    console.log("error found in checkRegister",error);
+    return res.status(400).json({message:"error found in checking Register",error})
+
+  }
+}
+
+module.exports = { registeredCompany,getCompany, editCompanyProfile,checkRegister}

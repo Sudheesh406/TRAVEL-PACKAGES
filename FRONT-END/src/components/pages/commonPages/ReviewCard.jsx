@@ -32,35 +32,6 @@ function ReviewCard() {
     getAllReview();
   }, []);
 
-  async function getUser(){
-    try {
-      let result = await axios.get('/getUser',{
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-      if(result.data){
-          if(!user){
-            dispatch(setUser(result.data.result));
-          }
-      }
-    } catch (error) {  
-
-    }
-  }
-  getUser()
-
-  const user = useSelector((state) => state.user.user);
- 
-  useEffect(() => {
-    if (user) {
-      if (user.role === 'admin') {
-        navigate('/AdminDashboard');
-      } else if (user.role === 'opperator') {
-        navigate('/OperatorDashboard');
-      }
-    }
-  }, [user, navigate]);
-
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
       <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">

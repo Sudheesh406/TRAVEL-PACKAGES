@@ -8,6 +8,7 @@ function OperatorBookingHistory() {
   const { id } = useParams();
   const [BookingDetails, setBookingDetails] = useState();
   const [Props, setProps] = useState("null");
+  const [loading,setLoading] = useState(true)
 
   useEffect(()=>{
     async function PackageBookedDetails() {
@@ -26,7 +27,35 @@ function OperatorBookingHistory() {
         }
       }
       PackageBookedDetails();
+
+      async function RegisterOrNot(){
+        try {
+          let token = localStorage.getItem("token");
+          let {data} = await axios.get('/Company/checkRegister',{
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,})
+          if(!data.result){
+            navigate("/Operator/OperatorRegister")
+            setLoading(false)
+          }else{
+            setLoading(false)
+          }
+        } catch (error) {
+          console.error('error found in RegisterOrNot',error);
+        }
+      }RegisterOrNot()
  },[])
+
+ if (loading) {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+    <div className="relative w-24 h-24">
+      <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+      <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
+    </div>
+  </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-100">

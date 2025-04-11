@@ -1,66 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import axios from '../../../axios';
-import { setUser } from '../../../redux/user/userSlice';
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "../../../axios";
+import { setUser } from "../../../redux/user/userSlice";
+
+const allowedRoutes = {
+  admin: ["Admin"],
+  operator: ["Operator"],
+  user: ["UserProfile", "BookingHistory"],
+};
 
 const ProtectedRoute = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(true); 
 
-  const token = localStorage.getItem('token') || '';
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  useEffect(() => {
+    const checkUserAccess = async () => {
+      let currentUser = user;
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const { data } = await axios.get('/getUser', {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //         withCredentials: true,
-  //       });
+      if (!currentUser) {
+        try {
+          const token = localStorage.getItem("token");
+          const { data } = await axios.get("/getUser", {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          });
+          if (data?.result) {
+            dispatch(setUser(data.result));
+            currentUser = data.result;
+          } else {
+            navigate("/");
+            return;
+          }
+        } catch (err) {
+          console.error("Auth error:", err);
+          navigate("/");
+          return;
+        }
+      }
 
-  //       if (data?.result) {
-  //         dispatch(setUser(data.result));
-  //       } else {
-  //         navigate('/');
-  //       }
-  //     } catch (error) {
-  //       navigate('/');
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+      const currentPath = location.pathname;
+      const mainRoute = currentPath.split("/")[1];
 
-  //   if (token) fetchUserData()
-  //   else {
-  //     navigate('/login');
-  //     setIsLoading(false);
-  //   }
-  // }, [dispatch, navigate, token]);
+      if (
+        !allowedRoutes[currentUser.role]?.some((path) =>
+          currentPath.includes(path)
+        )
+      ) {
+        navigate("/");
+      }
 
-  // useEffect(() => {
-  //   if (!isLoading && user) {
-  //     let redirected = false;
+      setInterval(() => {
+        setLoading(false);
+      }, 1000);
+    };
 
-  //     if (user.role === 'admin' && !location.pathname.startsWith('/Admin')) {
-  //       navigate('/AdminDashboard');
-  //       redirected = true;
-  //     } else if (user.role === 'opperator' && !location.pathname.startsWith('/Operator')) {        
-  //       navigate('/OperatorDashboard');
-  //       redirected = true;
-  //     } else if (user.role === 'user' && location.pathname.startsWith('Operator') || location.pathname.startsWith('Admin')) {
-  //       navigate('/');
-  //       redirected = true;
-  //     }
+    checkUserAccess();
+  }, []);
 
-  //     setIsRedirecting(redirected);
-  //   }
-  // }, [user, isLoading, location.pathname, navigate]);
-
-  // if (isLoading || isRedirecting) return null;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+      <div className="relative w-24 h-24">
+        <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+        <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
+      </div>
+    </div>
+    );
+  }
 
   return <Outlet />;
 };

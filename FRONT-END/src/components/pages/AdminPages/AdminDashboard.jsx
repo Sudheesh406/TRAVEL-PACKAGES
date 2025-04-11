@@ -1,14 +1,15 @@
 import { Users, Shield, DollarSign } from "lucide-react";
 import { FiMenu } from "react-icons/fi";
-
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import { useState, useEffect } from "react";
+import { clearUser } from "../../../redux/user/userSlice";
 
 function AdminDashboard() {
   const navigate = useNavigate();
   const [details, setDetails] = useState([]);
-
+  const dispatch = useDispatch()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   
@@ -27,19 +28,19 @@ function AdminDashboard() {
               title: "Users",
               value: data.result.userCount,
               icon: Users,
-              route: "/AdminUserListing",
+              route: "/Admin/AdminUserListing",
             },
             {
               title: "Operators",
               value: data.result.operators,
               icon: Shield,
-              route: "/AdminOperatorListing",
+              route: "/Admin/AdminOperatorListing",
             },
             {
               title: "Total Revenue",
               value: data.result.totalAmount,
               icon: DollarSign,
-              route: "/AdminPaymentDetails",
+              route: "/Admin/AdminPaymentDetails",
             },
           ]);
         }
@@ -56,6 +57,7 @@ function AdminDashboard() {
       let result = await axios.get("/logOut");
       if (result) {
         localStorage.removeItem("token");
+        dispatch(clearUser(null))
         navigate("/login");
       }
     } catch (err) {
@@ -71,21 +73,21 @@ function AdminDashboard() {
         </div>
         <nav className="space-y-4 text-gray-700 font-medium">
           <button
-            onClick={() => navigate("/AdminUserListing")}
+            onClick={() => navigate("/Admin/AdminUserListing")}
             className="hover:text-blue-600 flex items-center gap-2"
           >
             <Users className="w-5 h-5 text-blue-500" />
             Manage users
           </button>
           <button
-            onClick={() => navigate("/AdminOperatorListing")}
+            onClick={() => navigate("/Admin/AdminOperatorListing")}
             className="hover:text-blue-600 flex items-center gap-2"
           >
             <Shield className="w-5 h-5 text-blue-500" />
             Manage operators
           </button>
           <button
-            onClick={() => navigate("/AdminPaymentDetails")}
+            onClick={() => navigate("/Admin/AdminPaymentDetails")}
             className="hover:text-blue-600 flex items-center gap-2"
           >
             <DollarSign className="w-5 h-5 text-blue-500" />
@@ -114,7 +116,7 @@ function AdminDashboard() {
             <div className="absolute top-full left-4 right-4 bg-white border rounded-lg shadow-lg z-50 mt-4 p-4 space-y-3 md:hidden">
               <button
                 onClick={() => {
-                  navigate("/AdminUserListing");
+                  navigate("/Admin/AdminUserListing");
                   setIsMenuOpen(false);
                 }}
                 className="hover:text-blue-600 flex items-center gap-2"
@@ -124,7 +126,7 @@ function AdminDashboard() {
               </button>
               <button
                 onClick={() => {
-                  navigate("/AdminOperatorListing");
+                  navigate("/Admin/AdminOperatorListing");
                   setIsMenuOpen(false);
                 }}
                 className="hover:text-blue-600 flex items-center gap-2"
@@ -134,7 +136,7 @@ function AdminDashboard() {
               </button>
               <button
                 onClick={() => {
-                  navigate("/AdminPaymentDetails");
+                  navigate("/Admin/AdminPaymentDetails");
                   setIsMenuOpen(false);
                 }}
                 className="hover:text-blue-600 flex items-center gap-2"

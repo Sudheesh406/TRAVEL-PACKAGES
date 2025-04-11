@@ -1,18 +1,17 @@
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useSelector,useDispatch } from 'react-redux';
-import { setUser } from '../../redux/user/userSlice';
+
 import axios from '../../axios'
 import Swal from "sweetalert2";
 
 function BookingModal({ setShow, packageDetails }) { 
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const user = useSelector((state) => state.user.user);
   const [itemCount, setItemCount] = useState(0);
   const PRICE_PER_ITEM = packageDetails.price;
   const TAX_RATE = 0.00; 
-
+  
+  const user = useSelector((state) => state.user.user);
   const handleIncrement = () => {
     if (itemCount < packageDetails.availableSeat) {
       setItemCount(itemCount + 1);
@@ -24,25 +23,6 @@ function BookingModal({ setShow, packageDetails }) {
       setItemCount(itemCount - 1);
     }
   };
-
-  useEffect(() => {   
-  async function getUser(){
-    let token = localStorage.getItem("token")
-    try {
-      let result = await axios.get('/getUser',{
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-      if(result.data){
-            dispatch(setUser(result.data.result));
-            console.log("user found in booking modal",result.data);
-      }
-    } catch (error) {  
-
-    }
-  }
-  getUser()
-},[])
 
   const subtotal = itemCount * PRICE_PER_ITEM;
   const tax = subtotal * TAX_RATE;

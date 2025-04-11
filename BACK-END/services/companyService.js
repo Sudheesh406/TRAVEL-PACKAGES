@@ -80,5 +80,19 @@ const createRegisteredCompany = async (data,operator) => {
     }
 };
 
+ const findRegister = async (id)=>{
+  try {
+    let result = await RegistrationPayment.find({operatorId : id})
+    if(result.length === 0){
+    return null
+    }else{
+      return result
+    }
+  } catch (error) {
+    console.error('error found in findRegister',error);
+    
+  }
+ }
 
-  module.exports = {createRegisteredCompany,findCompanyById,updateCompanyProfile}
+
+  module.exports = {createRegisteredCompany,findCompanyById,updateCompanyProfile,findRegister}
