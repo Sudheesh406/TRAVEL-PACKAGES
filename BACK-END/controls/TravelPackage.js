@@ -73,12 +73,11 @@ const DisplayHomePackage = async (req, res) => {
 
 const DisplayLocationPackage = async (req, res) => {
   let value =  req.body
-  value.limit = 9
-  ;
+  value.limit = 9;
 try {
   if(req.body.location != "Any Location"  || req.body.duration != "Any Duration" || req.body.filter != ""){
     let data = await findLocationPackage(value)
-    if(data.length > 0){
+    if(data){
       res.status(200).json({
         message: "success",
         data
@@ -126,7 +125,6 @@ let getPackage = async (req,res)=>{
 const packageHandle = async (req,res)=>{
   try {
     let {id} = req.body
-    console.log("id",id)
     let result = await acticeNonActive(id)
     if(result)res.status(200).json({message:"Sucessfully change",result})
   } catch (error) {

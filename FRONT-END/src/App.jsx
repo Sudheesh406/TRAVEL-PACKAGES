@@ -86,11 +86,12 @@ function App() {
           <Route path="/" element={<HomePages />} />
           <Route path="/TravelPackages" element={<TravelPackages />} />
           <Route path="/ReviewCard" element={<ReviewCard />} />
+        </Route>
+        
           <Route
             path="/PackageDetails/:operator/:id"
             element={<PackageDetails />}
           />
-        </Route>
 
         <Route element={<HelperRoute />}>
           <Route path="/signup" element={<Signup />} />

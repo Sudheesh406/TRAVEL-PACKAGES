@@ -4,6 +4,7 @@ import imageSrc from "../../assets/signupimage.jpg";
 import axios from '../../axios';
 import OtpModal from '../modal/OtpModal';
 import { toast } from 'react-hot-toast';
+import LoadingModal from '../modal/LoadingModal';
 
 function Signup() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ function Signup() {
   const [identifyUser, setIdentifyUser] = useState(false);
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading,setLoading] = useState(false)
 
   const [formData, setFormData] = useState({
     username: '',
@@ -30,14 +32,16 @@ function Signup() {
         setErrorMessage('Passwords do not match')
         return;
       }
+      setLoading(true)
     let data = {otpRequest : true, email: formData.email}
      await axios.post('/Signup',data)
       .then(res => {
-        console.log('Signup response:', res.data);
+
         let result = localStorage.getItem('user');
         if(!result){
           localStorage.setItem('user',JSON.stringify(formData));
         }
+        setLoading(false)
         setOtpModal(true);
       })
       .catch(err => {
@@ -72,12 +76,13 @@ function Signup() {
     setIdentifyUser(true)
     const { username, email, password, confirmPassword } = formData;
     if (username && email && password && confirmPassword) {
-      console.log('formData:', formData);
+
       if (password !== confirmPassword && password.length >= 0) {
         setErrorDisplay(true)
         setErrorMessage('Password is not matched')
         return;
-      }
+      }      
+      setLoading(true)
       let data = {otpRequest : true, email: formData.email}
      await axios.post('/operatorSignup',data)
       .then(res => {
@@ -86,6 +91,7 @@ function Signup() {
         if(!result){
           localStorage.setItem('user',JSON.stringify(formData));
         }
+        setLoading(false)
         setOtpModal(true);
       })
       .catch(err => {
@@ -128,7 +134,7 @@ function Signup() {
   return (
    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div className="max-w-6xl h-[630px] w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl flex overflow-hidden">
-      {/* left Side - Signup Form */}
+
       <div className="w-full lg:w-1/2 p-8 ">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 ">Begin Your Journey</h1>
@@ -221,6 +227,7 @@ function Signup() {
        <img src={imageSrc} alt="Background" className="w-full h-full object-cover" />
        </div>
     </div>
+    {loading && <LoadingModal/>}
     {otpModal && <OtpModal setOtpModal={setOtpModal} handleOtp={setHandleOtp} identifyUser={identifyUser} />}  
   </div>
 

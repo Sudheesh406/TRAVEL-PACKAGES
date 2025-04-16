@@ -10,7 +10,6 @@ const createNewTourPackage = async (packageData) => {
   }
 }; 
 
-
 const findPackage = async (value) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0)
@@ -72,14 +71,20 @@ const findAllPackage = async (data) => {
         }
         const skip = data.limit ? data.limit - 9 : 0;
         const limit = 9;
-        const packages = await TourPackage.find(query).skip(skip).limit(limit);
-        return packages.length > 0 ? packages : null;
+        const packages = await TourPackage.find(query).skip(skip).limit(limit)
+        const totalCount = await TourPackage.countDocuments(query);
+        let detail = {packages,totalCount}
+        return packages.length > 0 ? detail : null;
       } catch (error) {
         throw new Error(error.message);
       }
   
 }else{
-  return await TourPackage.find({isAvailable:true, Date: { $gte: today }}).sort({createdAt:-1}).limit(9);
+   let all = await TourPackage.find({isAvailable:true, Date: { $gte: today }}).sort({createdAt:-1}).limit(9);
+  let count = await TourPackage.countDocuments({ isAvailable: true, Date: { $gte: today } })
+  let data = {all,count}
+  return data
+
 }
 };
 
@@ -90,7 +95,7 @@ const findLocationPackage = async (data) => {
   try {
     let query = { isAvailable: true , Date: { $gte: today }};
     if (data.location !== "Any Location") {
-      query.name = data.location.toUpperCase();
+      query.name = { $regex: '^' + data.location, $options: 'i' };
     }
     if (data.duration !== "Any Duration") {
       if (data.duration[0] === 8) {
@@ -103,7 +108,9 @@ const findLocationPackage = async (data) => {
       query.price = { $gte: data.filter[0], $lte: data.filter[1] };
     }
     const result = await TourPackage.find(query).limit(9);
-    return result.length > 0 ? result : [];
+    const count = await TourPackage.countDocuments(query)
+    let details = {result,count}
+    return result.length > 0 ? details : [];
     
   } catch (error) {
     throw new Error(error.message);

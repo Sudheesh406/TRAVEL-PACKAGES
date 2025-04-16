@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Calendar } from "lucide-react";
+import { Mail, Phone, MapPin, Calendar, UserCircle } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,12 +8,12 @@ import ProfileEditModal from "../../modal/ProfileEditModal";
 export default function UserProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const [bookings, setBookings] = useState();
   const [userDetails, setUserDetails] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [showMenu, setShowMenu] = useState(false); 
-  
+  const [showMenu, setShowMenu] = useState(false);
+
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
@@ -41,10 +41,10 @@ export default function UserProfile() {
       let token = localStorage.getItem("token");
       let { data } = await axios.get(`/Payment/getbookingDetails/${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-    if (data) setBookings(data.result);
+      if (data) setBookings(data.result);
     } catch (error) {
       console.error("error found in booking", error);
     }
@@ -54,9 +54,16 @@ export default function UserProfile() {
     navigate(`/BookingHistory/${user._id}`);
   };
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date)) {
+      return "Nill";
+    }
+    return date.toLocaleDateString();
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {/* Hamburger Icon */}
       <div className="absolute top-4 right-4 md:hidden z-50 ">
         <button
           onClick={() => setShowMenu(!showMenu)}
@@ -68,7 +75,6 @@ export default function UserProfile() {
         </button>
       </div>
 
-      {/* Mobile dropdown buttons */}
       {showMenu && (
         <div className="absolute top-6 right-0 bg-white shadow-md rounded-lg p-4 z-40 md:hidden flex flex-col gap-2 w-full">
           <button
@@ -89,11 +95,17 @@ export default function UserProfile() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-start md:text-left md:justify-between md:gap-8">
             <div className="flex flex-col items-center md:flex-row md:items-start gap-6 w-full">
-              <img
-                src={userDetails && userDetails.image}
-                alt="Profile"
-                className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-              />
+              {userDetails && userDetails.image ? (
+                <img
+                  src={userDetails.image}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                />
+              ) : (
+                <div className="w-32 h-32 flex items-center justify-center rounded-full border-4 border-white shadow-lg bg-gray-100">
+                  <UserCircle className="w-24 h-24 text-gray-400" />
+                </div>
+              )}
               <div>
                 <h1 className="text-3xl font-bold mb-2">
                   {userDetails && userDetails.username}
@@ -147,9 +159,7 @@ export default function UserProfile() {
               <MapPin className="text-gray-400" size={20} />
               <div>
                 <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium">
-                  {userDetails && userDetails.location}
-                </p>
+                <p className="font-medium">{userDetails?.location || "Nill"}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -157,25 +167,25 @@ export default function UserProfile() {
               <div>
                 <p className="text-sm text-gray-500">Date of Birth</p>
                 <p className="font-medium">
-                  {userDetails &&
-                    new Date(userDetails.DateOfBirth).getDate()}/
-                  {new Date(userDetails.DateOfBirth).getMonth() + 1}/
-                  {new Date(userDetails.DateOfBirth).getFullYear()}
+                  {formatDate(userDetails.DateOfBirth)}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex gap-4 items-center mt-10 mb-6">
-          <h2 className="text-2xl font-bold">Booking History</h2>
-          <button
-            className="h-11 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-            onClick={handleHistory}
-          >
-            View All
-          </button>
-        </div>
+        {bookings && bookings.length > 0 && (
+          <div className="flex gap-4 items-center mt-10 mb-6">
+            <h2 className="text-2xl font-bold">Booking History</h2>
+            <button
+              className="h-11 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              onClick={handleHistory}
+            >
+              View
+            </button>
+          </div>
+        )}
+
         <div className="space-y-4">
           {bookings &&
             bookings.map((booking, index) => (

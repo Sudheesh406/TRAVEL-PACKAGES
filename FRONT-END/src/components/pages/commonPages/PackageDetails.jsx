@@ -99,7 +99,7 @@ function PackageDetails() {
   return (
     <div className="container mx-auto px-4 sm:px-6 py-12 max-w-6xl h-[500px] relative">
       <button
-        onClick={() => navigate("/TravelPackages")}
+        onClick={() => navigate(-1)}
         className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2"
       >
         ← Back

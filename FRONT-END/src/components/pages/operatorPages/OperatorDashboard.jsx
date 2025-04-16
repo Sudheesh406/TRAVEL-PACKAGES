@@ -1,17 +1,17 @@
-import { Users, Package, Star, Calendar, Menu } from "lucide-react";
+import { Users, Package, Star, Calendar, Menu, Briefcase } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCompany } from "../../../redux/company/companySlice";
-import {clearPackageForm} from "../../../redux/forms/package/packageFormSlice";
+import { clearPackageForm } from "../../../redux/forms/package/packageFormSlice";
 import { clearPackageSecondForm } from "../../../redux/forms/package/packageSecondFormSlice";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import OperatorProfileEditModal from "../../modal/OperatorProfileEditModal";
-import { clearUser} from "../../../redux/user/userSlice"
+import { clearUser } from "../../../redux/user/userSlice";
 
 export default function OperatorDashboard() {
-  clearPackageForm(null)
-  clearPackageSecondForm(null)
+  clearPackageForm(null);
+  clearPackageSecondForm(null);
 
   const [details, setDetails] = useState(null);
   const [Packages, setPackages] = useState([]);
@@ -22,7 +22,7 @@ export default function OperatorDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading,setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchCompanyDetails() {
@@ -48,29 +48,28 @@ export default function OperatorDashboard() {
       } catch (error) {
         console.error("Error fetching company details", error);
       }
-    }fetchCompanyDetails();
+    }
+    fetchCompanyDetails();
 
-    
-    async function RegisterOrNot(){
+    async function RegisterOrNot() {
       try {
         let token = localStorage.getItem("token");
-        let {data} = await axios.get('/Company/checkRegister',{
+        let { data } = await axios.get("/Company/checkRegister", {
           headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,})
-        if(!data.result){
-          navigate("/Operator/OperatorRegister")
-          setLoading(false)
-        }else{
-          setLoading(false)
+          withCredentials: true,
+        });
+        if (!data.result) {
+          navigate("/Operator/OperatorRegister");
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
       } catch (error) {
-        console.error('error found in RegisterOrNot',error);
+        console.error("error found in RegisterOrNot", error);
       }
-    }RegisterOrNot()
-
+    }
+    RegisterOrNot();
   }, []);
-
-  
 
   let totalBookings = 0;
   if (booking && booking.length > 0) totalBookings = booking.length;
@@ -95,7 +94,7 @@ export default function OperatorDashboard() {
       let result = await axios.get("/logOut");
       if (result) {
         localStorage.removeItem("token");
-        dispatch(clearUser(null))
+        dispatch(clearUser(null));
         navigate("/login");
       }
     } catch (err) {
@@ -106,24 +105,30 @@ export default function OperatorDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-      <div className="relative w-24 h-24">
-        <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
-        <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
+        <div className="relative w-24 h-24">
+          <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+          <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
+        </div>
       </div>
-    </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <img
-              src={details?.image || "image"}
-              alt={details?.companyName || "Company Logo"}
-              className="w-16 h-16 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg"
-            />
+            {details && details.image ? (
+              <img
+                src={details.image}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+              />
+            ) : (
+              <div className="w-32 h-32 flex items-center justify-center rounded-full border-4 border-white shadow-lg bg-gray-100">
+                <Briefcase className="w-24 h-24 text-gray-400" />
+              </div>
+            )}
             <div>
               <h1 className="text-xl md:text-3xl font-bold">
                 {details?.companyName || "Company Name"}
@@ -225,15 +230,18 @@ export default function OperatorDashboard() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 items-center mt-10 mb-6">
-          <h2 className="text-2xl font-bold">Recently Added Packages</h2>
-          <button
-            className="h-11 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-            onClick={handlePackages}
-          >
-            View All
-          </button>
-        </div>
+        {Packages && Packages.length > 0 && (
+          <div className="flex flex-wrap gap-4 items-center mt-10 mb-6">
+            <h2 className="text-2xl font-bold">Recently Added Packages</h2>
+            <button
+              className="h-11 px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+              onClick={handlePackages}
+            >
+              View All
+            </button>
+          </div>
+        )}
+
         <div className="space-y-4">
           {Packages.length > 0 ? (
             Packages.map((pkg, index) => (

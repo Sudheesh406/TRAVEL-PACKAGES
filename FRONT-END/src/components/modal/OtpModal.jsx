@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../../axios';  
 import { useDispatch } from 'react-redux';
 import { setUser, clearUser } from '../../redux/user/userSlice';
+import toast from 'react-hot-toast';
 
 function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
   let dispatch = useDispatch()
@@ -32,6 +33,21 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
     }
   };
 
+  const handleResent = async()=>{
+    try {
+      toast('Your request accepted, please wait');
+      let user = JSON.parse(localStorage.getItem("user"));
+      let email = user.email
+      let response = await axios.post('/reSentOtp',{email})
+      if(response){
+      toast.success('OTP Resented')
+      }
+    } catch (error) {
+      console.error("error in handleResent",error);
+      
+    }
+  }
+
   const handleSubmit = async () => {
     const enteredOtp = otp.join(""); 
     let user = localStorage.getItem('user');  
@@ -51,7 +67,6 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
           }
       } catch (error) {
         console.log('Otp error:', error);
-          
       }
 
     }else if(identifyUser){
@@ -103,10 +118,12 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
                 </div>
               </div>
             </div>
-
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button type="button" className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto" onClick={handleSubmit}>
                 Verify OTP
+              </button>
+              <button type="button" className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto" onClick={handleResent}>
+                Resent OTP
               </button>
             </div>
           </div>

@@ -28,6 +28,7 @@ export default function TravelPackages() {
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); 
+  const [viewBtn,setViewBtn] = useState(false)
 
 
   useEffect(() => {
@@ -36,7 +37,8 @@ export default function TravelPackages() {
       try {
         let { data } = await axios.get("/Package/DisplayPackage");
         if (data) {
-          setPackages(data.Package);
+          setPackages(data.Package.all);
+          setViewBtn(data.Package.count > data.Package.all.length);
         }
       } catch (error) {
         console.error("error found in TravelPackages", error);
@@ -50,9 +52,12 @@ export default function TravelPackages() {
       try {
         let { data } = await axios.post("/Package/DisplayLocationPackage",pageDetail);
         if (data) {
-          setPackages(data.data);
+          setPackages(data.data.result);
+          setViewBtn(data.data.count > data.data.result.length);
         }else{
+          setViewBtn(false)
           setPackages([]);
+          setError(true);
         }
       } catch (error) {
         setError(true);
@@ -117,14 +122,14 @@ export default function TravelPackages() {
     try {
       let { data } = await axios.post("/Package/DisplayMorePackage",lmtAndLocation);
       if (data) {
+        console.log("datanch",data)
         let inc = 9
         setLimit((prev)=>prev+inc)
         if(data.Package){
-          data.Package.map((p)=>{
+          data.Package.packages.map((p)=>{
             setPackages((prev) => [...prev, p]);
           })
-
-        }
+          setViewBtn(data.Package.totalCount > (packages?.length || 0))        }
       }
     } catch (error) {
       if(error.response.status == 401){
@@ -300,16 +305,18 @@ return (
       </p>
     )}
 
-    <div className="w-full flex justify-center p-4">
-      {!error && (
-        <button
-          className="bg-transparent border border-blue-600 text-blue-600 px-12 py-3 rounded-md hover:bg-blue-50 transition duration-300"
-          onClick={() => morePackages()}
-        >
-          View More
-        </button>
-      )}
+<div className="w-full flex justify-center p-4">
+  {!error && viewBtn && (
+    <div>
+      <button
+        className="bg-transparent border border-blue-600 text-blue-600 px-12 py-3 rounded-md hover:bg-blue-50 transition duration-300"
+        onClick={() => morePackages()}
+      >
+        View More
+      </button>
     </div>
+  )}
+</div>
 
     {showFilter && (
       <FilterModal

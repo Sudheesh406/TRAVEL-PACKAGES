@@ -154,6 +154,21 @@ async function nodemailer(userMail) {
   return info;
 }
 
+const reSentOtp = async (req,res)=>{
+  try {
+    let {email} = req.body
+    let result = await nodemailer(email)
+    if(result){
+      res.status(200).json({message:"sucessfully Resented otp",result})
+    }else{
+      res.status(401).json({message:"error found in Resented otp",error})
+    }
+  } catch (error) {
+    console.error("error found in reSentOtp",error);
+    res.status(401).json({message:"error in Resenting otp",error})
+  }
+}
+
 function generateOTP(length = 6) {
   let otp = "";
   for (let i = 0; i < length; i++) {
@@ -294,4 +309,4 @@ let logOut = async (req, res) => {
   }
 };
 
-module.exports = { Signup, login, operatorSignup, getUser, logOut };
+module.exports = { Signup, login, operatorSignup, getUser, logOut, reSentOtp };
