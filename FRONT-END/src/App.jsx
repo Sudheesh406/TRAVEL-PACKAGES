@@ -22,7 +22,7 @@ import AdminOperatorListing from "./components/pages/AdminPages/AdminOperatorLis
 import AdminPaymentDetails from "./components/pages/AdminPages/AdminPaymentDetails";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute/ProtectedRoute";
-import CommonRoute from "./components/auth/ProtectedRoute/commonRoute";
+import CommonRoute from "./components/auth/ProtectedRoute/CommonRoute"
 import HelperRoute from "./components/auth/ProtectedRoute/HelperRoute";
 
 import NotFound404 from "./components/pages/commonPages/NotFound404";
