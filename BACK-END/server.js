@@ -12,7 +12,6 @@ const reviewRouter = require('./routers/reviewRoute')
 const databaseCn = require('./database/db');
 const cors = require('cors')
 
-
 app.use(cors({
    origin: process.env.FRONTEND_URL,
    credentials: true, 
