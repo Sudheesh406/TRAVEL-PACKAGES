@@ -45,6 +45,7 @@ const ProtectedRoute = () => {
       const currentPath = location.pathname;
       const mainRoute = currentPath.split("/")[1];
 
+
       if (
         !allowedRoutes[currentUser.role]?.some((path) =>
           currentPath.includes(path)
@@ -52,8 +53,6 @@ const ProtectedRoute = () => {
       ) {
         navigate("/");
       }
-
-      
         setLoading(false);
       
     };
