@@ -9,7 +9,7 @@ function HelperRoute() {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const checkIfLoggedIn = async () => {
@@ -37,9 +37,7 @@ function HelperRoute() {
     };
 
 
-    setInterval(() => {
       setLoading(false);
-    }, 1000);
     checkIfLoggedIn();
   }, []);
 

@@ -15,7 +15,7 @@ const ProtectedRoute = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const checkUserAccess = async () => {
@@ -53,9 +53,9 @@ const ProtectedRoute = () => {
         navigate("/");
       }
 
-      setInterval(() => {
+      
         setLoading(false);
-      }, 1000);
+      
     };
 
     checkUserAccess();
