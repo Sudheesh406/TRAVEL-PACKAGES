@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setUser, clearUser } from '../../redux/user/userSlice';
 import toast from 'react-hot-toast';
 
-function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
+function OtpModal({ setOtpModal, handleOtp, identifyUser,SubmitBtn,setPassWordField,setEmailField}) {
   let dispatch = useDispatch()
   const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -86,6 +86,23 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
     }
     handleOtp(enteredOtp); 
   };
+ 
+  async function handleNewPasword(){
+    try {
+      let email = JSON.parse(localStorage.getItem("user"))
+      const enteredOtp = otp.join(""); 
+      setOtpModal(false)
+      const data = {enteredOtp,email}
+      const response = await axios.post('/ChangePassword',{data})
+      if(response){
+         setEmailField(false)
+         setPassWordField(true)
+       }
+    } catch (error) {
+      console.error("error found in handleNewPasword",error);
+      toast.error('Something went wrong during verification. Please recheck your email and OTP.');
+    }
+  }
 
   return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -119,9 +136,12 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser}) {
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <button type="button" className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto" onClick={handleSubmit}>
+             {SubmitBtn && <button type="button" className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto" onClick={handleSubmit}>
                 Verify OTP
-              </button>
+              </button>}
+             {!SubmitBtn && <button type="button" className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto" onClick={handleNewPasword}>
+                Verify OTP
+              </button>}
               <button type="button" className="w-full inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto" onClick={handleResent}>
                 Resent OTP
               </button>

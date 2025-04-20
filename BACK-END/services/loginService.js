@@ -152,6 +152,37 @@ async function otpClear(value) {
   }
 }
 
+const updateNewpassword = async (email, password) => {
+  try {
+    let operator = await TourOperator.findOne({ email });
+    let user = await User.findOne({ email });
+
+    if (operator) {
+      operator.password = password;
+      await operator.save();
+
+      operator = operator.toObject();
+      delete operator.password;
+      return operator;
+    }
+
+    if (user) {
+      user.password = password;
+      await user.save();
+
+      user = user.toObject();
+      delete user.password;
+      return user;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error found in updateNewpassword:', error);
+    return null;
+  }
+};
+
+
 
 
 module.exports = {
@@ -162,5 +193,6 @@ module.exports = {
   otpStore,
   GetOtp,
   findUser,
-  findUserById
+  findUserById,
+  updateNewpassword
 };

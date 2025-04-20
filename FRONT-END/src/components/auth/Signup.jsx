@@ -14,6 +14,7 @@ function Signup() {
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loading,setLoading] = useState(false)
+  const [SubmitBtn,setSubmitBtn] = useState(true)
 
   const [formData, setFormData] = useState({
     username: '',
@@ -228,7 +229,7 @@ function Signup() {
        </div>
     </div>
     {loading && <LoadingModal/>}
-    {otpModal && <OtpModal setOtpModal={setOtpModal} handleOtp={setHandleOtp} identifyUser={identifyUser} />}  
+    {otpModal && <OtpModal setOtpModal={setOtpModal} handleOtp={setHandleOtp} identifyUser={identifyUser} SubmitBtn={SubmitBtn}/>}  
   </div>
 
   );

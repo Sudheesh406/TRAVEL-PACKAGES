@@ -10,6 +10,7 @@ const {
   otpStore,
   GetOtp,
   findUserById,
+  updateNewpassword
 } = require("../services/loginService");
 
 //--------user Signup------------
@@ -156,17 +157,23 @@ async function nodemailer(userMail) {
 
 const reSentOtp = async (req,res)=>{
   try {
-    let {email} = req.body
-    let result = await nodemailer(email)
-    if(result){
-      res.status(200).json({message:"sucessfully Resented otp",result})
-    }else{
-      res.status(401).json({message:"error found in Resented otp",error})
-    }
-  } catch (error) {
-    console.error("error found in reSentOtp",error);
-    res.status(401).json({message:"error in Resenting otp",error})
+  let {email} = req.body
+  let user = await findUser(email)
+  let operator = await findOperator(email)
+
+  if(user || operator){
+  let result = await nodemailer(email)
+  if(result){
+    res.status(200).json({message:"sucessfully Resented otp",result})
+  }else{
+    res.status(401).json({message:"error found in Resented otp",error})
   }
+}
+
+} catch (error) {
+  console.error("error found in reSentOtp",error);
+  res.status(401).json({message:"error in Resenting otp",error})
+}
 }
 
 function generateOTP(length = 6) {
@@ -250,37 +257,6 @@ async function operatorSignup(req, res) {
 }
 }
 
-// //--------operator Login------------
-
-// async function operatorLogin (req,res){
-//   const { email, password } = req.body;
-//   if (email && password){
-//           let data = email;
-//           let result = await findOperator(data);
-//           if (result) {
-//             let valid = await bcrypt.compare(password, result.password);
-//             if (valid) {
-//               let accessToken = jwt.sign(
-//                 { id: result.id },
-//                 process.env.SECRET_KEY,
-//                 { expiresIn: "24h" }
-//               );
-//               return res
-//                 .cookie("token", accessToken, {
-//                   httpOnly: true,
-//                   secure: true,
-//                   sameSite: "lax",
-//                 })
-//                 .status(200)
-//                 .json({ message: "login successfully...", result});
-//             } else {
-//               return res.status(400).json({ message: "in correct password..." });
-//             }
-//   }
-// }else{
-//   return res.status(400).json({ message: "no Operator found in this id" });
-// }
-// }
 
 const getUser = async (req, res) => {
   try {
@@ -309,4 +285,39 @@ let logOut = async (req, res) => {
   }
 };
 
-module.exports = { Signup, login, operatorSignup, getUser, logOut, reSentOtp };
+const ChangePassword = async(req,res)=>{
+  try {
+    const {data} = req.body
+
+    if(data.email){
+      let otpData = await GetOtp(data.email);
+      if (otpData[0].otp != data.enteredOtp) {
+        return res.status(401).json({ message: "otp is not correct" });
+      }else{
+        return res.status(200).json({ message: "otp is verified" });
+      }
+    }
+  } catch (error) {
+    console.error("error found in ChangePassword",error);
+    
+  }
+}
+
+const Newpassword = async (req,res)=>{
+  try {
+    let data = req.body
+    if(data){
+      const hashedPassword = await bcrypt.hash(data.passwordInput, 10);
+      if(hashedPassword){
+        let result = await updateNewpassword(data.userEmail,hashedPassword)
+        if(result)return res.status(200).json({message:"successfully Password Changed",result})
+      }
+    }
+
+  } catch (error) {
+    console.error('error found in Newpassword',error);
+    res.status(401).json({message:"error found in Newpassword",error})
+  }
+}
+
+module.exports = { Signup, login, operatorSignup, getUser, logOut, reSentOtp,ChangePassword,Newpassword };
