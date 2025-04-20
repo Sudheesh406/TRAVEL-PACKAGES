@@ -9,7 +9,7 @@ function HelperRoute() {
   const location = useLocation();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     const checkIfLoggedIn = async () => {

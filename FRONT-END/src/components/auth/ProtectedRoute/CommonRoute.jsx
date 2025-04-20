@@ -11,7 +11,7 @@ function CommonRoute() {
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector(state => state.user.user);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     const checkUser = async () => {
