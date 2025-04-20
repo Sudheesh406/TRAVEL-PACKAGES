@@ -36,7 +36,6 @@ function HelperRoute() {
       else if (currentUser?.role === 'user') navigate('/');
     };
 
-
       setLoading(false);
     checkIfLoggedIn();
   }, []);
