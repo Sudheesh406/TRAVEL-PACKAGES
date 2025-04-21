@@ -169,61 +169,104 @@ useEffect(() => {
 return (
   <div className="min-h-screen bg-gray-50">
     <div className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1 min-w-[240px]">
-            <div className="relative flex">
-              <button
-                onClick={() => navigate('/')}
-                className="text-blue-600 hover:text-blue-800 flex items-center gap-2 pr-4"
-              >
-                <span>←</span> <span>Back</span>
-              </button>
-              <Search
-                className="absolute left-[75px] top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <input
-                type="text"
-                placeholder="Search locations..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                value={search}
-                onChange={handleSearch}
-              />
-            </div>
-          </div>
+  <div className="max-w-7xl mx-auto px-4 py-6">
+    {/* Top Row with Back, Search and Hamburger */}
+    <div className="flex items-center justify-between gap-4 mb-4">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
+      >
+        <span>←</span> <span>Back</span>
+      </button>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <select
-              className="px-4 py-2 border rounded-lg bg-white w-full sm:w-auto"
-              onChange={handleChangeLocation}
-              value={location}
-            >
-              <option>Any Location</option>
-              <option>THIRUVANANTHAPURAM</option>
-              <option>KOLLAM</option>
-              <option>ALAPPUZHA</option>
-              <option>THRISSUR</option>
-            </select>
-            <select
-              className="px-4 py-2 border rounded-lg bg-white w-full sm:w-auto"
-              onChange={handleChangeDuration}
-            >
-              <option>Any Duration</option>
-              <option>1-3 days</option>
-              <option>4-7 days</option>
-              <option>8+ days</option>
-            </select>
-            <button
-              className="px-4 py-2 border rounded-lg bg-white flex items-center gap-2 w-full sm:w-auto justify-center"
-              onClick={() => showFilterModal()}
-            >
-              <Filter size={20} />
-              Filters
-            </button>
-          </div>
-        </div>
+      {/* Search Input */}
+      <div className="relative flex-1 mx-2">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+        <input
+          type="text"
+          placeholder="Search locations..."
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          value={search}
+          onChange={handleSearch}
+        />
       </div>
+
+      {/* Hamburger Menu Button */}
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="text-blue-600 hover:text-blue-800 sm:hidden"
+      >
+        <Menu size={24} />
+      </button>
+    </div>
+
+    {/* Dropdown inside hamburger */}
+    {menuOpen && (
+      <div className="flex flex-col sm:hidden gap-4">
+        <select
+          className="px-4 py-2 border rounded-lg bg-white"
+          onChange={handleChangeLocation}
+          value={location}
+        >
+          <option>Any Location</option>
+          <option>THIRUVANANTHAPURAM</option>
+          <option>KOLLAM</option>
+          <option>ALAPPUZHA</option>
+          <option>THRISSUR</option>
+        </select>
+        <select
+          className="px-4 py-2 border rounded-lg bg-white"
+          onChange={handleChangeDuration}
+        >
+          <option>Any Duration</option>
+          <option>1-3 days</option>
+          <option>4-7 days</option>
+          <option>8+ days</option>
+        </select>
+        <button
+          className="px-4 py-2 border rounded-lg bg-white flex items-center gap-2 justify-center"
+          onClick={() => showFilterModal()}
+        >
+          <Filter size={20} />
+          Filters
+        </button>
+      </div>
+    )}
+
+    {/* Show the full row of filters in larger screens */}
+    <div className="hidden sm:flex gap-4 mt-4">
+      <select
+        className="px-4 py-2 border rounded-lg bg-white"
+        onChange={handleChangeLocation}
+        value={location}
+      >
+        <option>Any Location</option>
+        <option>THIRUVANANTHAPURAM</option>
+        <option>KOLLAM</option>
+        <option>ALAPPUZHA</option>
+        <option>THRISSUR</option>
+      </select>
+      <select
+        className="px-4 py-2 border rounded-lg bg-white"
+        onChange={handleChangeDuration}
+      >
+        <option>Any Duration</option>
+        <option>1-3 days</option>
+        <option>4-7 days</option>
+        <option>8+ days</option>
+      </select>
+      <button
+        className="px-4 py-2 border rounded-lg bg-white flex items-center gap-2 justify-center"
+        onClick={() => showFilterModal()}
+      >
+        <Filter size={20} />
+        Filters
+      </button>
+    </div>
+  </div>
+
+
     </div>
 
     <div className="max-w-7xl mx-auto px-4 py-8">

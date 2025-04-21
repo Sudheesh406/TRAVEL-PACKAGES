@@ -17,7 +17,7 @@ function AdminOperatorListing() {
 
         if (data) {
             setOperatorList(data.result);
-            SetProps('operator')
+            setProps('operator')
         }
       } catch (error) {
         console.error("Error fetching operator details", error);
