@@ -57,6 +57,7 @@ function OperatorBookingHistory() {
   );
 }
 
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow">
@@ -64,7 +65,13 @@ function OperatorBookingHistory() {
           <h1 className="text-3xl font-bold text-gray-900">Bookings Details</h1>
         </div>
       </header>
-    <Listings Data={BookingDetails} Props={Props} />
+      {BookingDetails && BookingDetails.length > 0 ? (
+      <Listings Data={BookingDetails} Props={Props} />
+    ) : (
+      <div className="text-center py-10 text-gray-600 text-xl">
+        No bookings
+      </div>
+    )}
      
     </div>
   );
