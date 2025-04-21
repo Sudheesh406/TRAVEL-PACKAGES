@@ -147,7 +147,7 @@ async function nodemailer(userMail) {
   const info = await transporter.sendMail({
     from: "sudheeshunni406@gmail.com", // sender address
     to: userMail, // list of receivers
-    subject: "Hello ✔", // Subject line
+    subject: "Travel Easy", // Subject line
     text: `${otp} here is your otp`, // plain text body
     html: `${otp} here is your otp`, // html body
   });
