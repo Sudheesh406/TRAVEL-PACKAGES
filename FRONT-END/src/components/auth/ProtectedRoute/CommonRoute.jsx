@@ -35,8 +35,9 @@ function CommonRoute() {
 
       if (currentUser?.role === "admin") navigate("/Admin/AdminDashboard");
       else if (currentUser?.role === "operator") navigate("/Operator/OperatorDashboard");
-   
-       setLoading(false)
+    setTimeout(()=>{
+      setLoading(false)
+    },1000)
    
     };
 
