@@ -22,13 +22,13 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use('/',loginRouter)
-app.use('/Package',PackageRouter)
-app.use('/Company',companyRouter)
-app.use('/Payment',bookingRouter)
-app.use('/userProfile',userProfileRouter)
-app.use('/Review',reviewRouter)
-app.use('/Admin',adminRouter)
+app.use('/api/',loginRouter)
+app.use('/api/Package',PackageRouter)
+app.use('/api/Company',companyRouter)
+app.use('/api/Payment',bookingRouter)
+app.use('/api/userProfile',userProfileRouter)
+app.use('/api/Review',reviewRouter)
+app.use('/api/Admin',adminRouter)
 
 const path = require('path');
 
