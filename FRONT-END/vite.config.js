@@ -7,4 +7,13 @@ export default defineConfig({
   build: {
     outDir: 'build',
   },
+  preview: {
+    host: true,               
+    port: 4173,               
+    allowedHosts: [
+      'travel-packages-front-end.onrender.com', 
+      '.onrender.com',          
+      'localhost',              
+    ],
+  },
 })
