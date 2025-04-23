@@ -33,7 +33,7 @@ app.use('/api/Admin',adminRouter)
 const path = require('path');
 
 // Serve React frontend
-app.use(express.static(path.join(__dirname, 'FRONT-END/build')));
+app.use(express.static(path.join(__dirname, '../FRONT-END/build')));
 
 // For any route not handled by the API, send back React's index.html
 app.get('*', (req, res) => {
