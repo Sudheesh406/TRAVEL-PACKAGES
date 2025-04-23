@@ -30,6 +30,16 @@ app.use('/userProfile',userProfileRouter)
 app.use('/Review',reviewRouter)
 app.use('/Admin',adminRouter)
 
+const path = require('path');
+
+// Serve React frontend
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// For any route not handled by the API, send back React's index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
 databaseCn();
 
 app.listen(process.env.PORT,(err)=>{
