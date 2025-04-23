@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import BookingModal from "../../modal/BookingModal";
+import Nav from '../../homeComponents/Navbar'
 
 function PackageDetails() {
   let company = useSelector((state) => state.company);
@@ -84,6 +85,8 @@ function PackageDetails() {
 
   if (!value && !packageDetails) {
     return (
+      <div>
+      <Nav/>
       <div className="container mx-auto px-6 py-16 flex flex-col items-center text-center">
         <h1 className="text-3xl font-bold text-red-600">Package Not Found</h1>
         <button
@@ -93,10 +96,14 @@ function PackageDetails() {
           Back to Packages
         </button>
       </div>
+      </div>
     );
   }
 
   return (
+    <div>
+      <Nav/>
+    
     <div className="container mx-auto px-4 sm:px-6 py-12 max-w-6xl h-[500px] relative">
       <button
         onClick={() => navigate(-1)}
@@ -229,6 +236,7 @@ function PackageDetails() {
       {show && (
         <BookingModal packageDetails={packageDetails} setShow={setShow} />
       )}
+    </div>
     </div>
   );
 }
