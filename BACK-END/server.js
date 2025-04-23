@@ -22,22 +22,23 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use('/api/',loginRouter)
-app.use('/api/Package',PackageRouter)
-app.use('/api/Company',companyRouter)
-app.use('/api/Payment',bookingRouter)
-app.use('/api/userProfile',userProfileRouter)
-app.use('/api/Review',reviewRouter)
-app.use('/api/Admin',adminRouter)
+const path = require('path'); // ⬅️ Make sure you import 'path' at the top
 
-const path = require('path');
+// Serve React frontend static files
+app.use(express.static(path.join(__dirname, 'client/build'))); // change 'client' to your frontend folder name if different
 
-// Serve React frontend
-app.use(express.static(path.join(__dirname, '../FRONT-END/build')));
+// Your existing routes
+app.use('/', loginRouter);
+app.use('/Package', PackageRouter);
+app.use('/Company', companyRouter);
+app.use('/Payment', bookingRouter);
+app.use('/userProfile', userProfileRouter);
+app.use('/Review', reviewRouter);
+app.use('/Admin', adminRouter);
 
-// For any route not handled by the API, send back React's index.html
+// Fallback: Serve index.html for all unknown routes (React Router will handle them)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../FRONT-END/build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
 databaseCn();
