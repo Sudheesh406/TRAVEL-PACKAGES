@@ -28,7 +28,7 @@ const Packages = () => {
 
   const handleDetails = (id)=>{
     let operator = false
-  navigate(`/PackageDetails/${operator}/${id}`);
+  navigate(`packages/packageDetails/${operator}/${id}`);
   }
 
   return (
@@ -101,7 +101,7 @@ const Packages = () => {
         </div>
         
         <div className="text-center mt-10">
-          <Link to="/TravelPackages">
+          <Link to="/packages/travelPackages">
           <button className="bg-transparent border border-blue-600 text-blue-600 px-6 py-3 rounded-md hover:bg-blue-50 transition duration-300">
           View All Packages
           </button>

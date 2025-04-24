@@ -33,11 +33,10 @@ function CommonRoute() {
         }
       }
 
-      if (currentUser?.role === "admin") navigate("/Admin/AdminDashboard");
-      else if (currentUser?.role === "operator") navigate("/Operator/OperatorDashboard");
-    setTimeout(()=>{
+      if (currentUser?.role === "admin") navigate("/admin/adminDashboard");
+      else if (currentUser?.role === "operator") navigate("/operator/operatorDashboard");
+
       setLoading(false)
-    },1000)
    
     };
 

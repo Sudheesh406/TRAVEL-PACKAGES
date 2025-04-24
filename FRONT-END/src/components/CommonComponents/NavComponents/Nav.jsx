@@ -2,10 +2,10 @@ import { Menu, X, MapPin, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearUser } from '../../redux/user/userSlice';
-import axios from '../../axios';
+import { clearUser } from '../../../redux/user/userSlice';
+import axios from '../../../axios';
 
-const Navbar = () => {
+const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -42,10 +42,9 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Home</a>
-            <a href="#destinations" className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Destinations</a>
-            <a href="#packages" className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Packages</a>
-            <a href="#testimonials" className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Testimonials</a>
+          <Link to="/"><button className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Home</button> </Link>
+            <Link to="/packages/travelPackages"><button className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Packages</button> </Link>
+            <Link to="/review/reviewCard"><button className="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Testimonials</button> </Link>
             <Link to="/packages/travelPackages">
               <button className="mt-2 w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
                 Book Now
@@ -118,10 +117,9 @@ const Navbar = () => {
 {isMenuOpen && (
   <div className="md:hidden">
     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-      <a href="#" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Home</a>
-      <a href="#destinations" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Destinations</a>
-      <a href="#packages" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Packages</a>
-      <a href="#testimonials" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Testimonials</a>
+            <Link to="/"><button className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Home</button> </Link>
+            <Link to="/packages/travelPackages"><button  className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Packages</button> </Link>
+            <Link to="/review/reviewCard"><button className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">Testimonials</button> </Link>
       {isExist ? (
         <Link
         to="/profile/userProfile"
@@ -152,4 +150,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Nav;

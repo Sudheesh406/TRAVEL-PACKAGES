@@ -5,9 +5,9 @@ import axios from "../../../axios";
 import { setUser } from "../../../redux/user/userSlice";
 
 const allowedRoutes = {
-  admin: ["Admin"],
-  operator: ["Operator"],
-  user: ["UserProfile", "BookingHistory"],
+  admin: ["admin"],
+  operator: ["operator"],
+  user: ["profile", "history"],
 };
 
 const ProtectedRoute = () => {

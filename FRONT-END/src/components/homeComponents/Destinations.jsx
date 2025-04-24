@@ -21,7 +21,7 @@ useEffect(()=>{
 
 const handleOnclick = (id) => {
   let operator = false
-  navigate(`/PackageDetails/${operator}/${id}`);
+  navigate(`/packages/packageDetails/${operator}/${id}`);
 }
 
   return (

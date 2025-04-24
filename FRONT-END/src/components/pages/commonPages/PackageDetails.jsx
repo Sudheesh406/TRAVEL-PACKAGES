@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../../../axios";
 import BookingModal from "../../modal/BookingModal";
-import Nav from '../../homeComponents/Navbar'
+import Nav from '../../CommonComponents/NavComponents/Nav'
 
 function PackageDetails() {
   let company = useSelector((state) => state.company);
@@ -86,11 +86,11 @@ function PackageDetails() {
   if (!value && !packageDetails) {
     return (
       <div>
-      <Nav/>
+      {!operatorBool && <Nav/>}
       <div className="container mx-auto px-6 py-16 flex flex-col items-center text-center">
         <h1 className="text-3xl font-bold text-red-600">Package Not Found</h1>
         <button
-          onClick={() => navigate("/TravelPackages")}
+          onClick={() => navigate("/packages/travelPackages")}
           className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition"
         >
           Back to Packages
@@ -102,15 +102,15 @@ function PackageDetails() {
 
   return (
     <div>
-      <Nav/>
+      {!operatorBool && <Nav/>}
     
     <div className="container mx-auto px-4 sm:px-6 py-12 max-w-6xl h-[500px] relative">
-      <button
+    {operatorBool && <button
         onClick={() => navigate(-1)}
         className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2"
       >
         ← Back
-      </button>
+      </button>}
 
       <div className="flex flex-col lg:flex-row gap-10">
         <div className="lg:w-1/2 w-full">
@@ -132,7 +132,7 @@ function PackageDetails() {
           </div>
         </div>
 
-        <div className="lg:w-1/2 w-full bg-gray-200 p-6 h-[620px] sm:p-8 rounded-lg shadow-lg border border-gray-200">
+        <div className="lg:w-1/2 w-full bg-gray-200 p-6 h-[600px] sm:p-8 rounded-lg shadow-lg border border-gray-200">
           <h1 className="text-2xl sm:text-4xl font-bold text-gray-900">
             {packageDetails.name}
           </h1>
@@ -189,7 +189,7 @@ function PackageDetails() {
             </p>
           </div>
 
-          <div className="mt-10 text-center">
+          <div className="mt-5 text-center">
             {!operatorBool && (
               <button
                 className={`w-full px-5 py-2 rounded-lg text-lg font-semibold transition ${

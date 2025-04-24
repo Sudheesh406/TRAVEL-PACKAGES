@@ -102,7 +102,7 @@ function PackageSecondPage() {
         },
       });
       if (result) {
-        navigate('/OperatorDashboard');
+        navigate('/operatorDashboard');
       }
     } catch (error) {
       console.error("error found in package posting", error);
@@ -111,7 +111,7 @@ function PackageSecondPage() {
 
   const handleBack = () => {
     dispatch(setPackageSecondForm(data));
-    navigate("/OperatorPackageFirstPage");
+    navigate("/operatorPackageFirstPage");
   };
 
   useEffect(() => {

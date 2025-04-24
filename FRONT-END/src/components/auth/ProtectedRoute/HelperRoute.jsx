@@ -31,12 +31,13 @@ function HelperRoute() {
         }
       }
 
-      if (currentUser?.role === 'admin') navigate('/Admin/AdminDashboard');
-      else if (currentUser?.role === 'operator') navigate('/Operator/OperatorDashboard');
+      if (currentUser?.role === 'admin') navigate('/admin/adminDashboard');
+      else if (currentUser?.role === 'operator') navigate('/operator/operatorDashboard');
       else if (currentUser?.role === 'user') navigate('/');
     };
 
       setLoading(false);
+
     checkIfLoggedIn();
   }, []);
 

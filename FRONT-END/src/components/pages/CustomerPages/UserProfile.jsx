@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "../../../axios";
 import ProfileEditModal from "../../modal/ProfileEditModal";
+import Nav from "../../CommonComponents/NavComponents/Nav";
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export default function UserProfile() {
   }
 
   const handleHistory = () => {
-    navigate(`/BookingHistory/${user._id}`);
+    navigate(`/history/bookingHistory/${user._id}`);
   };
 
   function formatDate(dateString) {
@@ -63,6 +64,8 @@ export default function UserProfile() {
   }
 
   return (
+    <div>
+      <Nav />
     <div className="min-h-screen bg-gray-50 relative">
       <div className="absolute top-4 right-4 md:hidden z-50 ">
         <button
@@ -237,6 +240,7 @@ export default function UserProfile() {
           userDetails={userDetails}
         />
       )}
+    </div>
     </div>
   );
 }

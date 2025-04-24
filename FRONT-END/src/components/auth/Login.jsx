@@ -40,9 +40,9 @@ function Login() {
         navigate("/");
         console.log("Login response:", result.data.result);
       } else if (result.data.result.role === "operator") {
-        navigate("/Operator/OperatorDashboard");
+        navigate("/operator/operatorDashboard");
       } else if (result.data.result.role === "admin") {
-        navigate("/Admin/AdminDashboard");
+        navigate("/admin/adminDashboard");
       }
     } catch (error) {
       if (error.response.status === 401) {

@@ -4,6 +4,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import Nav from '../../CommonComponents/NavComponents/Nav'
 import axios from "../../../axios";
 import { Star, ChevronRight, ChevronLeft } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -33,6 +34,8 @@ function ReviewCard() {
   }, []);
 
   return (
+    <div>
+      <Nav/>
     <div className="max-w-7xl mx-auto px-6 py-10">
       <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
         What Our Customers Say
@@ -102,6 +105,7 @@ function ReviewCard() {
             </div>
           ))}
       </div>
+    </div>
     </div>
   );
 }

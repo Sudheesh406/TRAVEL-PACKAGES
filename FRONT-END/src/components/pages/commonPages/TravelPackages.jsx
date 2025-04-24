@@ -12,6 +12,7 @@ import {debounce} from 'lodash'
 import { useDispatch, useSelector } from 'react-redux';
 import {setPackage,clearPackage,} from "../../../redux/package/packageSlice";
 import { toast } from 'react-hot-toast';
+import Nav from '../../CommonComponents/NavComponents/Nav'
 
 export default function TravelPackages() {
   const [packages, setPackages] = useState();
@@ -122,7 +123,7 @@ export default function TravelPackages() {
     try {
       let { data } = await axios.post("/Package/DisplayMorePackage",lmtAndLocation);
       if (data) {
-        console.log("datanch",data)
+
         let inc = 9
         setLimit((prev)=>prev+inc)
         if(data.Package){
@@ -158,7 +159,7 @@ export default function TravelPackages() {
 
 const handleDetails = (id)=>{
   let operator = false
-  navigate(`/PackageDetails/${operator}/${id}`);
+  navigate(`/packages/packageDetails/${operator}/${id}`);
 }
 
 useEffect(() => {
@@ -168,17 +169,18 @@ useEffect(() => {
 
 return (
   <div className="min-h-screen bg-gray-50">
+<Nav/>
     <div className="bg-white shadow-sm">
   <div className="max-w-7xl mx-auto px-4 py-6">
     {/* Top Row with Back, Search and Hamburger */}
     <div className="flex items-center justify-between gap-4 mb-4">
-      {/* Back Button */}
+      {/* Back Button
       <button
         onClick={() => navigate('/')}
         className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
       >
         <span>←</span> <span>Back</span>
-      </button>
+      </button> */}
 
       {/* Search Input */}
       <div className="relative flex-1 mx-2">

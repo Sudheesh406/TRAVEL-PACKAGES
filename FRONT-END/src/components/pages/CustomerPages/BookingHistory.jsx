@@ -4,6 +4,7 @@ import axios from "../../../axios";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import RatingComponent from "../../modal/RatingComponent";
+import Nav from "../../CommonComponents/NavComponents/Nav";
 
 function BookingHistory() {
 
@@ -67,6 +68,8 @@ function BookingHistory() {
    setShowRating(true)
   }
   return (
+    <div>
+      <Nav/>
     <div className="container mx-auto px-4 py-8 relative ">
     <h1 className="text-3xl font-bold mb-8 text-center md:text-left flex justify-center">My Booking History</h1>
     <div className="grid gap-6">
@@ -150,6 +153,7 @@ function BookingHistory() {
         selectedPackageId={selectedPackageId}
       />
     )}
+  </div>
   </div>
   
   );

@@ -39,57 +39,57 @@ function App() {
       <Toaster />
       <Routes>
         <Route element={<ProtectedRoute />}>
-          <Route path="/Admin/AdminDashboard" element={<AdminDashboard />} />
+          <Route path="/admin/adminDashboard" element={<AdminDashboard />} />
           <Route
-            path="/Admin/AdminUserListing"
+            path="/admin/adminUserListing"
             element={<AdminUserListing />}
           />
           <Route
-            path="/Admin/AdminOperatorListing"
+            path="/admin/adminOperatorListing"
             element={<AdminOperatorListing />}
           />
           <Route
-            path="/Admin/AdminPaymentDetails"
+            path="/admin/adminPaymentDetails"
             element={<AdminPaymentDetails />}
           />
 
           <Route
-            path="/Operator/OperatorDashboard"
+            path="/operator/operatorDashboard"
             element={<OperatorDashboard />}
           />
           <Route
-            path="/Operator/OperatorRegister"
+            path="/operator/operatorRegister"
             element={<OperatorRegister />}
           />
           <Route
-            path="/Operator/OperatorPackageFirstPage"
+            path="/operator/operatorPackageFirstPage"
             element={<OperatorPackageFirstPage />}
           />
           <Route
-            path="/Operator/OperatorPackageSecondPage"
+            path="/operator/operatorPackageSecondPage"
             element={<OperatorPackageSecondPage />}
           />
           <Route
-            path="/Operator/OperatorPackages/:id"
+            path="/operator/operatorPackages/:id"
             element={<OperatorPackages />}
           />
           <Route
-            path="/Operator/OperatorBookingHistory/:id"
+            path="/operator/operatorBookingHistory/:id"
             element={<OperatorBookingHistory />}
           />
 
-          <Route path="/UserProfile" element={<UserProfile />} />
-          <Route path="/BookingHistory/:id" element={<BookingHistory />} />
+          <Route path="/profile/userProfile" element={<UserProfile />} />
+          <Route path="/history/bookingHistory/:id" element={<BookingHistory />} />
         </Route>
 
         <Route element={<CommonRoute />}>
           <Route path="/" element={<HomePages />} />
-          <Route path="/TravelPackages" element={<TravelPackages />} />
-          <Route path="/ReviewCard" element={<ReviewCard />} />
+          <Route path="/packages/travelPackages" element={<TravelPackages />} />
+          <Route path="/review/reviewCard" element={<ReviewCard />} />
         </Route>
         
           <Route
-            path="/PackageDetails/:operator/:id"
+            path="/packages/packageDetails/:operator/:id"
             element={<PackageDetails />}
           />
 

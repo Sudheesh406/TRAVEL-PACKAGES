@@ -28,19 +28,19 @@ function AdminDashboard() {
               title: "Users",
               value: data.result.userCount,
               icon: Users,
-              route: "/Admin/AdminUserListing",
+              route: "/admin/adminUserListing",
             },
             {
               title: "Operators",
               value: data.result.operators,
               icon: Shield,
-              route: "/Admin/AdminOperatorListing",
+              route: "/admin/adminOperatorListing",
             },
             {
               title: "Total Revenue",
               value: data.result.totalAmount,
               icon: DollarSign,
-              route: "/Admin/AdminPaymentDetails",
+              route: "/admin/adminPaymentDetails",
             },
           ]);
         }
@@ -73,21 +73,21 @@ function AdminDashboard() {
         </div>
         <nav className="space-y-4 text-gray-700 font-medium">
           <button
-            onClick={() => navigate("/Admin/AdminUserListing")}
+            onClick={() => navigate("/admin/adminUserListing")}
             className="hover:text-blue-600 flex items-center gap-2"
           >
             <Users className="w-5 h-5 text-blue-500" />
             Manage users
           </button>
           <button
-            onClick={() => navigate("/Admin/AdminOperatorListing")}
+            onClick={() => navigate("/admin/adminOperatorListing")}
             className="hover:text-blue-600 flex items-center gap-2"
           >
             <Shield className="w-5 h-5 text-blue-500" />
             Manage operators
           </button>
           <button
-            onClick={() => navigate("/Admin/AdminPaymentDetails")}
+            onClick={() => navigate("/admin/adminPaymentDetails")}
             className="hover:text-blue-600 flex items-center gap-2"
           >
             <DollarSign className="w-5 h-5 text-blue-500" />
@@ -116,7 +116,7 @@ function AdminDashboard() {
             <div className="absolute top-full left-4 right-4 bg-white border rounded-lg shadow-lg z-50 mt-4 p-4 space-y-3 md:hidden">
               <button
                 onClick={() => {
-                  navigate("/Admin/AdminUserListing");
+                  navigate("/admin/adminUserListing");
                   setIsMenuOpen(false);
                 }}
                 className="hover:text-blue-600 flex items-center gap-2"
@@ -126,7 +126,7 @@ function AdminDashboard() {
               </button>
               <button
                 onClick={() => {
-                  navigate("/Admin/AdminOperatorListing");
+                  navigate("/admin/adminOperatorListing");
                   setIsMenuOpen(false);
                 }}
                 className="hover:text-blue-600 flex items-center gap-2"
@@ -136,7 +136,7 @@ function AdminDashboard() {
               </button>
               <button
                 onClick={() => {
-                  navigate("/Admin/AdminPaymentDetails");
+                  navigate("/admin/adminPaymentDetails");
                   setIsMenuOpen(false);
                 }}
                 className="hover:text-blue-600 flex items-center gap-2"

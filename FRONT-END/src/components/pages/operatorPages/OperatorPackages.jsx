@@ -25,14 +25,20 @@ function OperatorPackages() {
 
   const ViewPackageDetails = async (id) => {
     let operator = true
-    navigate(`/PackageDetails/${operator}/${id}`);
+    navigate(`/packages/packageDetails/${operator}/${id}`);
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4">
+      <header className="bg-white shadow  ">
+        <div className="max-w-7xl mx-auto py-6 px-4 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-900">Travel Packages</h1>
+          <button
+        onClick={() => navigate(-1)}
+        className="text-blue-600 hover:text-blue-800 flex text-lg items-center gap-2"
+      >
+        ← Back
+      </button>
         </div>
       </header>
 

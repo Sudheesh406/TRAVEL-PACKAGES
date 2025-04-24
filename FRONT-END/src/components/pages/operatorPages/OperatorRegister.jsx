@@ -4,6 +4,8 @@ import axios from '../../../axios'
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompany, clearCompany } from '../../../redux/company/companySlice';
+
+
 function OpperatorRegister() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -39,7 +41,7 @@ function OpperatorRegister() {
         withCredentials: true,
       });
       if(data){
-        navigate('/Operator/OperatorDashboard')
+        navigate('/operator/operatorDashboard')
         console.log("result:",data)
       }
     } catch (error) {
@@ -48,6 +50,7 @@ function OpperatorRegister() {
   }
 
   useEffect(()=>{
+    if(user.role == "admin" || user.role == "operator")navigate(-1)
     async function RegisterOrNot(){
       try {
         let token = localStorage.getItem("token");
@@ -57,7 +60,7 @@ function OpperatorRegister() {
         if(!data.result){
           setLoading(false)
         }else{
-          navigate("/Operator/OperatorDashBoard")
+          navigate("/operator/operatorDashBoard")
           setLoading(false)
         }
       } catch (error) {

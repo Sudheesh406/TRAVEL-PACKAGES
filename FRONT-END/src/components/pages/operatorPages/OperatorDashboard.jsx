@@ -59,7 +59,7 @@ export default function OperatorDashboard() {
           withCredentials: true,
         });
         if (!data.result) {
-          navigate("/Operator/OperatorRegister");
+          navigate("/operator/operatorRegister");
           setLoading(false);
         } else {
           setLoading(false);
@@ -81,12 +81,12 @@ export default function OperatorDashboard() {
   const handlePackages = () => {
     let id = Packages[0]?.company;
     if (id) {
-      navigate(`/Operator/OperatorPackages/${id}`);
+      navigate(`/operator/operatorPackages/${id}`);
     }
   };
 
   const viewBookings = (id) => {
-    navigate(`/Operator/OperatorBookingHistory/${id}`);
+    navigate(`/operator/operatorBookingHistory/${id}`);
   };
 
   const handleLogout = async () => {

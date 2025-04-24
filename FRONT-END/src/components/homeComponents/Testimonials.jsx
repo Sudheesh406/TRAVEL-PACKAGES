@@ -28,7 +28,7 @@ const Testimonials = () => {
   },[])
 
 const handleclick = ()=>{
-  navigate('/ReviewCard')
+  navigate('review/reviewCard')
 }
 
   return (

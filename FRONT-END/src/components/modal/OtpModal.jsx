@@ -76,8 +76,8 @@ function OtpModal({ setOtpModal, handleOtp, identifyUser,SubmitBtn,setPassWordFi
           localStorage.setItem('token', result.data.result.accessToken);
           dispatch(setUser(result.data.result.newUser));
           setOtpModal(false);
-          console.log("navigated")
-          navigate('/Operator/OperatorRegister')
+
+          navigate('/operator/operatorRegister')
           localStorage.removeItem('user');
         }
     } catch (error) {

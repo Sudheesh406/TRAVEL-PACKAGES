@@ -96,7 +96,7 @@ function PackageFirstPage() {
     setSubmitted(true);
     if (!isValid) return;
     dispatch(setPackageForm(formData));
-    navigate("/OperatorPackageSecondPage");
+    navigate("/operatorPackageSecondPage");
   };
 
   useEffect(() => {

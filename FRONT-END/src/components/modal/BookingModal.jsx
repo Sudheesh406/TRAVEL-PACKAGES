@@ -110,7 +110,7 @@ function BookingModal({ setShow, packageDetails }) {
         });
       
       if(result){
-        navigate(`/BookingHistory/${user._id}`)      }
+        navigate(`/history/bookingHistory/${user._id}`)      }
     } catch (error) {
       console.error("error found in packageBooked",error);
     }
