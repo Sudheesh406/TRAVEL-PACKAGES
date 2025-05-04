@@ -77,9 +77,12 @@ function PackageDetails() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen">
+      <div className="relative w-24 h-24">
+        <div className="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+        <div className="absolute top-3 left-3 right-3 bottom-3 border-4 border-yellow-400 border-b-transparent rounded-full animate-spin-reverse"></div>
       </div>
+    </div>
     );
   }
 

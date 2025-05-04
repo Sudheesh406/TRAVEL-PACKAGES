@@ -260,7 +260,7 @@ async function operatorSignup(req, res) {
 
 const getUser = async (req, res) => {
   try {
-    let result = await findUserById(req.User.id);
+    let result = await findUserById(req.User.id).select("-password")
     if (result) {
       return res.status(200).json({ message: "user Found", result });
     } else {

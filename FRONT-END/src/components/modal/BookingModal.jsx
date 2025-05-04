@@ -1,17 +1,45 @@
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {useSelector,useDispatch } from 'react-redux';
+import { setUser } from "../../redux/user/userSlice";
 
 import axios from '../../axios'
 import Swal from "sweetalert2";
 
 function BookingModal({ setShow, packageDetails }) { 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [itemCount, setItemCount] = useState(0);
   const PRICE_PER_ITEM = packageDetails.price;
   const TAX_RATE = 0.00; 
   
   const user = useSelector((state) => state.user.user);
+  // console.log("user",user)
+
+  useEffect(() => {
+    const checkUser = async () => {
+      let currentUser = user;
+      if (!currentUser) {
+        try {
+          const token = localStorage.getItem("token");
+          const { data } = await axios.get("/getUser", {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true
+          });
+          if (data?.result) {
+            dispatch(setUser(data.result));
+            currentUser = data.result;
+          }
+        } catch (err) {
+          console.error('error found in fetching user:',err);
+          
+        }
+      }
+    };
+    checkUser()
+  }, []);
+
+
   const handleIncrement = () => {
     if (itemCount < packageDetails.availableSeat) {
       setItemCount(itemCount + 1);
@@ -63,7 +91,6 @@ function BookingModal({ setShow, packageDetails }) {
           packageBooked(data)
          })
 
-         
         const paymentData = {
           razorpay_order_id: response.razorpay_order_id,
           razorpay_payment_id: response.razorpay_payment_id,
@@ -128,11 +155,11 @@ function BookingModal({ setShow, packageDetails }) {
             Authorization: `Bearer ${token}`,
           },withCredentials: true, 
         });
-        
-      if (response) {
-        await checkoutPayment(response.data.order);
-        // change order status ton completed
-        
+        if (response) {
+          console.log(response)
+          await checkoutPayment(response.data.order);
+          // change order status ton completed
+          
       }
     } catch (error) {
       console.error(error);
