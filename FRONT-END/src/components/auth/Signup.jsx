@@ -13,8 +13,8 @@ function Signup() {
   const [identifyUser, setIdentifyUser] = useState(false);
   const [errorDisplay, setErrorDisplay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading,setLoading] = useState(false)
-  const [SubmitBtn,setSubmitBtn] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [SubmitBtn, setSubmitBtn] = useState(true)
 
   const [formData, setFormData] = useState({
     username: '',
@@ -37,7 +37,6 @@ function Signup() {
     let data = {otpRequest : true, email: formData.email}
      await axios.post('/Signup',data)
       .then(res => {
-
         let result = localStorage.getItem('user');
         if(!result){
           localStorage.setItem('user',JSON.stringify(formData));
@@ -45,6 +44,7 @@ function Signup() {
         setLoading(false)
         setOtpModal(true);
       })
+
       .catch(err => {
         console.log('Signup error:', err);
         if(err.response.status === 409){
@@ -77,7 +77,6 @@ function Signup() {
     setIdentifyUser(true)
     const { username, email, password, confirmPassword } = formData;
     if (username && email && password && confirmPassword) {
-
       if (password !== confirmPassword && password.length >= 0) {
         setErrorDisplay(true)
         setErrorMessage('Password is not matched')
@@ -95,6 +94,7 @@ function Signup() {
         setLoading(false)
         setOtpModal(true);
       })
+
       .catch(err => {
         if(err.response.status === 409){
           setErrorDisplay(true)
@@ -231,7 +231,6 @@ function Signup() {
     {loading && <LoadingModal/>}
     {otpModal && <OtpModal setOtpModal={setOtpModal} handleOtp={setHandleOtp} identifyUser={identifyUser} SubmitBtn={SubmitBtn}/>}  
   </div>
-
   );
 }
 
