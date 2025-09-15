@@ -41,7 +41,6 @@ const reviewUpdate = async(data,imgLocations)=>{
         console.error('Error in review update:', error);
         return null;
     }
-    
 }
 
 const getReviewToHome = async () => {
