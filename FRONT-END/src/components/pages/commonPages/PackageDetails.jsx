@@ -46,7 +46,9 @@ function PackageDetails() {
 
   const handleSubmit = () => {
     let token = localStorage.getItem("token");
+    console.log('np token')
     if (!token) {
+      console.log('np token',token)
       navigate("/login");
     } else {
       setShow(true);

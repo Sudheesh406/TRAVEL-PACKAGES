@@ -32,6 +32,7 @@ import ScrollToTop from "./components/ScrollTop";
 import "./App.css";
 import { Toaster } from "react-hot-toast";
 
+
 function App() {
   return (
     <div>

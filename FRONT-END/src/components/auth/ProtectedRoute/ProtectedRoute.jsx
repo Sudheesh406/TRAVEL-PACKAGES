@@ -37,6 +37,7 @@ const ProtectedRoute = () => {
           }
         } catch (err) {
           console.error("Auth error:", err);
+          
           navigate("/");
           return;
         }
